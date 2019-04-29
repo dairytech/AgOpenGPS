@@ -250,19 +250,21 @@ namespace AgOpenGPS
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+
+#warning implement texts for labels!
             //GPS phrase
             textBoxRcv.Text = mf.recvSentenceSettings;
             mf.recvSentenceSettings = "";
 
-            //RateRelay phrases
-            txtBoxRecvArduino.Text = mf.mc.serialRecvRelayRateStr;
-            txtBoxSendArduino.Text = "32762, "
-                 + mf.mc.relayRateData[2] + "," + mf.mc.relayRateData[3] + "," + mf.mc.relayRateData[4]//relay hi lo and speed x 4
-                 + "," + mf.mc.relayRateData[5] + "," + mf.mc.relayRateData[6] + "," + mf.mc.relayRateData[7]; //setpoint hi lo
-            //autoSteer phrases
-            txtBoxRecvAutoSteer.Text = mf.mc.serialRecvAutoSteerStr;
-            txtBoxSendAutoSteer.Text = "32766, " + mf.mc.autoSteerData[mf.mc.sdRelayLo] + ", " + mf.mc.autoSteerData[mf.mc.sdSpeed]
-                                    + ", " + mf.guidanceLineDistanceOff + ", " + mf.guidanceLineSteerAngle + ", " + mf.mc.machineControlData[mf.mc.cnYouTurn];
+            ////RateRelay phrases
+            //txtBoxRecvArduino.Text = mf.mc.serialRecvRelayRateStr;
+            //txtBoxSendArduino.Text = "32762, "
+            //     + mf.mc.relayRateData[2] + "," + mf.mc.relayRateData[3] + "," + mf.mc.relayRateData[4]//relay hi lo and speed x 4
+            //     + "," + mf.mc.relayRateData[5] + "," + mf.mc.relayRateData[6] + "," + mf.mc.relayRateData[7]; //setpoint hi lo
+            ////autoSteer phrases
+            //txtBoxRecvAutoSteer.Text = mf.mc.serialRecvAutoSteerStr;
+            //txtBoxSendAutoSteer.Text = "32766, " + mf.mc.autoSteerData[mf.mc.sdRelayLo] + ", " + mf.mc.autoSteerData[mf.mc.sdSpeed]
+            //                        + ", " + mf.guidanceLineDistanceOff + ", " + mf.guidanceLineSteerAngle + ", " + mf.mc.machineControlData[mf.mc.cnYouTurn];
         }
 
         private void btnSerialOK_Click(object sender, EventArgs e)

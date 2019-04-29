@@ -466,14 +466,16 @@ namespace AgOpenGPS
                         vehicle.maxAngularVelocity = Properties.Vehicle.Default.setVehicle_maxAngularVelocity;
                         vehicle.maxSteerAngle = Properties.Vehicle.Default.setVehicle_maxSteerAngle;
 
-                        mc.autoSteerSettings[mc.ssKp] = Properties.Settings.Default.setAS_Kp;
-                        mc.autoSteerSettings[mc.ssKi] = Properties.Settings.Default.setAS_Ki;
-                        mc.autoSteerSettings[mc.ssKd] = Properties.Settings.Default.setAS_Kd;
-                        mc.autoSteerSettings[mc.ssKo] = Properties.Settings.Default.setAS_Ko;
-                        mc.autoSteerSettings[mc.ssSteerOffset] = Properties.Settings.Default.setAS_steerAngleOffset;
-                        mc.autoSteerSettings[mc.ssMinPWM] = Properties.Settings.Default.setAS_minSteerPWM;
-                        mc.autoSteerSettings[mc.ssMaxIntegral] = Properties.Settings.Default.setAS_maxIntegral;
-                        mc.autoSteerSettings[mc.ssCountsPerDegree] = Properties.Settings.Default.setAS_countsPerDegree;
+#warning autosteer config example PGN
+
+                        //mc.autoSteerSettings[mc.ssKp] = Properties.Settings.Default.setAS_Kp;
+                        //mc.autoSteerSettings[mc.ssKi] = Properties.Settings.Default.setAS_Ki;
+                        //mc.autoSteerSettings[mc.ssKd] = Properties.Settings.Default.setAS_Kd;
+                        //mc.autoSteerSettings[mc.ssKo] = Properties.Settings.Default.setAS_Ko;
+                        //mc.autoSteerSettings[mc.ssSteerOffset] = Properties.Settings.Default.setAS_steerAngleOffset;
+                        //mc.autoSteerSettings[mc.ssMinPWM] = Properties.Settings.Default.setAS_minSteerPWM;
+                        //mc.autoSteerSettings[mc.ssMaxIntegral] = Properties.Settings.Default.setAS_maxIntegral;
+                        //mc.autoSteerSettings[mc.ssCountsPerDegree] = Properties.Settings.Default.setAS_countsPerDegree;
 
                         mc.isWorkSwitchEnabled = Properties.Settings.Default.setF_IsWorkSwitchEnabled;
                         mc.isWorkSwitchActiveLow = Properties.Settings.Default.setF_IsWorkSwitchActiveLow;

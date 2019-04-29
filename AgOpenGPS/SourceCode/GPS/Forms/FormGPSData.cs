@@ -49,18 +49,19 @@ namespace AgOpenGPS
             lblStatus.Text = mf.Status;
             lblHDOP.Text = mf.HDOP;
 
-            tboxSerialFromRelay.Text = mf.mc.serialRecvRelayRateStr;
-            tboxSerialToRelay.Text = mf.mc.relayRateData[0] + "," + mf.mc.relayRateData[1]
-                 + "," + mf.mc.relayRateData[2] + "," + mf.mc.relayRateData[3] //relay and speed x 4
-                 + "," + mf.mc.relayRateData[4] + "," + mf.mc.relayRateData[5] + "," + mf.mc.relayRateData[6]; //setpoint hi lo
-            tboxNMEASerial.Text = mf.recvSentenceSettings;
-            //tboxNMEASerial.Text = mainForm.pn.rawBuffer;
+#warning implement texts for labels!
+      //tboxSerialFromRelay.Text = mf.mc.serialRecvRelayRateStr;
+      //tboxSerialToRelay.Text = mf.mc.relayRateData[0] + "," + mf.mc.relayRateData[1]
+      //     + "," + mf.mc.relayRateData[2] + "," + mf.mc.relayRateData[3] //relay and speed x 4
+      //     + "," + mf.mc.relayRateData[4] + "," + mf.mc.relayRateData[5] + "," + mf.mc.relayRateData[6]; //setpoint hi lo
+      //tboxNMEASerial.Text = mf.recvSentenceSettings;
+      ////tboxNMEASerial.Text = mainForm.pn.rawBuffer;
 
-            tboxSerialFromAutoSteer.Text = mf.mc.serialRecvAutoSteerStr;
-            tboxSerialToAutoSteer.Text = "32766, " + mf.mc.autoSteerData[mf.mc.sdRelayLo] + ", " + mf.mc.autoSteerData[mf.mc.sdSpeed]
-                                    + ", " + mf.guidanceLineDistanceOff + ", " + mf.guidanceLineSteerAngle;
+      //tboxSerialFromAutoSteer.Text = mf.mc.serialRecvAutoSteerStr;
+      //tboxSerialToAutoSteer.Text = "32766, " + mf.mc.autoSteerData[mf.mc.sdRelayLo] + ", " + mf.mc.autoSteerData[mf.mc.sdSpeed]
+      //                        + ", " + mf.guidanceLineDistanceOff + ", " + mf.guidanceLineSteerAngle;
 
-            DrawChart();
+      DrawChart();
         }
 
         //chart gain control

@@ -90,27 +90,28 @@ namespace AgOpenGPS
         //Timer
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!mf.ast.isInFreeDriveMode)
-            {
-                //normal mode
-                tboxSerialFromAutoSteer.Text = mf.mc.serialRecvAutoSteerStr;
-                tboxSerialToAutoSteer.Text = mf.mc.autoSteerData[mf.mc.sdRelayLo] + ", " + mf.mc.autoSteerData[mf.mc.sdSpeed]
-                                        + ", " + mf.guidanceLineDistanceOff + ", " + mf.guidanceLineSteerAngle;
-            }
-            else
-            {
-                //free drive mode
-                mf.mc.autoSteerData[mf.mc.sdSteerAngleHi] = (byte)((driveFreeSteerAngle * 100) >> 8);
-                mf.mc.autoSteerData[mf.mc.sdSteerAngleLo] = (byte)(driveFreeSteerAngle * 100);
+#warning implement texts for labels
+      ////if (!mf.ast.isInFreeDriveMode)
+      ////{
+      ////    //normal mode
+      ////    tboxSerialFromAutoSteer.Text = mf.mc.serialRecvAutoSteerStr;
+      ////    tboxSerialToAutoSteer.Text = mf.mc.autoSteerData[mf.mc.sdRelayLo] + ", " + mf.mc.autoSteerData[mf.mc.sdSpeed]
+      ////                            + ", " + mf.guidanceLineDistanceOff + ", " + mf.guidanceLineSteerAngle;
+      ////}
+      ////else
+      ////{
+      ////    //free drive mode
+      ////    mf.mc.autoSteerData[mf.mc.sdSteerAngleHi] = (byte)((driveFreeSteerAngle * 100) >> 8);
+      ////    mf.mc.autoSteerData[mf.mc.sdSteerAngleLo] = (byte)(driveFreeSteerAngle * 100);
 
-                tboxSerialFromAutoSteer.Text = mf.mc.serialRecvAutoSteerStr;
-                tboxSerialToAutoSteer.Text = mf.mc.autoSteerData[mf.mc.sdRelayLo] + ", " + mf.mc.autoSteerData[mf.mc.sdSpeed]
-                                        + ", " + mf.mc.autoSteerData[mf.mc.sdDistanceLo] + ", " + (driveFreeSteerAngle * 100);
-            }
-        }
+      ////    tboxSerialFromAutoSteer.Text = mf.mc.serialRecvAutoSteerStr;
+      ////    tboxSerialToAutoSteer.Text = mf.mc.autoSteerData[mf.mc.sdRelayLo] + ", " + mf.mc.autoSteerData[mf.mc.sdSpeed]
+      ////                            + ", " + mf.mc.autoSteerData[mf.mc.sdDistanceLo] + ", " + (driveFreeSteerAngle * 100);
+      ////}
+    }
 
-        //Scrollbars
-        private void hsbarLookAhead_ValueChanged(object sender, EventArgs e)
+    //Scrollbars
+    private void hsbarLookAhead_ValueChanged(object sender, EventArgs e)
         {
             mf.vehicle.goalPointLookAheadSeconds = hsbarLookAhead.Value * 0.1;
             lblLookAhead.Text = mf.vehicle.goalPointLookAheadSeconds.ToString();
@@ -145,9 +146,8 @@ namespace AgOpenGPS
 
         private void hsbarCountsPerDegree_ValueChanged(object sender, EventArgs e)
         {
-            mf.mc.autoSteerSettings[mf.mc.ssCountsPerDegree] = (byte)hsbarCountsPerDegree.Value;
-            lblCountsPerDegree.Text = (mf.mc.autoSteerSettings[mf.mc.ssCountsPerDegree]).ToString();
-            Properties.Settings.Default.setAS_countsPerDegree = mf.mc.autoSteerSettings[mf.mc.ssCountsPerDegree];
+            lblCountsPerDegree.Text = (hsbarCountsPerDegree.Value).ToString();
+            Properties.Settings.Default.setAS_countsPerDegree = (byte)hsbarCountsPerDegree.Value;
             Properties.Settings.Default.Save();
             mf.AutoSteerSettingsOutToPort();
         }
@@ -163,62 +163,61 @@ namespace AgOpenGPS
         private void hsbarSteerAngleSensorZero_ValueChanged(object sender, EventArgs e)
         {
             lblSteerAngleSensorZero.Text = hsbarSteerAngleSensorZero.Value.ToString();
-            mf.mc.autoSteerSettings[mf.mc.ssSteerOffset] = (byte)(127 + hsbarSteerAngleSensorZero.Value);
-            Properties.Settings.Default.setAS_steerAngleOffset = mf.mc.autoSteerSettings[mf.mc.ssSteerOffset];
+            //mf.mc.autoSteerSettings[mf.mc.ssSteerOffset] = (byte)(127 + hsbarSteerAngleSensorZero.Value);
+            Properties.Settings.Default.setAS_steerAngleOffset = (byte)(127 + hsbarSteerAngleSensorZero.Value);
             Properties.Settings.Default.Save();
             mf.AutoSteerSettingsOutToPort();
         }
 
         private void hsbarMinPWM_ValueChanged(object sender, EventArgs e)
         {
-            mf.mc.autoSteerSettings[mf.mc.ssMinPWM] = (byte)hsbarMinPWM.Value;
-            lblMinPWM.Text = (mf.mc.autoSteerSettings[mf.mc.ssMinPWM]).ToString();
-            Properties.Settings.Default.setAS_minSteerPWM = mf.mc.autoSteerSettings[mf.mc.ssMinPWM];
+            //mf.mc.autoSteerSettings[mf.mc.ssMinPWM] = (byte)hsbarMinPWM.Value;
+            lblMinPWM.Text = (hsbarMinPWM.Value).ToString();
+            Properties.Settings.Default.setAS_minSteerPWM = (byte)hsbarMinPWM.Value;
             Properties.Settings.Default.Save();
             mf.AutoSteerSettingsOutToPort();
         }
 
         private void hsbarProportionalGain_ValueChanged(object sender, EventArgs e)
         {
-            mf.mc.autoSteerSettings[mf.mc.ssKp] = (byte)hsbarProportionalGain.Value;
-            lblProportionalGain.Text = (mf.mc.autoSteerSettings[mf.mc.ssKp]).ToString();
-            Properties.Settings.Default.setAS_Kp = mf.mc.autoSteerSettings[mf.mc.ssKp];
+            //mf.mc.autoSteerSettings[mf.mc.ssKp] = (byte)hsbarProportionalGain.Value;
+            lblProportionalGain.Text = (hsbarProportionalGain.Value).ToString();
+            Properties.Settings.Default.setAS_Kp = (byte)hsbarProportionalGain.Value;
             Properties.Settings.Default.Save();
             mf.AutoSteerSettingsOutToPort();
         }
 
         private void hsbarOutputGain_ValueChanged(object sender, EventArgs e)
         {
-            mf.mc.autoSteerSettings[mf.mc.ssKo] = (byte)hsbarOutputGain.Value;
-            lblOutputGain.Text = (mf.mc.autoSteerSettings[mf.mc.ssKo]).ToString();
-            Properties.Settings.Default.setAS_Ko = mf.mc.autoSteerSettings[mf.mc.ssKo];
+            lblOutputGain.Text = (hsbarOutputGain.Value).ToString();
+            Properties.Settings.Default.setAS_Ko = (byte)hsbarOutputGain.Value;
             Properties.Settings.Default.Save();
             mf.AutoSteerSettingsOutToPort();
         }
 
         private void hsbarSidehillDraftGain_ValueChanged(object sender, EventArgs e)
         {
-            mf.mc.autoSteerSettings[mf.mc.ssKd] = (byte)hsbarSidehillDraftGain.Value;
-            lblSidehillDraftGain.Text = (mf.mc.autoSteerSettings[mf.mc.ssKd]).ToString();
-            Properties.Settings.Default.setAS_Kd = mf.mc.autoSteerSettings[mf.mc.ssKd];
+            //mf.mc.autoSteerSettings[mf.mc.ssKd] = (byte)hsbarSidehillDraftGain.Value;
+            lblSidehillDraftGain.Text = (hsbarSidehillDraftGain.Value).ToString();
+            Properties.Settings.Default.setAS_Kd = (byte)hsbarSidehillDraftGain.Value;
             Properties.Settings.Default.Save();
             mf.AutoSteerSettingsOutToPort();
         }
 
         private void hsbarIntegralGain_ValueChanged(object sender, EventArgs e)
         {
-            mf.mc.autoSteerSettings[mf.mc.ssKi] = (byte)hsbarIntegralGain.Value;
-            lblIntegralGain.Text = (mf.mc.autoSteerSettings[mf.mc.ssKi]).ToString();
-            Properties.Settings.Default.setAS_Ki = mf.mc.autoSteerSettings[mf.mc.ssKi];
+            //mf.mc.autoSteerSettings[mf.mc.ssKi] = (byte)hsbarIntegralGain.Value;
+            lblIntegralGain.Text = (hsbarIntegralGain.Value).ToString();
+            Properties.Settings.Default.setAS_Ki = (byte)hsbarIntegralGain.Value;
             Properties.Settings.Default.Save();
             mf.AutoSteerSettingsOutToPort();
         }
 
         private void hsbarIntegralMax_ValueChanged(object sender, EventArgs e)
         {
-            mf.mc.autoSteerSettings[mf.mc.ssMaxIntegral] = (byte)hsbarIntegralMax.Value;
-            lblIntegralMax.Text = (mf.mc.autoSteerSettings[mf.mc.ssMaxIntegral]).ToString();
-            Properties.Settings.Default.setAS_maxIntegral = mf.mc.autoSteerSettings[mf.mc.ssMaxIntegral];
+            //mf.mc.autoSteerSettings[mf.mc.ssMaxIntegral] = (byte)hsbarIntegralMax.Value;
+            lblIntegralMax.Text = (hsbarIntegralMax.Value).ToString();
+            Properties.Settings.Default.setAS_maxIntegral = (byte)hsbarIntegralMax.Value;
             Properties.Settings.Default.Save();
             mf.AutoSteerSettingsOutToPort();
         }

@@ -31,41 +31,42 @@ namespace AgOpenGPS
 
         private void DrawChart()
         {
-            //just data
-            words = mf.mc.serialRecvAutoSteerStr.Split(',');
-            if (words.Length < 5)
-            {
-                dataSteerAngle = "0";
-                dataPWM = "-2";
-                lblSteerAng.Text = "Actual";
-                lblPWM.Text = "Set";
-                if (!mode)
-                {
-                    error = 0;
-                    dataPWM = "0";
-                }
-            }
-            else
-            {
-                //word 0 - steerangle, 1 - pwmDisplay
-                dataSteerAngle = words[0];
-                dataPWM = words[1];
-                lblSteerAng.Text = words[0];
-                lblPWM.Text = words[1];
+#warning implement charts!
+      ////just data
+      //words = mf.mc.serialRecvAutoSteerStr.Split(',');
+      //if (words.Length < 5)
+      //{
+      //    dataSteerAngle = "0";
+      //    dataPWM = "-2";
+      //    lblSteerAng.Text = "Actual";
+      //    lblPWM.Text = "Set";
+      //    if (!mode)
+      //    {
+      //        error = 0;
+      //        dataPWM = "0";
+      //    }
+      //}
+      //else
+      //{
+      //    //word 0 - steerangle, 1 - pwmDisplay
+      //    dataSteerAngle = words[0];
+      //    dataPWM = words[1];
+      //    lblSteerAng.Text = words[0];
+      //    lblPWM.Text = words[1];
 
-                double.TryParse(words[0], NumberStyles.Float, CultureInfo.InvariantCulture, out actual);
-                double.TryParse(words[1], NumberStyles.Float, CultureInfo.InvariantCulture, out error);
-                error -= actual;
-                lblError.Text = error.ToString();
-                if (!mode)
-                {
-                    dataPWM = "0";
-                    dataSteerAngle = error.ToString();
-                }
-            }
+      //    double.TryParse(words[0], NumberStyles.Float, CultureInfo.InvariantCulture, out actual);
+      //    double.TryParse(words[1], NumberStyles.Float, CultureInfo.InvariantCulture, out error);
+      //    error -= actual;
+      //    lblError.Text = error.ToString();
+      //    if (!mode)
+      //    {
+      //        dataPWM = "0";
+      //        dataSteerAngle = error.ToString();
+      //    }
+      //}
 
-            //chart data
-            Series s = unoChart.Series["S"];
+      //chart data
+      Series s = unoChart.Series["S"];
             Series w = unoChart.Series["PWM"];
             double nextX = 1;
             double nextX5 = 1;

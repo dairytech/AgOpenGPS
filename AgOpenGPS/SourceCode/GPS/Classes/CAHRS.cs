@@ -1,93 +1,85 @@
 ﻿using Tinkerforge;
 
-namespace AgOpenGPS
-{
-    public class CAHRS
-    {
-        private readonly FormGPS mf;
+namespace AgOpenGPS {
+  public class CAHRS {
+    private readonly FormGPS mf;
 
-        /// <summary>
-        /// The USB TinkerForge comm
-        /// </summary>
-        public readonly IPConnection ipcon;
+    /// <summary>
+    /// The USB TinkerForge comm
+    /// </summary>
+    public readonly IPConnection ipcon;
 
-        /// <summary>
-        /// The Tinker IMU object
-        /// </summary>
-        public readonly BrickIMUV2 imu;
+    /// <summary>
+    /// The Tinker IMU object
+    /// </summary>
+    public readonly BrickIMUV2 imu;
 
-        public static string HOST = "localhost";
-        public static int PORT = 4223;
-        public static readonly string UID = Properties.Settings.Default.setIMU_UID; // "68wESU"; // Change XXYYZZ to the UID of your IMU Brick 2.0
+    public static string HOST = "localhost";
+    public static int PORT = 4223;
+    public static readonly string UID = Properties.Settings.Default.setIMU_UID; // "68wESU"; // Change XXYYZZ to the UID of your IMU Brick 2.0
 
-        //flags for desired sources
-        public bool isHeadingBNO, isHeadingBrick, isHeadingPAOGI, isRollDogs, isRollBrick, isRollPAOGI;
+    //flags for desired sources
+    public bool isHeadingBNO, isHeadingBrick, isHeadingPAOGI, isRollDogs, isRollBrick, isRollPAOGI;
 
-        //by Matthias Hammer Jan 2019
-        public bool isBNOSeparate = false;
+    //by Matthias Hammer Jan 2019
+    public bool isBNOSeparate = false;
 
-        public bool isDogsSeparate = false;
+    public bool isDogsSeparate = false;
 
-        //actual value in degrees* 16 to modify the imu*16 values
-        public int rollZero, pitchZero;
+    //actual value in degrees* 16 to modify the imu*16 values
+    public int rollZero, pitchZero;
 
-        //constructor
-        public CAHRS(FormGPS _f)
-        {
-            mf = _f;
+    //constructor
+    public CAHRS( FormGPS _f ) {
+      mf = _f;
 
-            //non GPS AHRS sensors
-            isHeadingBNO = Properties.Settings.Default.setIMU_isHeadingFromBNO;
-            isHeadingBrick = Properties.Settings.Default.setIMU_isHeadingFromBrick;
-            isHeadingPAOGI = Properties.Settings.Default.setIMU_isHeadingFromPAOGI;
+      //non GPS AHRS sensors
+      isHeadingBNO = Properties.Settings.Default.setIMU_isHeadingFromBNO;
+      isHeadingBrick = Properties.Settings.Default.setIMU_isHeadingFromBrick;
+      isHeadingPAOGI = Properties.Settings.Default.setIMU_isHeadingFromPAOGI;
 
-            isRollDogs = Properties.Settings.Default.setIMU_isRollFromDogs;
-            isRollBrick = Properties.Settings.Default.setIMU_isRollFromBrick;
-            isRollPAOGI = Properties.Settings.Default.setIMU_isRollFromPAOGI;
+      isRollDogs = Properties.Settings.Default.setIMU_isRollFromDogs;
+      isRollBrick = Properties.Settings.Default.setIMU_isRollFromBrick;
+      isRollPAOGI = Properties.Settings.Default.setIMU_isRollFromPAOGI;
 
-            rollZero = Properties.Settings.Default.setIMU_rollZero;
-            pitchZero = Properties.Settings.Default.setIMU_pitchZero;
+      rollZero = Properties.Settings.Default.setIMU_rollZero;
+      pitchZero = Properties.Settings.Default.setIMU_pitchZero;
 
-            //usb IMU Tinker
-            if (isHeadingBrick || isRollBrick)
-            {
-                ipcon = new IPConnection(); // Create IP connection
-                imu = new BrickIMUV2(CAHRS.UID, ipcon); // Create device object
+      //usb IMU Tinker
+      if( isHeadingBrick || isRollBrick ) {
+        ipcon = new IPConnection(); // Create IP connection
+        imu = new BrickIMUV2( CAHRS.UID, ipcon ); // Create device object
 
-                try
-                {
-                    ipcon.Connect(HOST, PORT); // Connect to brickd - daemon
-                                               // Don't use device before ipcon is connected
+        try {
+          ipcon.Connect( HOST, PORT ); // Connect to brickd - daemon
+                                       // Don't use device before ipcon is connected
 
-                    // Register Orientation callback in AHRS class
-                    imu.OrientationCallback += OrientCB;
+          // Register Orientation callback in AHRS class
+          imu.OrientationCallback += OrientCB;
 
-                    // Set period for Orientation callback to 0.1s (100ms)
-                    imu.SetOrientationPeriod(100);
+          // Set period for Orientation callback to 0.1s (100ms)
+          imu.SetOrientationPeriod( 100 );
 
-                    //set the mode with mag
-                    imu.SetSensorFusionMode(1);
+          //set the mode with mag
+          imu.SetSensorFusionMode( 1 );
 
-                    imu.LedsOff();
-                }
-                catch
-                {
-                }
-            }
+          imu.LedsOff();
+        } catch {
         }
-
-        //event for TinkerForge IMU
-        public void OrientCB(BrickIMUV2 sender, short heading, short roll, short pitch)
-        {
-            if (isHeadingBrick)
-            {
-                mf.mc.prevGyroHeading = mf.mc.gyroHeading;
-                mf.mc.gyroHeading = heading;
-            }
-
-            if (isRollBrick) mf.mc.rollRaw = roll;
-        }
+      }
     }
+
+    //event for TinkerForge IMU
+    public void OrientCB( BrickIMUV2 sender, short heading, short roll, short pitch ) {
+      if( isHeadingBrick ) {
+        mf.mc.prevGyroHeading = mf.mc.gyroHeading;
+        mf.mc.gyroHeading = heading;
+      }
+
+      if( isRollBrick )
+        mf.mc.rollRaw = roll;
+    }
+  }
 }
 
 ////input to the Kalman

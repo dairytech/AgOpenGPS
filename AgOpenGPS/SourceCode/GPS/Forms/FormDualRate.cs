@@ -85,11 +85,7 @@ namespace AgOpenGPS
             mf.rcd.rateRight = rateRight;
             mf.rcd.isRate1Selected = true;
 
-            mf.mc.relayRateSettings[mf.mc.rsFlowCalFactorLeftHi] = (byte)(Properties.Settings.Default.setRate_FlowmeterCalNumberLeft >> 8);
-            mf.mc.relayRateSettings[mf.mc.rsFlowCalFactorLeftLo] = (byte)(Properties.Settings.Default.setRate_FlowmeterCalNumberLeft);
-            mf.mc.relayRateSettings[mf.mc.rsFlowCalFactorRightHi] = (byte)(Properties.Settings.Default.setRate_FlowmeterCalNumberRight >> 8);
-            mf.mc.relayRateSettings[mf.mc.rsFlowCalFactorRightLo] = (byte)(Properties.Settings.Default.setRate_FlowmeterCalNumberRight);
-            mf.RateRelayOutToPort(mf.mc.relayRateSettings, CModuleComm.numRelayRateSettingsItems);
+            mf.RateOutToPort();
 
             Close();
         }
@@ -97,21 +93,10 @@ namespace AgOpenGPS
         private void btnDualResetAccumulatedVolume_Click(object sender, EventArgs e)
         {
             //sending 32700 resets accumulated counts in module
-            mf.mc.relayRateSettings[mf.mc.rsDualAccumulatedVolumeHi] = (32700 >> 8);
-            mf.mc.relayRateSettings[mf.mc.rsDualAccumulatedVolumeLo] = unchecked((byte)32700);
-            Properties.Settings.Default.setRate_DualAccumulatedVolume = 0;
+            Properties.Settings.Default.setRate_DualAccumulatedVolume = 32700;
             Properties.Settings.Default.Save();
+            mf.RateOutToPort();
 
-            //make sure current flowCal is set
-            mf.mc.relayRateSettings[mf.mc.rsFlowCalFactorLeftHi] = (byte)(Properties.Settings.Default.setRate_FlowmeterCalNumberLeft >> 8);
-            mf.mc.relayRateSettings[mf.mc.rsFlowCalFactorLeftLo] = (byte)(Properties.Settings.Default.setRate_FlowmeterCalNumberLeft);
-
-            mf.mc.relayRateSettings[mf.mc.rsFlowCalFactorRightHi] = (byte)(Properties.Settings.Default.setRate_FlowmeterCalNumberRight >> 8);
-            mf.mc.relayRateSettings[mf.mc.rsFlowCalFactorRightLo] = (byte)(Properties.Settings.Default.setRate_FlowmeterCalNumberRight);
-            mf.RateRelayOutToPort(mf.mc.relayRateSettings, CModuleComm.numRelayRateSettingsItems);
-
-            mf.mc.relayRateSettings[mf.mc.rsDualAccumulatedVolumeHi] = 0;
-            mf.mc.relayRateSettings[mf.mc.rsDualAccumulatedVolumeLo] = 0;
             mf.rcd.dualVolumeActual = 0;
             lblDualAccumulatedVolume.Text = mf.rcd.dualVolumeActual.ToString();
         }
@@ -123,7 +108,7 @@ namespace AgOpenGPS
             nudRateLeft.Value += (decimal)0.1;
             if (nudRateLeft.Value > nudRateLeft.Maximum) nudRateLeft.Value = nudRateLeft.Maximum;
 
-            //always in L/ha
+            //always in l/ha
             rateLeft = (double)nudRateLeft.Value * NUD2Setting;
 
             nudRateLeft.ValueChanged += nudRateLeft_ValueChanged;
@@ -136,7 +121,7 @@ namespace AgOpenGPS
             nudRateLeft.Value -= (decimal)0.1;
             if (nudRateLeft.Value < nudRateLeft.Minimum) nudRateLeft.Value = nudRateLeft.Minimum;
 
-            //always in L/ha
+            //always in l/ha
             rateLeft = (double)nudRateLeft.Value * NUD2Setting;
 
             nudRateLeft.ValueChanged += nudRateLeft_ValueChanged;

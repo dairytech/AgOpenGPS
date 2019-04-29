@@ -88,6 +88,7 @@ namespace AgOpenGPS
             //parse any data from pn.rawBuffer
             pn.ParseNMEA();
 
+#warning do something more inteligent to block the autosteer controller
             //time for a frame update with new valid nmea data
             if (pn.updatedGGA | pn.updatedOGI | pn.updatedRMC)
             {
@@ -106,11 +107,11 @@ namespace AgOpenGPS
                 UpdateFixPosition();
             }
 
-            //must make sure arduinos are kept off if initializing
-            else
-            {
-                if (!isGPSPositionInitialized)  mc.ResetAllModuleCommValues();
-            }
+            ////must make sure arduinos are kept off if initializing
+            //else
+            //{
+            //    if (!isGPSPositionInitialized)  mc.ResetAllModuleCommValues();
+            //}
 
             //Update the port connection counter - is reset every time new sentence is valid and ready
             recvCounter++;
@@ -324,41 +325,43 @@ namespace AgOpenGPS
             //if the whole path driving driving process is green
             if (recPath.isDrivingRecordedPath) recPath.UpdatePosition();
 
-            // If Drive button enabled be normal, or just fool the autosteer and fill values
-            if (!ast.isInFreeDriveMode)
-            {
-                if (ahrs.isHeadingPAOGI)
-                {
-                    guidanceLineSteerAngle = (Int16)(guidanceLineSteerAngle + (pn.nRoll * ((double)mc.autoSteerSettings[mc.ssKd]) * 4.166666));
-                }
+//            // If Drive button enabled be normal, or just fool the autosteer and fill values
+//            if (!ast.isInFreeDriveMode)
+//            {
+#warning example PGN autosteer
+//                //if (ahrs.isHeadingPAOGI)
+//                //{
+//                //    guidanceLineSteerAngle = (Int16)(guidanceLineSteerAngle + (pn.nRoll * ((double)mc.autoSteerSettings[mc.ssKd]) * 4.166666));
+//                //}
 
-                //fill up0 the appropriate arrays with new values
-                mc.autoSteerData[mc.sdSpeed] = (byte)(pn.speed * 4.0);
-                mc.machineControlData[mc.cnSpeed] = mc.autoSteerData[mc.sdSpeed];
+//                ////fill up0 the appropriate arrays with new values
+//                //mc.autoSteerData[mc.sdSpeed] = (byte)(pn.speed * 4.0);
+//                //mc.machineControlData[mc.cnSpeed] = mc.autoSteerData[mc.sdSpeed];
 
-                mc.autoSteerData[mc.sdDistanceHi] = (byte)(guidanceLineDistanceOff >> 8);
-                mc.autoSteerData[mc.sdDistanceLo] = (byte)guidanceLineDistanceOff;
+//                //mc.autoSteerData[mc.sdDistanceHi] = (byte)(guidanceLineDistanceOff >> 8);
+//                //mc.autoSteerData[mc.sdDistanceLo] = (byte)guidanceLineDistanceOff;
 
-                mc.autoSteerData[mc.sdSteerAngleHi] = (byte)(guidanceLineSteerAngle >> 8);
-                mc.autoSteerData[mc.sdSteerAngleLo] = (byte)guidanceLineSteerAngle;
+//                //mc.autoSteerData[mc.sdSteerAngleHi] = (byte)(guidanceLineSteerAngle >> 8);
+//                //mc.autoSteerData[mc.sdSteerAngleLo] = (byte)guidanceLineSteerAngle;
 
-                //out serial to autosteer module  //indivdual classes load the distance and heading deltas 
-                AutoSteerDataOutToPort();
-            }
+//                //out serial to autosteer module  //indivdual classes load the distance and heading deltas 
+//                AutoSteerDataOutToPort();
+//            }
 
-            else
-            {
-                //fill up the auto steer array with free drive values
-                mc.autoSteerData[mc.sdSpeed] = (byte)(pn.speed * 4.0 + 8);
-                mc.machineControlData[mc.cnSpeed] = mc.autoSteerData[mc.sdSpeed];
+//            else
+//            {
+//                ////fill up the auto steer array with free drive values
+//                //mc.autoSteerData[mc.sdSpeed] = (byte)(pn.speed * 4.0 + 8);
+//                //mc.machineControlData[mc.cnSpeed] = mc.autoSteerData[mc.sdSpeed];
 
-                //make steer module think everything is normal
-                mc.autoSteerData[mc.sdDistanceHi] = (byte)(0);
-                mc.autoSteerData[mc.sdDistanceLo] = (byte)0;
+//                ////make steer module think everything is normal
+//                //mc.autoSteerData[mc.sdDistanceHi] = (byte)(0);
+//                //mc.autoSteerData[mc.sdDistanceLo] = (byte)0;
 
-                //out serial to autosteer module  //indivdual classes load the distance and heading deltas 
-                AutoSteerDataOutToPort();
-            }
+//                //out serial to autosteer module  //indivdual classes load the distance and heading deltas 
+//                }
+            AutoSteerDataOutToPort();
+            
 
             //for average cross track error
             if (guidanceLineDistanceOff < 29000)
@@ -385,47 +388,50 @@ namespace AgOpenGPS
             //do the relayRateControl
             if (rcd.isRateControlOn)
             {
-                if (rcd.isSingleFlowMeter)
-                {
-                    rcd.CalculateRateLitersPerMinuteSingle();
-                    mc.relayRateData[mc.rdRateSetPointLeftHi] = (byte)((Int16)(rcd.rateSetPointLeft * 100.0) >> 8);
-                    mc.relayRateData[mc.rdRateSetPointLeftLo] = (byte)(rcd.rateSetPointLeft * 100.0);
+#warning PGN example rate control!
+                //if (rcd.isSingleFlowMeter)
+                //{
+                //    rcd.CalculateRateLitersPerMinuteSingle();
+                //    mc.relayRateData[mc.rdRateSetPointLeftHi] = (byte)((Int16)(rcd.rateSetPointLeft * 100.0) >> 8);
+                //    mc.relayRateData[mc.rdRateSetPointLeftLo] = (byte)(rcd.rateSetPointLeft * 100.0);
 
-                    mc.relayRateData[mc.rdRateSetPointRightHi] = 0;
-                    mc.relayRateData[mc.rdRateSetPointRightLo] = 0;
+                //    mc.relayRateData[mc.rdRateSetPointRightHi] = 0;
+                //    mc.relayRateData[mc.rdRateSetPointRightLo] = 0;
 
-                    mc.relayRateData[mc.rdSpeedXFour] = (byte)(pn.speed * 4.0);
-                    //relay byte is built in SerialComm function BuildRelayByte()
-                    //youturn control byte is built in SerialComm BuildYouTurnByte()
+                //    mc.relayRateData[mc.rdSpeedXFour] = (byte)(pn.speed * 4.0);
+                //    //relay byte is built in SerialComm function BuildRelayByte()
+                //    //youturn control byte is built in SerialComm BuildYouTurnByte()
 
-                }
-                else
-                {
-                    rcd.CalculateRateLitersPerMinuteDual();
-                    mc.relayRateData[mc.rdRateSetPointLeftHi] = (byte)((Int16)(rcd.rateSetPointLeft * 100.0) >> 8);
-                    mc.relayRateData[mc.rdRateSetPointLeftLo] = (byte)(rcd.rateSetPointLeft * 100.0);
+                //}
+                //else
+                //{
+                //    rcd.CalculateRateLitersPerMinuteDual();
+                //    mc.relayRateData[mc.rdRateSetPointLeftHi] = (byte)((Int16)(rcd.rateSetPointLeft * 100.0) >> 8);
+                //    mc.relayRateData[mc.rdRateSetPointLeftLo] = (byte)(rcd.rateSetPointLeft * 100.0);
 
-                    mc.relayRateData[mc.rdRateSetPointRightHi] = (byte)((Int16)(rcd.rateSetPointRight * 100.0) >> 8);
-                    mc.relayRateData[mc.rdRateSetPointRightLo] = (byte)(rcd.rateSetPointRight * 100.0);
+                //    mc.relayRateData[mc.rdRateSetPointRightHi] = (byte)((Int16)(rcd.rateSetPointRight * 100.0) >> 8);
+                //    mc.relayRateData[mc.rdRateSetPointRightLo] = (byte)(rcd.rateSetPointRight * 100.0);
 
-                    mc.relayRateData[mc.rdSpeedXFour] = (byte)(pn.speed * 4.0);
-                    //relay byte is built in SerialComm function BuildRelayByte()
-                    //youturn control byte is built in SerialComm BuildYouTurnByte()
-                }
+                //    mc.relayRateData[mc.rdSpeedXFour] = (byte)(pn.speed * 4.0);
+                //    //relay byte is built in SerialComm function BuildRelayByte()
+                //    //youturn control byte is built in SerialComm BuildYouTurnByte()
+                //}
             }
             else
             {
-                mc.relayRateData[mc.rdRateSetPointLeftHi] = (byte)0;
-                mc.relayRateData[mc.rdRateSetPointLeftHi] = (byte)0;
-                mc.relayRateData[mc.rdRateSetPointRightHi] = (byte)0;
-                mc.relayRateData[mc.rdRateSetPointRightHi] = (byte)0;
-                mc.relayRateData[mc.rdSpeedXFour] = (byte)(pn.speed * 4.0);
-                //relay byte is built in SerialComm.cs - function BuildRelayByte()
-                //youturn control byte is built in SerialComm BuildYouTurnByte()
+                //mc.relayRateData[mc.rdRateSetPointLeftHi] = (byte)0;
+                //mc.relayRateData[mc.rdRateSetPointLeftHi] = (byte)0;
+                //mc.relayRateData[mc.rdRateSetPointRightHi] = (byte)0;
+                //mc.relayRateData[mc.rdRateSetPointRightHi] = (byte)0;
+                //mc.relayRateData[mc.rdSpeedXFour] = (byte)(pn.speed * 4.0);
+                ////relay byte is built in SerialComm.cs - function BuildRelayByte()
+                ////youturn control byte is built in SerialComm BuildYouTurnByte()
             }
 
             //send out the port
-            RateRelayOutToPort(mc.relayRateData, CModuleComm.numRelayRateDataItems);
+
+#warning implement rate control!
+            //RateRelayOutToPort(mc.relayRateData, CModuleComm.numRelayRateDataItems);
 
             //if the relay rate port is open, check switches
             //if (spRelay.IsOpen) DoRemoteSectionSwitch();
