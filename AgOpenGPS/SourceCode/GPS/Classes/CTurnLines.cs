@@ -39,23 +39,32 @@ namespace AgOpenGPS
             //first point needs last, first, second points
             CTurnPt pt3 = arr[0];
             pt3.heading = Math.Atan2(arr[1].easting - arr[cnt].easting, arr[1].northing - arr[cnt].northing);
-            if (pt3.heading < 0) pt3.heading += glm.twoPI;
-            turnLine.Add(pt3);
+            if (pt3.heading < 0) {
+        pt3.heading += glm.twoPI;
+      }
+
+      turnLine.Add(pt3);
 
             //middle points
             for (int i = 1; i < cnt; i++)
             {
                 pt3 = arr[i];
                 pt3.heading = Math.Atan2(arr[i + 1].easting - arr[i - 1].easting, arr[i + 1].northing - arr[i - 1].northing);
-                if (pt3.heading < 0) pt3.heading += glm.twoPI;
-                turnLine.Add(pt3);
+                if (pt3.heading < 0) {
+          pt3.heading += glm.twoPI;
+        }
+
+        turnLine.Add(pt3);
             }
 
             //last and first point
             pt3 = arr[cnt];
             pt3.heading = Math.Atan2(arr[0].easting - arr[cnt - 1].easting, arr[0].northing - arr[cnt - 1].northing);
-            if (pt3.heading < 0) pt3.heading += glm.twoPI;
-            turnLine.Add(pt3);
+            if (pt3.heading < 0) {
+        pt3.heading += glm.twoPI;
+      }
+
+      turnLine.Add(pt3);
         }
 
         public void ResetTurn()
@@ -109,8 +118,11 @@ namespace AgOpenGPS
             for (int i = 0; i < bndCount; i++)
             {
                 int j = i + 1;
-                if (j == bndCount) j = 0;
-                distance = glm.Distance(turnLine[i], turnLine[j]);
+                if (j == bndCount) {
+          j = 0;
+        }
+
+        distance = glm.Distance(turnLine[i], turnLine[j]);
                 if (distance > (spacing * 1.25))
                 {
                     CTurnPt pointB = new CTurnPt((turnLine[i].easting + turnLine[j].easting) / 2.0, (turnLine[i].northing + turnLine[j].northing) / 2.0, turnLine[i].heading);
@@ -155,8 +167,11 @@ namespace AgOpenGPS
 
         public bool IsPointInTurnWorkArea(vec3 testPointv3)
         {
-            if (calcList.Count < 3) return false;
-            int j = turnLine.Count - 1;
+            if (calcList.Count < 3) {
+        return false;
+      }
+
+      int j = turnLine.Count - 1;
             bool oddNodes = false;
 
             //test against the constant and multiples list the test point
@@ -173,8 +188,11 @@ namespace AgOpenGPS
 
         public bool IsPointInTurnWorkArea(vec2 testPointv2)
         {
-            if (calcList.Count < 3) return false;
-            int j = turnLine.Count - 1;
+            if (calcList.Count < 3) {
+        return false;
+      }
+
+      int j = turnLine.Count - 1;
             bool oddNodes = false;
 
             //test against the constant and multiples list the test point
@@ -193,13 +211,19 @@ namespace AgOpenGPS
         {
             ////draw the turn line oject
             int ptCount = turnLine.Count;
-            if (ptCount < 1) return;
-            GL.LineWidth(1);
+            if (ptCount < 1) {
+        return;
+      }
+
+      GL.LineWidth(1);
             GL.Color3(0.8555f, 0.9232f, 0.60f);
             GL.PointSize(2);
             GL.Begin(PrimitiveType.Points);
-            for (int h = 0; h < ptCount; h++) GL.Vertex3(turnLine[h].easting, turnLine[h].northing, 0);
-            GL.Vertex3(turnLine[0].easting, turnLine[0].northing, 0);
+            for (int h = 0; h < ptCount; h++) {
+        GL.Vertex3(turnLine[h].easting, turnLine[h].northing, 0);
+      }
+
+      GL.Vertex3(turnLine[0].easting, turnLine[0].northing, 0);
             GL.End();
         }
     }

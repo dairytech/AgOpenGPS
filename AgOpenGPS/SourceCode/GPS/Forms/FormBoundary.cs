@@ -21,11 +21,14 @@ namespace AgOpenGPS
             {
                 //outer metric
                 lvLines.Items[0].SubItems[2].Text = "NA";
-                if (mf.bnd.bndArr[0].isSet) lvLines.Items[0].SubItems[1].Text = Math.Round(mf.bnd.bndArr[0].area * 0.0001, 2) + " Ha";
-                else lvLines.Items[0].SubItems[1].Text = "*";
+                if (mf.bnd.bndArr[0].isSet) {
+          lvLines.Items[0].SubItems[1].Text = Math.Round(mf.bnd.bndArr[0].area * 0.0001, 2) + " Ha";
+        } else {
+          lvLines.Items[0].SubItems[1].Text = "*";
+        }
 
-                //inner metric
-                for (int i = 1; i < FormGPS.MAXBOUNDARIES; i++)
+        //inner metric
+        for (int i = 1; i < FormGPS.MAXBOUNDARIES; i++)
                 {
                     if (mf.bnd.bndArr[i].isSet)
                     {
@@ -45,11 +48,14 @@ namespace AgOpenGPS
             {
                 //outer
                 lvLines.Items[0].SubItems[2].Text = "NA";
-                if (mf.bnd.bndArr[0].isSet) lvLines.Items[0].SubItems[1].Text = Math.Round(mf.bnd.bndArr[0].area * 0.000247105, 2) + " Ac";
-                else lvLines.Items[0].SubItems[1].Text = "*";
+                if (mf.bnd.bndArr[0].isSet) {
+          lvLines.Items[0].SubItems[1].Text = Math.Round(mf.bnd.bndArr[0].area * 0.000247105, 2) + " Ac";
+        } else {
+          lvLines.Items[0].SubItems[1].Text = "*";
+        }
 
-                //inner
-                for (int i = 1; i < FormGPS.MAXBOUNDARIES; i++)
+        //inner
+        for (int i = 1; i < FormGPS.MAXBOUNDARIES; i++)
                 {
                     if (mf.bnd.bndArr[i].isSet)
                     {
@@ -235,8 +241,11 @@ namespace AgOpenGPS
 
         private void ResetAllBoundary()
         {
-            for (int j = 0; j < FormGPS.MAXBOUNDARIES; j++) mf.bnd.bndArr[j].ResetBoundary();
-            mf.FileSaveBoundary();
+            for (int j = 0; j < FormGPS.MAXBOUNDARIES; j++) {
+        mf.bnd.bndArr[j].ResetBoundary();
+      }
+
+      mf.FileSaveBoundary();
             UpdateChart();
             cboxSelectBoundary.SelectedIndex = 0;
             cboxSelectBoundary.Enabled = true;
@@ -273,9 +282,12 @@ namespace AgOpenGPS
                 };
 
                 //was a file selected
-                if (ofd.ShowDialog() == DialogResult.Cancel) return;
-                else fileAndDirectory = ofd.FileName;
-            }
+                if (ofd.ShowDialog() == DialogResult.Cancel) {
+          return;
+        } else {
+          fileAndDirectory = ofd.FileName;
+        }
+      }
 
             //start to read the file
             string line = null;
@@ -292,8 +304,10 @@ namespace AgOpenGPS
                     line = reader.ReadLine();
                     index = line.IndexOf("<coordinates>");
 
-                    if (index != -1) bndCount++;
-                }
+                    if (index != -1) {
+            bndCount++;
+          }
+        }
 
                 reader.DiscardBufferedData();
                 reader.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -312,8 +326,10 @@ namespace AgOpenGPS
                         {
                             line = reader.ReadLine();
                             index = line.IndexOf("<coord");
-                            if (index != -1) break;
-                        }
+                            if (index != -1) {
+                break;
+              }
+            }
 
                         line = reader.ReadLine();
                         line = line.Trim();
@@ -387,9 +403,12 @@ namespace AgOpenGPS
                 };
 
                 //was a file selected
-                if (ofd.ShowDialog() == DialogResult.Cancel) return;
-                else fileAndDirectory = ofd.FileName;
-            }
+                if (ofd.ShowDialog() == DialogResult.Cancel) {
+          return;
+        } else {
+          fileAndDirectory = ofd.FileName;
+        }
+      }
 
             //start to read the file
             string line = null;

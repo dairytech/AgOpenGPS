@@ -33,10 +33,12 @@ namespace AgOpenGPS
             }
 
             //stop it all for adding
-            for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++) mf.bnd.bndArr[i].isOkToAddPoints = false;
+            for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++) {
+        mf.bnd.bndArr[i].isOkToAddPoints = false;
+      }
 
-            //turn lines made from boundaries
-            mf.CalculateMinMax();
+      //turn lines made from boundaries
+      mf.CalculateMinMax();
             mf.FileSaveBoundary();
             mf.turn.BuildTurnLines();
             mf.gf.BuildGeoFenceLines();
@@ -52,8 +54,11 @@ namespace AgOpenGPS
         {
             if (mf.bnd.bndArr[mf.bnd.boundarySelected].isOkToAddPoints)
             {
-                for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++) mf.bnd.bndArr[i].isOkToAddPoints = false;
-                btnPausePlay.Image = Properties.Resources.BoundaryRecord;
+                for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++) {
+          mf.bnd.bndArr[i].isOkToAddPoints = false;
+        }
+
+        btnPausePlay.Image = Properties.Resources.BoundaryRecord;
                 btnPausePlay.Text = "Record";
             }
             else
@@ -66,8 +71,11 @@ namespace AgOpenGPS
 
         private void FormBoundaryPlayer_Load(object sender, EventArgs e)
         {
-            for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++) mf.bnd.bndArr[i].isOkToAddPoints = false;
-            btnPausePlay.Image = Properties.Resources.BoundaryRecord;
+            for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++) {
+        mf.bnd.bndArr[i].isOkToAddPoints = false;
+      }
+
+      btnPausePlay.Image = Properties.Resources.BoundaryRecord;
         }
 
         private void timer1_Tick(object sender, EventArgs e)

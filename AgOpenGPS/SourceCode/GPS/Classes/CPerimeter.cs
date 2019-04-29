@@ -26,12 +26,18 @@ namespace AgOpenGPS
         {
             ////draw the perimeter line so far
             int ptCount = periPtList.Count;
-            if (ptCount < 1) return;
-            GL.LineWidth(2);
+            if (ptCount < 1) {
+        return;
+      }
+
+      GL.LineWidth(2);
             GL.Color3(0.2f, 0.98f, 0.0f);
             GL.Begin(PrimitiveType.LineStrip);
-            for (int h = 0; h < ptCount; h++) GL.Vertex3(periPtList[h].easting, periPtList[h].northing, 0);
-            GL.End();
+            for (int h = 0; h < ptCount; h++) {
+        GL.Vertex3(periPtList[h].easting, periPtList[h].northing, 0);
+      }
+
+      GL.End();
 
             //the "close the loop" line
             GL.LineWidth(1);

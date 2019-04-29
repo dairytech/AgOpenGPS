@@ -25,8 +25,10 @@ namespace AgOpenGPS
             boxLength = 2000;
             //boundaries array
             bndArr = new CBoundaryLines[FormGPS.MAXBOUNDARIES];
-            for (int j = 0; j < FormGPS.MAXBOUNDARIES; j++) bndArr[j] = new CBoundaryLines();
-        }
+            for (int j = 0; j < FormGPS.MAXBOUNDARIES; j++) {
+        bndArr[j] = new CBoundaryLines();
+      }
+    }
 
         // the list of possible bounds points
         public List<vec4> bndClosestList = new List<vec4>();
@@ -89,9 +91,11 @@ namespace AgOpenGPS
             for (int i = 0; i < FormGPS.MAXHEADS; i++)
             {
                 //skip the drive thru
-                if (bndArr[i].isDriveThru) continue;
+                if (bndArr[i].isDriveThru) {
+          continue;
+        }
 
-                ptCount = bndArr[i].bndLine.Count;
+        ptCount = bndArr[i].bndLine.Count;
                 for (int p = 0; p < ptCount; p++)
                 {
                     if ((((boxB.easting - boxA.easting) * (bndArr[i].bndLine[p].northing - boxA.northing))
@@ -138,8 +142,10 @@ namespace AgOpenGPS
                         mf.bnd.closestBoundaryNum = bndClosestList[i].index;
                     }
                 }
-                if (closestBoundaryPt.heading < 0) closestBoundaryPt.heading += glm.twoPI;
-            }
+                if (closestBoundaryPt.heading < 0) {
+          closestBoundaryPt.heading += glm.twoPI;
+        }
+      }
         }
 
         public void DrawBoundaryLines()
@@ -153,8 +159,10 @@ namespace AgOpenGPS
 
         public void ResetBoundaries()
         {
-            for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++) bndArr[i].ResetBoundary();
-        }
+            for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++) {
+        bndArr[i].ResetBoundary();
+      }
+    }
 
         //draws the derived closest point
         public void DrawClosestPoint()

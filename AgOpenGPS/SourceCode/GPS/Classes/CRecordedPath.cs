@@ -76,10 +76,12 @@ namespace AgOpenGPS
             //create the dubins path based on start and goal to start of recorded path
             A = B = C = 0;
             recListCount = recList.Count;
-            if (recListCount < 5) return false;
+            if (recListCount < 5) {
+        return false;
+      }
 
-            //the goal is the first point of path, the start is the current position
-            vec3 goal = new vec3(recList[0].easting, recList[0].northing, recList[0].heading);
+      //the goal is the first point of path, the start is the current position
+      vec3 goal = new vec3(recList[0].easting, recList[0].northing, recList[0].heading);
 
             //save a copy of where we started.
             homePos = mf.pivotAxlePos;
@@ -89,10 +91,12 @@ namespace AgOpenGPS
             shuttleListCount = shuttleDubinsList.Count;
 
             //has a valid dubins path been created?
-            if (shuttleListCount == 0) return false;
+            if (shuttleListCount == 0) {
+        return false;
+      }
 
-            //technically all good if we get here so set all the flags
-            isFollowingDubinsHome = false;
+      //technically all good if we get here so set all the flags
+      isFollowingDubinsHome = false;
             isFollowingRecPath = false;
             isFollowingDubinsToPath = true;
             isEndOfTheRecLine = false;
@@ -154,8 +158,10 @@ namespace AgOpenGPS
                     //section control - only if different click the button
                     bool autoBtn = (mf.autoBtnState == FormGPS.btnStates.Auto);
                     trig = autoBtn;
-                    if (autoBtn != recList[C].autoBtnState) mf.btnSectionOffAutoOn.PerformClick();
-                }
+                    if (autoBtn != recList[C].autoBtnState) {
+            mf.btnSectionOffAutoOn.PerformClick();
+          }
+        }
                 else
                 {
                     //create the dubins path based on start and goal to start trip home
@@ -200,8 +206,10 @@ namespace AgOpenGPS
             }
 
             //if paused, set the sim to 0
-            if (isPausedDrivingRecordedPath) mf.sim.stepDistance = 0 / 17.86;
-        }
+            if (isPausedDrivingRecordedPath) {
+        mf.sim.stepDistance = 0 / 17.86;
+      }
+    }
 
         public void StopDrivingRecordedPath()
         {
@@ -262,10 +270,12 @@ namespace AgOpenGPS
             mazeList = mf.mazeGrid.SearchForPath(pt2, goal);
 
             //you can't get anywhere!
-            if (mazeList == null) return;
+            if (mazeList == null) {
+        return;
+      }
 
-            //start is navigateable - maybe
-            int cnt = mazeList.Count;
+      //start is navigateable - maybe
+      int cnt = mazeList.Count;
 
             if (cnt > 0)
             {
@@ -322,13 +332,23 @@ namespace AgOpenGPS
             steerAngleRP = glm.toDegrees(Math.Atan(2 * (((goalPointRP.easting - pivotAxlePosRP.easting) * Math.Cos(localHeading))
                 + ((goalPointRP.northing - pivotAxlePosRP.northing) * Math.Sin(localHeading))) * mf.vehicle.wheelbase / goalPointDistanceSquared));
 
-            if (steerAngleRP < -mf.vehicle.maxSteerAngle) steerAngleRP = -mf.vehicle.maxSteerAngle;
-            if (steerAngleRP > mf.vehicle.maxSteerAngle) steerAngleRP = mf.vehicle.maxSteerAngle;
+            if (steerAngleRP < -mf.vehicle.maxSteerAngle) {
+        steerAngleRP = -mf.vehicle.maxSteerAngle;
+      }
 
-            if (ppRadiusRP < -500) ppRadiusRP = -500;
-            if (ppRadiusRP > 500) ppRadiusRP = 500;
+      if (steerAngleRP > mf.vehicle.maxSteerAngle) {
+        steerAngleRP = mf.vehicle.maxSteerAngle;
+      }
 
-            radiusPointRP.easting = pivotAxlePosRP.easting + (ppRadiusRP * Math.Cos(localHeading));
+      if (ppRadiusRP < -500) {
+        ppRadiusRP = -500;
+      }
+
+      if (ppRadiusRP > 500) {
+        ppRadiusRP = 500;
+      }
+
+      radiusPointRP.easting = pivotAxlePosRP.easting + (ppRadiusRP * Math.Cos(localHeading));
             radiusPointRP.northing = pivotAxlePosRP.northing + (ppRadiusRP * Math.Sin(localHeading));
 
             //angular velocity in rads/sec  = 2PI * m/sec * radians/meters
@@ -348,8 +368,10 @@ namespace AgOpenGPS
             //if you're going the opposite direction left is right and right is left
             if (isABSameAsFixHeading)
             {
-                if (!isOnRightSideCurrentLine) distanceFromCurrentLine *= -1.0;
-            }
+                if (!isOnRightSideCurrentLine) {
+          distanceFromCurrentLine *= -1.0;
+        }
+      }
 
             //opposite way so right is left
             else if (isOnRightSideCurrentLine)
@@ -368,9 +390,11 @@ namespace AgOpenGPS
 
             //set the search range close to current position
             int top = currentPositonIndex + 5;
-            if (top > ptCount) top = ptCount;
+            if (top > ptCount) {
+        top = ptCount;
+      }
 
-            double dist;
+      double dist;
             for (int t = currentPositonIndex; t < top; t++)
             {
                 dist = ((pivotAxlePosRP.easting - recList[t].easting) * (pivotAxlePosRP.easting - recList[t].easting))
@@ -404,10 +428,12 @@ namespace AgOpenGPS
             //z2-z1
             double dz = recList[B].northing - recList[A].northing;
 
-            if (Math.Abs(dx) < Double.Epsilon && Math.Abs(dz) < Double.Epsilon) return goalPointRP;
+            if (Math.Abs(dx) < Double.Epsilon && Math.Abs(dz) < Double.Epsilon) {
+        return goalPointRP;
+      }
 
-            //abHeading = Math.Atan2(dz, dx);
-            segmentHeading = recList[A].heading;
+      //abHeading = Math.Atan2(dz, dx);
+      segmentHeading = recList[A].heading;
 
             //how far from current AB Line is fix
             distanceFromCurrentLine = ((dz * pivotAxlePosRP.easting) - (dx * pivotAxlePosRP
@@ -431,10 +457,12 @@ namespace AgOpenGPS
 
             //Subtract the two headings, if > 1.57 its going the opposite heading as refAB
             abFixHeadingDelta = (Math.Abs(mf.fixHeading - segmentHeading));
-            if (abFixHeadingDelta >= Math.PI) abFixHeadingDelta = Math.Abs(abFixHeadingDelta - glm.twoPI);
+            if (abFixHeadingDelta >= Math.PI) {
+        abFixHeadingDelta = Math.Abs(abFixHeadingDelta - glm.twoPI);
+      }
 
-            //used for accumulating distance to find goal point
-            double distSoFar;
+      //used for accumulating distance to find goal point
+      double distSoFar;
 
             //update base on autosteer settings and distance from line
             double goalPointDistance = mf.vehicle.UpdateGoalPointDistance(distanceFromCurrentLine);
@@ -523,10 +551,12 @@ namespace AgOpenGPS
             //z2-z1
             double dz = shuttleDubinsList[B].northing - shuttleDubinsList[A].northing;
 
-            if (Math.Abs(dx) < Double.Epsilon && Math.Abs(dz) < Double.Epsilon) return goalPointRP;
+            if (Math.Abs(dx) < Double.Epsilon && Math.Abs(dz) < Double.Epsilon) {
+        return goalPointRP;
+      }
 
-            //abHeading = Math.Atan2(dz, dx);
-            segmentHeading = shuttleDubinsList[A].heading;
+      //abHeading = Math.Atan2(dz, dx);
+      segmentHeading = shuttleDubinsList[A].heading;
 
             //how far from current AB Line is fix
             distanceFromCurrentLine = ((dz * pivotAxlePosRP.easting) - (dx * pivotAxlePosRP
@@ -550,10 +580,12 @@ namespace AgOpenGPS
 
             //Subtract the two headings, if > 1.57 its going the opposite heading as refAB
             abFixHeadingDelta = (Math.Abs(mf.fixHeading - segmentHeading));
-            if (abFixHeadingDelta >= Math.PI) abFixHeadingDelta = Math.Abs(abFixHeadingDelta - glm.twoPI);
+            if (abFixHeadingDelta >= Math.PI) {
+        abFixHeadingDelta = Math.Abs(abFixHeadingDelta - glm.twoPI);
+      }
 
-            //used for accumulating distance to find goal point
-            double distSoFar;
+      //used for accumulating distance to find goal point
+      double distSoFar;
 
             //update base on autosteer settings and distance from line
             double goalPointDistance = mf.vehicle.UpdateGoalPointDistance(distanceFromCurrentLine);
@@ -607,12 +639,18 @@ namespace AgOpenGPS
         public void DrawRecordedLine()
         {
             int ptCount = recList.Count;
-            if (ptCount < 1) return;
-            GL.LineWidth(1);
+            if (ptCount < 1) {
+        return;
+      }
+
+      GL.LineWidth(1);
             GL.Color3(0.98f, 0.92f, 0.460f);
             GL.Begin(PrimitiveType.LineStrip);
-            for (int h = 0; h < ptCount; h++) GL.Vertex3(recList[h].easting, recList[h].northing, 0);
-            GL.End();
+            for (int h = 0; h < ptCount; h++) {
+        GL.Vertex3(recList[h].easting, recList[h].northing, 0);
+      }
+
+      GL.End();
 
             if (mf.isPureDisplayOn)
             {
@@ -663,9 +701,11 @@ namespace AgOpenGPS
                 GL.PointSize(2);
                 GL.Color3(0.298f, 0.96f, 0.2960f);
                 GL.Begin(PrimitiveType.Points);
-                for (int h = 0; h < shuttleDubinsList.Count; h++)
-                    GL.Vertex3(shuttleDubinsList[h].easting, shuttleDubinsList[h].northing, 0);
-                GL.End();
+                for (int h = 0; h < shuttleDubinsList.Count; h++) {
+          GL.Vertex3(shuttleDubinsList[h].easting, shuttleDubinsList[h].northing, 0);
+        }
+
+        GL.End();
             }
         }
     }

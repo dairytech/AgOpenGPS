@@ -111,14 +111,17 @@ namespace AgOpenGPS
             //how far should goal point be away  - speed * seconds * kmph -> m/s then limit min value
             double goalPointDistance = mf.pn.speed * goalPointLookAheadSeconds * 0.27777777;
 
-            if (distanceFromCurrentLine < 1.0)
-                goalPointDistance += distanceFromCurrentLine * goalPointDistance * mf.vehicle.goalPointDistanceMultiplier;
-            else
-                goalPointDistance += goalPointDistance * mf.vehicle.goalPointDistanceMultiplier;
+            if (distanceFromCurrentLine < 1.0) {
+        goalPointDistance += distanceFromCurrentLine * goalPointDistance * mf.vehicle.goalPointDistanceMultiplier;
+      } else {
+        goalPointDistance += goalPointDistance * mf.vehicle.goalPointDistanceMultiplier;
+      }
 
-            if (goalPointDistance < mf.vehicle.goalPointLookAheadMinimumDistance) goalPointDistance = mf.vehicle.goalPointLookAheadMinimumDistance;
+      if (goalPointDistance < mf.vehicle.goalPointLookAheadMinimumDistance) {
+        goalPointDistance = mf.vehicle.goalPointLookAheadMinimumDistance;
+      }
 
-            mf.lookaheadActual = goalPointDistance;
+      mf.lookaheadActual = goalPointDistance;
 
             return goalPointDistance;
         }
@@ -195,9 +198,13 @@ namespace AgOpenGPS
             //draw section line
             if (mf.section[numOfSections].isSectionOn)
             {
-                if (mf.section[0].manBtnState == FormGPS.manBtn.Auto) GL.Color3(0.0f, 0.97f, 0.0f);
-                else GL.Color3(0.99, 0.99, 0);
-                GL.Vertex3(mf.section[numOfSections].positionLeft, trailingTool, 0);
+                if (mf.section[0].manBtnState == FormGPS.manBtn.Auto) {
+          GL.Color3(0.0f, 0.97f, 0.0f);
+        } else {
+          GL.Color3(0.99, 0.99, 0);
+        }
+
+        GL.Vertex3(mf.section[numOfSections].positionLeft, trailingTool, 0);
                 GL.Vertex3(mf.section[numOfSections].positionRight, trailingTool, 0);
             }
             else
@@ -207,9 +214,12 @@ namespace AgOpenGPS
                     //if section is on, green, if off, red color
                     if (mf.section[j].isSectionOn)
                     {
-                        if (mf.section[j].manBtnState == FormGPS.manBtn.Auto) GL.Color3(0.0f, 0.97f, 0.0f);
-                        else GL.Color3(0.97, 0.97, 0);
-                    }
+                        if (mf.section[j].manBtnState == FormGPS.manBtn.Auto) {
+              GL.Color3(0.0f, 0.97f, 0.0f);
+            } else {
+              GL.Color3(0.97, 0.97, 0);
+            }
+          }
                     else
                     {
                         GL.Color3(0.97f, 0.2f, 0.2f);
@@ -230,9 +240,11 @@ namespace AgOpenGPS
                 //section markers
                 GL.PointSize(4.0f);
                 GL.Begin(PrimitiveType.Points);
-                for (int j = 0; j < mf.vehicle.numOfSections - 1; j++)
-                    GL.Vertex3(mf.section[j].positionRight, trailingTool, 0);
-                GL.End();
+                for (int j = 0; j < mf.vehicle.numOfSections - 1; j++) {
+          GL.Vertex3(mf.section[j].positionRight, trailingTool, 0);
+        }
+
+        GL.End();
             }
 
             //draw vehicle

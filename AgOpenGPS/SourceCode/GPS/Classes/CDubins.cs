@@ -510,10 +510,12 @@ namespace AgOpenGPS
             theta += Math.Atan2(goalCircle.northing - startCircle.northing, goalCircle.easting - startCircle.easting);
 
             //Add pi to get the "bottom" coordinate which is on the opposite side (180 degrees = pi)
-            if (isBottom) theta += Math.PI;
+            if (isBottom) {
+        theta += Math.PI;
+      }
 
-            //The coordinates of the first tangent points
-            double xT1 = startCircle.easting + (CDubins.turningRadius * Math.Cos(theta));
+      //The coordinates of the first tangent points
+      double xT1 = startCircle.easting + (CDubins.turningRadius * Math.Cos(theta));
             double zT1 = startCircle.northing + (CDubins.turningRadius * Math.Sin(theta));
 
             //To get the second coordinate we need a direction
@@ -544,10 +546,12 @@ namespace AgOpenGPS
             double theta = Math.Acos((2 * CDubins.turningRadius) / D);
 
             //If the circles is LSR, then the first tangent pos is on the other side of the center line
-            if (isBottom) theta *= -1.0;
+            if (isBottom) {
+        theta *= -1.0;
+      }
 
-            //Need to modify theta if the circles are not on the same height
-            theta += Math.Atan2(goalCircle.northing - startCircle.northing, goalCircle.easting - startCircle.easting);
+      //Need to modify theta if the circles are not on the same height
+      theta += Math.Atan2(goalCircle.northing - startCircle.northing, goalCircle.easting - startCircle.easting);
 
             //The coordinates of the first tangent point
             double xT1 = startCircle.easting + (CDubins.turningRadius * Math.Cos(theta));
@@ -589,13 +593,14 @@ namespace AgOpenGPS
             vec2 V1 = goalCircle - startCircle;
 
             //Different depending on if we calculate LRL or RLR
-            if (isLRL)
-                theta = Math.Atan2(V1.northing, V1.easting) + theta;
-            else
-                theta = Math.Atan2(V1.northing, V1.easting) - theta;
+            if (isLRL) {
+        theta = Math.Atan2(V1.northing, V1.easting) + theta;
+      } else {
+        theta = Math.Atan2(V1.northing, V1.easting) - theta;
+      }
 
-            //Calculate the position of the third circle
-            double x = startCircle.easting + (2 * CDubins.turningRadius * Math.Cos(theta));
+      //Calculate the position of the third circle
+      double x = startCircle.easting + (2 * CDubins.turningRadius * Math.Cos(theta));
             double z = startCircle.northing + (2 * CDubins.turningRadius * Math.Sin(theta));
             middleCircle = new vec2(x, z);
 
@@ -620,9 +625,13 @@ namespace AgOpenGPS
             vec2 V2 = goalPos - circleCenterPos;
 
             double theta = Math.Atan2(V2.northing, V2.easting) - Math.Atan2(V1.northing, V1.easting);
-            if (theta < 0f && isLeftCircle) theta += 2.0 * Math.PI;
-            else if (theta > 0 && !isLeftCircle) theta -= 2.0 * Math.PI;
-            return Math.Abs(theta * CDubins.turningRadius);
+            if (theta < 0f && isLeftCircle) {
+        theta += 2.0 * Math.PI;
+      } else if (theta > 0 && !isLeftCircle) {
+        theta -= 2.0 * Math.PI;
+      }
+
+      return Math.Abs(theta * CDubins.turningRadius);
         }
 
         //Loops through segments of a path and add new coordinates to the final path
@@ -646,10 +655,12 @@ namespace AgOpenGPS
                     //Which way are we turning?
                     double turnParameter = 1.0;
 
-                    if (!isTurningRight) turnParameter = -1.0;
+                    if (!isTurningRight) {
+            turnParameter = -1.0;
+          }
 
-                    //Update the heading
-                    theta += (CDubins.driveDistance / CDubins.turningRadius) * turnParameter;
+          //Update the heading
+          theta += (CDubins.driveDistance / CDubins.turningRadius) * turnParameter;
                 }
 
                 //Add the new coordinate to the path

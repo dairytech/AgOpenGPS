@@ -24,16 +24,25 @@ namespace AgOpenGPS
         private void FormDisplaySettings_Load(object sender, EventArgs e)
         {
             triResolution = (decimal)Properties.Settings.Default.setDisplay_triangleResolution;
-            if (nudTriangleResolution.CheckValue(ref triResolution)) nudTriangleResolution.BackColor = System.Drawing.Color.OrangeRed;
-            nudTriangleResolution.Value = triResolution;
+            if (nudTriangleResolution.CheckValue(ref triResolution)) {
+        nudTriangleResolution.BackColor = System.Drawing.Color.OrangeRed;
+      }
+
+      nudTriangleResolution.Value = triResolution;
 
             boundaryDistance = (decimal)Properties.Settings.Default.setF_boundaryTriggerDistance;
-            if (nudBoundaryDistance.CheckValue(ref boundaryDistance)) nudBoundaryDistance.BackColor = System.Drawing.Color.OrangeRed;
-            nudBoundaryDistance.Value = boundaryDistance;
+            if (nudBoundaryDistance.CheckValue(ref boundaryDistance)) {
+        nudBoundaryDistance.BackColor = System.Drawing.Color.OrangeRed;
+      }
+
+      nudBoundaryDistance.Value = boundaryDistance;
 
             minFixStepDistance = (decimal)Properties.Settings.Default.setF_minFixStep;
-            if (nudMinFixStepDistance.CheckValue(ref minFixStepDistance)) nudMinFixStepDistance.BackColor = System.Drawing.Color.OrangeRed;
-            nudMinFixStepDistance.Value = minFixStepDistance;
+            if (nudMinFixStepDistance.CheckValue(ref minFixStepDistance)) {
+        nudMinFixStepDistance.BackColor = System.Drawing.Color.OrangeRed;
+      }
+
+      nudMinFixStepDistance.Value = minFixStepDistance;
 
             nudLightbarCmPerPixel.Value = (Properties.Settings.Default.setDisplay_lightbarCmPerPixel);
             nudSnapDistance.Value = Properties.Settings.Default.setDisplay_snapDistance;
@@ -57,18 +66,27 @@ namespace AgOpenGPS
             lblRollZeroOffset.Text = ((double)Properties.Settings.Default.setIMU_rollZero / 16).ToString("N2");
 
             headingFromWhichSource = Properties.Settings.Default.setGPS_headingFromWhichSource;
-            if (headingFromWhichSource == "Fix") rbtnHeadingFix.Checked = true;
-            else if (headingFromWhichSource == "GPS") rbtnHeadingGPS.Checked = true;
-            else if (headingFromWhichSource == "HDT") rbtnHeadingHDT.Checked = true;
-        }
+            if (headingFromWhichSource == "Fix") {
+        rbtnHeadingFix.Checked = true;
+      } else if (headingFromWhichSource == "GPS") {
+        rbtnHeadingGPS.Checked = true;
+      } else if (headingFromWhichSource == "HDT") {
+        rbtnHeadingHDT.Checked = true;
+      }
+    }
 
         private void bntOK_Click(object sender, EventArgs e)
         {
             ////Display ---load the delay slides --------------------------------------------------------------------
-            if (headingFromWhichSource == "Fix") Properties.Settings.Default.setGPS_headingFromWhichSource = "Fix";
-            else if (headingFromWhichSource == "GPS") Properties.Settings.Default.setGPS_headingFromWhichSource = "GPS";
-            else if (headingFromWhichSource == "HDT") Properties.Settings.Default.setGPS_headingFromWhichSource = "HDT";
-            mf.headingFromSource = headingFromWhichSource;
+            if (headingFromWhichSource == "Fix") {
+        Properties.Settings.Default.setGPS_headingFromWhichSource = "Fix";
+      } else if (headingFromWhichSource == "GPS") {
+        Properties.Settings.Default.setGPS_headingFromWhichSource = "GPS";
+      } else if (headingFromWhichSource == "HDT") {
+        Properties.Settings.Default.setGPS_headingFromWhichSource = "HDT";
+      }
+
+      mf.headingFromSource = headingFromWhichSource;
 
             mf.boundaryTriggerDistance = (double)boundaryDistance;
             Properties.Settings.Default.setF_boundaryTriggerDistance = mf.boundaryTriggerDistance;
@@ -133,15 +151,20 @@ namespace AgOpenGPS
 
          private void nudSnapDistance_ValueChanged(object sender, EventArgs e)
         {
-            if (nudSnapDistanceSmall.Value > nudSnapDistance.Value) nudSnapDistanceSmall.Value = nudSnapDistance.Value;
+            if (nudSnapDistanceSmall.Value > nudSnapDistance.Value) {
+        nudSnapDistanceSmall.Value = nudSnapDistance.Value;
+      }
 
-            snapDistance = (int)nudSnapDistance.Value;
+      snapDistance = (int)nudSnapDistance.Value;
         }
 
         private void nudSnapDistanceSmall_ValueChanged(object sender, EventArgs e)
         {
-            if (nudSnapDistanceSmall.Value > nudSnapDistance.Value) nudSnapDistanceSmall.Value = nudSnapDistance.Value;
-            snapDistanceSmall = (int)nudSnapDistanceSmall.Value;
+            if (nudSnapDistanceSmall.Value > nudSnapDistance.Value) {
+        nudSnapDistanceSmall.Value = nudSnapDistance.Value;
+      }
+
+      snapDistanceSmall = (int)nudSnapDistanceSmall.Value;
         }
 
         private void nudBoundaryDistance_ValueChanged(object sender, EventArgs e)

@@ -53,10 +53,15 @@ namespace AgOpenGPS
             steerAngle = _st;
             double temp = (stepDistance * Math.Tan(steerAngle * 0.0165329252) / 3.3);
             headingTrue += temp;
-            if (headingTrue > (2.0 * Math.PI)) headingTrue -= (2.0 * Math.PI);
-            if (headingTrue < 0) headingTrue += (2.0 * Math.PI);
+            if (headingTrue > (2.0 * Math.PI)) {
+        headingTrue -= (2.0 * Math.PI);
+      }
 
-            degrees = headingTrue * 57.2958;
+      if (headingTrue < 0) {
+        headingTrue += (2.0 * Math.PI);
+      }
+
+      degrees = headingTrue * 57.2958;
             degrees = Math.Round(degrees, 1);
             //lblHeading.Text = degrees.ToString();
 
@@ -122,11 +127,18 @@ namespace AgOpenGPS
             latNMEA = latMinu + latDeg;
             longNMEA = longMinu + longDeg;
 
-            if (latitude >= 0) NS = 'N';
-            else NS = 'S';
-            if (longitude >= 0) EW = 'E';
-            else EW = 'W';
-        }
+            if (latitude >= 0) {
+        NS = 'N';
+      } else {
+        NS = 'S';
+      }
+
+      if (longitude >= 0) {
+        EW = 'E';
+      } else {
+        EW = 'W';
+      }
+    }
 
         //calculate the NMEA checksum to stuff at the end
         public void CalculateChecksum(string Sentence)
@@ -140,9 +152,11 @@ namespace AgOpenGPS
             {
                 tmp = sentence_chars[inx];
                 // Indicates end of data and start of checksum
-                if (tmp == '*')
-                    break;
-                sum ^= tmp;    // Build checksum
+                if (tmp == '*') {
+          break;
+        }
+
+        sum ^= tmp;    // Build checksum
             }
             // Calculated checksum converted to a 2 digit hex string
             sumStr = String.Format("{0:X2}", sum);

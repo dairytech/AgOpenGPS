@@ -70,59 +70,93 @@ namespace AgOpenGPS
         {
             //Vehicle settings to what it is in the settings page------------------------------------------------
             antennaHeight = Properties.Vehicle.Default.setVehicle_antennaHeight;
-            if (nudAntennaHeight.CheckValueCm(ref antennaHeight)) nudAntennaHeight.BackColor = System.Drawing.Color.OrangeRed;
+            if (nudAntennaHeight.CheckValueCm(ref antennaHeight)) {
+        nudAntennaHeight.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            antennaPivot = Math.Abs(Properties.Vehicle.Default.setVehicle_antennaPivot);
-            if (nudAntennaPivot.CheckValueCm(ref antennaPivot)) nudAntennaPivot.BackColor = System.Drawing.Color.OrangeRed;
+      antennaPivot = Math.Abs(Properties.Vehicle.Default.setVehicle_antennaPivot);
+            if (nudAntennaPivot.CheckValueCm(ref antennaPivot)) {
+        nudAntennaPivot.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            hitchLength = Math.Abs(Properties.Vehicle.Default.setVehicle_hitchLength);
-            if (nudHitchLength.CheckValueCm(ref hitchLength)) nudHitchLength.BackColor = System.Drawing.Color.OrangeRed;
+      hitchLength = Math.Abs(Properties.Vehicle.Default.setVehicle_hitchLength);
+            if (nudHitchLength.CheckValueCm(ref hitchLength)) {
+        nudHitchLength.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            wheelbase = Math.Abs(Properties.Vehicle.Default.setVehicle_wheelbase);
-            if (nudWheelbase.CheckValueCm(ref wheelbase)) nudWheelbase.BackColor = System.Drawing.Color.OrangeRed;
+      wheelbase = Math.Abs(Properties.Vehicle.Default.setVehicle_wheelbase);
+            if (nudWheelbase.CheckValueCm(ref wheelbase)) {
+        nudWheelbase.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            minTurningRadius = Properties.Vehicle.Default.setVehicle_minTurningRadius;
-            if (nudMinTurnRadius.CheckValueCm(ref minTurningRadius)) nudMinTurnRadius.BackColor = System.Drawing.Color.OrangeRed;
+      minTurningRadius = Properties.Vehicle.Default.setVehicle_minTurningRadius;
+            if (nudMinTurnRadius.CheckValueCm(ref minTurningRadius)) {
+        nudMinTurnRadius.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            antennaOffset = Properties.Vehicle.Default.setVehicle_antennaOffset;
-            if (nudAntennaOffset.CheckValueCm(ref antennaOffset)) nudAntennaOffset.BackColor = System.Drawing.Color.OrangeRed;
+      antennaOffset = Properties.Vehicle.Default.setVehicle_antennaOffset;
+            if (nudAntennaOffset.CheckValueCm(ref antennaOffset)) {
+        nudAntennaOffset.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            toolTrailingHitchLength = Math.Abs(Properties.Vehicle.Default.setVehicle_toolTrailingHitchLength);
-            if (nudForeAft.CheckValueCm(ref toolTrailingHitchLength)) nudForeAft.BackColor = System.Drawing.Color.OrangeRed;
+      toolTrailingHitchLength = Math.Abs(Properties.Vehicle.Default.setVehicle_toolTrailingHitchLength);
+            if (nudForeAft.CheckValueCm(ref toolTrailingHitchLength)) {
+        nudForeAft.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            tankTrailingHitchLength = Math.Abs(Properties.Vehicle.Default.setVehicle_tankTrailingHitchLength);
-            if (nudTankHitch.CheckValueCm(ref tankTrailingHitchLength)) nudTankHitch.BackColor = System.Drawing.Color.OrangeRed;
+      tankTrailingHitchLength = Math.Abs(Properties.Vehicle.Default.setVehicle_tankTrailingHitchLength);
+            if (nudTankHitch.CheckValueCm(ref tankTrailingHitchLength)) {
+        nudTankHitch.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            toolOverlap = Properties.Vehicle.Default.setVehicle_toolOverlap;
-            if (nudOverlap.CheckValueCm(ref toolOverlap)) nudOverlap.BackColor = System.Drawing.Color.OrangeRed;
+      toolOverlap = Properties.Vehicle.Default.setVehicle_toolOverlap;
+            if (nudOverlap.CheckValueCm(ref toolOverlap)) {
+        nudOverlap.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            toolOffset = Properties.Vehicle.Default.setVehicle_toolOffset;
-            if (nudOffset.CheckValueCm(ref toolOffset)) nudOffset.BackColor = System.Drawing.Color.OrangeRed;
+      toolOffset = Properties.Vehicle.Default.setVehicle_toolOffset;
+            if (nudOffset.CheckValueCm(ref toolOffset)) {
+        nudOffset.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            decimal temp;
+      decimal temp;
             toolTurnOffDelay = Properties.Vehicle.Default.setVehicle_turnOffDelay;
             temp = (decimal)toolTurnOffDelay;
-            if (nudTurnOffDelay.CheckValue(ref temp)) nudTurnOffDelay.BackColor = System.Drawing.Color.OrangeRed;
-            toolTurnOffDelay = (double)temp;
+            if (nudTurnOffDelay.CheckValue(ref temp)) {
+        nudTurnOffDelay.BackColor = System.Drawing.Color.OrangeRed;
+      }
+
+      toolTurnOffDelay = (double)temp;
 
             minApplied = Properties.Vehicle.Default.setVehicle_minApplied;
             temp = minApplied;
-            if (nudMinApplied.CheckValue(ref temp)) nudMinApplied.BackColor = System.Drawing.Color.OrangeRed;
+            if (nudMinApplied.CheckValue(ref temp)) {
+        nudMinApplied.BackColor = System.Drawing.Color.OrangeRed;
+      }
 
-            toolLookAhead = Properties.Vehicle.Default.setVehicle_lookAhead;
+      toolLookAhead = Properties.Vehicle.Default.setVehicle_lookAhead;
             temp = (decimal)toolLookAhead;
-            if (nudLookAhead.CheckValue(ref temp)) nudLookAhead.BackColor = System.Drawing.Color.OrangeRed;
-            toolLookAhead = (double)temp;
+            if (nudLookAhead.CheckValue(ref temp)) {
+        nudLookAhead.BackColor = System.Drawing.Color.OrangeRed;
+      }
+
+      toolLookAhead = (double)temp;
 
             numberOfSections = Properties.Vehicle.Default.setVehicle_numSections;
             temp = numberOfSections;
-            if (nudNumberOfSections.CheckValue(ref temp)) nudNumberOfSections.BackColor = System.Drawing.Color.OrangeRed;
-            numberOfSections = (int)temp;
+            if (nudNumberOfSections.CheckValue(ref temp)) {
+        nudNumberOfSections.BackColor = System.Drawing.Color.OrangeRed;
+      }
+
+      numberOfSections = (int)temp;
 
             cutoffSpeed = Properties.Vehicle.Default.setVehicle_slowSpeedCutoff / cutoffMetricImperial;
             temp = (decimal)cutoffSpeed;
-            if (nudCutoffSpeed.CheckValue(ref temp)) nudCutoffSpeed.BackColor = System.Drawing.Color.OrangeRed;
-            cutoffSpeed = (double)temp;
+            if (nudCutoffSpeed.CheckValue(ref temp)) {
+        nudCutoffSpeed.BackColor = System.Drawing.Color.OrangeRed;
+      }
+
+      cutoffSpeed = (double)temp;
 
             isToolBehindPivot = Properties.Vehicle.Default.setVehicle_isToolBehindPivot;
             isToolTrailing = Properties.Vehicle.Default.setVehicle_isToolTrailing;
@@ -282,15 +316,21 @@ namespace AgOpenGPS
         {
             //Vehicle settings -------------------------------------------------------------------------------
 
-            if (!isPivotBehindAntenna) antennaPivot *= -1;
-            mf.vehicle.antennaPivot = antennaPivot;
+            if (!isPivotBehindAntenna) {
+        antennaPivot *= -1;
+      }
+
+      mf.vehicle.antennaPivot = antennaPivot;
             Properties.Vehicle.Default.setVehicle_antennaPivot = mf.vehicle.antennaPivot;
 
             mf.vehicle.isPivotBehindAntenna = isPivotBehindAntenna;
             Properties.Vehicle.Default.setVehicle_isPivotBehindAntenna = mf.vehicle.isPivotBehindAntenna;
 
-            if (!isSteerAxleAhead) wheelbase *= -1;
-            mf.vehicle.wheelbase = wheelbase;
+            if (!isSteerAxleAhead) {
+        wheelbase *= -1;
+      }
+
+      mf.vehicle.wheelbase = wheelbase;
             Properties.Vehicle.Default.setVehicle_wheelbase = wheelbase;
 
             mf.vehicle.minTurningRadius = minTurningRadius;
@@ -334,8 +374,11 @@ namespace AgOpenGPS
             mf.vehicle.isToolBehindPivot = isToolBehindPivot;
             Properties.Vehicle.Default.setVehicle_isToolBehindPivot = mf.vehicle.isToolBehindPivot;
 
-            if (isToolBehindPivot) hitchLength *= -1;
-            mf.vehicle.hitchLength = hitchLength;
+            if (isToolBehindPivot) {
+        hitchLength *= -1;
+      }
+
+      mf.vehicle.hitchLength = hitchLength;
             Properties.Vehicle.Default.setVehicle_hitchLength = mf.vehicle.hitchLength;
 
             //Sections ------------------------------------------------------------------------------------------
@@ -1028,9 +1071,11 @@ namespace AgOpenGPS
         {
             numberOfSections = (int)nudNumberOfSections.Value;
             decimal wide = 300;
-            if (!mf.isMetric) wide = 100;
+            if (!mf.isMetric) {
+        wide = 100;
+      }
 
-            nudSection1.ValueChanged -= nudSection1_ValueChanged;
+      nudSection1.ValueChanged -= nudSection1_ValueChanged;
             nudSection1.Value = wide;
             nudSection1.ValueChanged += nudSection1_ValueChanged;
 
@@ -1085,74 +1130,98 @@ namespace AgOpenGPS
         private void nudSection1_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection1.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection1.Value--;
+      }
+    }
 
         private void nudSection2_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection2.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection2.Value--;
+      }
+    }
 
         private void nudSection3_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection3.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection3.Value--;
+      }
+    }
 
         private void nudSection4_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection4.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection4.Value--;
+      }
+    }
 
         private void nudSection5_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection5.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection5.Value--;
+      }
+    }
 
         private void nudSection6_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection6.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection6.Value--;
+      }
+    }
 
         private void nudSection7_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection7.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection7.Value--;
+      }
+    }
 
         private void nudSection8_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection8.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection8.Value--;
+      }
+    }
 
         private void nudSection9_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection9.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection9.Value--;
+      }
+    }
 
         private void nudSection10_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection10.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection10.Value--;
+      }
+    }
 
         private void nudSection11_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection11.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection11.Value--;
+      }
+    }
 
         private void nudSection12_ValueChanged(object sender, EventArgs e)
         {
             UpdateSpinners();
-            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) nudSection12.Value--;
-        }
+            if (Convert.ToDouble(lblVehicleToolWidth.Text) > maxWidth) {
+        nudSection12.Value--;
+      }
+    }
 
         #endregion Sections //---------------------------------------------------------------
 

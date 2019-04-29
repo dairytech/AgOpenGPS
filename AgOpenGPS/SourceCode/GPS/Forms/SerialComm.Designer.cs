@@ -204,6 +204,13 @@ namespace AgOpenGPS {
         dataForUDP[7] = 0;
       }
 
+      if( !rcd.isRateControlOn ) {
+        dataForUDP[4] = 0;
+        dataForUDP[5] = 0;
+        dataForUDP[6] = 0;
+        dataForUDP[7] = 0;
+      }
+
       SendUDPMessage( dataForUDP );
 
       //Tell Arduino autoSteer settings

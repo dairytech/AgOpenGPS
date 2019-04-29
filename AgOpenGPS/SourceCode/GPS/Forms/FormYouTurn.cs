@@ -709,48 +709,62 @@ namespace AgOpenGPS {
     #region distance
 
     private void btnDistanceDn_Click( object sender, EventArgs e ) {
-      if( mf.yt.youTurnStartOffset-- < 4 )
+      if( mf.yt.youTurnStartOffset-- < 4 ) {
         mf.yt.youTurnStartOffset = 3;
+      }
+
       lblDistance.Text = Math.Abs( mf.yt.youTurnStartOffset ).ToString() + " m";
-      if( mf.yt.youTurnStartOffset < 0 )
+      if( mf.yt.youTurnStartOffset < 0 ) {
         lblWhenTrig.Text = "Before";
-      else
+      } else {
         lblWhenTrig.Text = "After";
+      }
     }
 
     private void btnDistanceUp_Click( object sender, EventArgs e ) {
-      if( mf.yt.youTurnStartOffset++ > 49 )
+      if( mf.yt.youTurnStartOffset++ > 49 ) {
         mf.yt.youTurnStartOffset = 50;
+      }
+
       lblDistance.Text = Math.Abs( mf.yt.youTurnStartOffset ).ToString() + " m";
-      if( mf.yt.youTurnStartOffset < 0 )
+      if( mf.yt.youTurnStartOffset < 0 ) {
         lblWhenTrig.Text = "Before";
-      else
+      } else {
         lblWhenTrig.Text = "After";
+      }
     }
 
     private void btnTriggerDistanceUp_MouseDown( object sender, MouseEventArgs e ) {
-      if( mf.yt.triggerDistanceOffset++ > 50 )
+      if( mf.yt.triggerDistanceOffset++ > 50 ) {
         mf.yt.triggerDistanceOffset = 50;
+      }
+
       lblTriggerDistance.Text = mf.yt.triggerDistanceOffset.ToString() + "m";
     }
 
     private void btnTriggerDistanceDn_MouseDown( object sender, MouseEventArgs e ) {
       mf.yt.triggerDistanceOffset--;
-      if( mf.yt.triggerDistanceOffset < 0 )
+      if( mf.yt.triggerDistanceOffset < 0 ) {
         mf.yt.triggerDistanceOffset = 0;
+      }
+
       lblTriggerDistance.Text = mf.yt.triggerDistanceOffset.ToString() + "m";
     }
 
     private void btnGeoFenceDistanceUp_MouseDown( object sender, MouseEventArgs e ) {
-      if( mf.yt.geoFenceDistance++ > 50 )
+      if( mf.yt.geoFenceDistance++ > 50 ) {
         mf.yt.geoFenceDistance = 50;
+      }
+
       lblGeoFenceDistance.Text = mf.yt.geoFenceDistance.ToString() + "m";
     }
 
     private void btnGeoFenceDistanceDn_MouseDown( object sender, MouseEventArgs e ) {
       mf.yt.geoFenceDistance--;
-      if( mf.yt.geoFenceDistance < 0 )
+      if( mf.yt.geoFenceDistance < 0 ) {
         mf.yt.geoFenceDistance = 0;
+      }
+
       lblGeoFenceDistance.Text = mf.yt.geoFenceDistance.ToString() + "m";
     }
 
@@ -1090,35 +1104,41 @@ namespace AgOpenGPS {
     }
 
     private void FunctionButtonsOnOff() {
-      if( ( mf.yt.getRelaisStateOf( 0 ) ) )
+      if( ( mf.yt.getRelaisStateOf( 0 ) ) ) {
         btnToggle3.BackColor = Color.LightGreen;
-      else
+      } else {
         btnToggle3.BackColor = Color.LightSalmon;
+      }
 
-      if( ( mf.yt.getRelaisStateOf( 1 ) ) )
+      if( ( mf.yt.getRelaisStateOf( 1 ) ) ) {
         btnToggle4.BackColor = Color.LightGreen;
-      else
+      } else {
         btnToggle4.BackColor = Color.LightSalmon;
+      }
 
-      if( ( mf.yt.getRelaisStateOf( 2 ) ) )
+      if( ( mf.yt.getRelaisStateOf( 2 ) ) ) {
         btnToggle5.BackColor = Color.LightGreen;
-      else
+      } else {
         btnToggle5.BackColor = Color.LightSalmon;
+      }
 
-      if( ( mf.yt.getRelaisStateOf( 3 ) ) )
+      if( ( mf.yt.getRelaisStateOf( 3 ) ) ) {
         btnToggle6.BackColor = Color.LightGreen;
-      else
+      } else {
         btnToggle6.BackColor = Color.LightSalmon;
+      }
 
-      if( ( mf.yt.getRelaisStateOf( 4 ) ) )
+      if( ( mf.yt.getRelaisStateOf( 4 ) ) ) {
         btnToggle7.BackColor = Color.LightGreen;
-      else
+      } else {
         btnToggle7.BackColor = Color.LightSalmon;
+      }
 
-      if( ( mf.yt.getRelaisStateOf( 5 ) ) )
+      if( ( mf.yt.getRelaisStateOf( 5 ) ) ) {
         btnToggle8.BackColor = Color.LightGreen;
-      else
+      } else {
         btnToggle8.BackColor = Color.LightSalmon;
+      }
     }
   }
 }

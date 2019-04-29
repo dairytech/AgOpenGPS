@@ -76,8 +76,9 @@ namespace AgOpenGPS {
         mf.mc.gyroHeading = heading;
       }
 
-      if( isRollBrick )
+      if( isRollBrick ) {
         mf.mc.rollRaw = roll;
+      }
     }
   }
 }

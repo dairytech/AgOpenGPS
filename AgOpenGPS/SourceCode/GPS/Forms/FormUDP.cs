@@ -79,23 +79,31 @@ namespace AgOpenGPS
             string[] arrOctets = strIP.Split('.');
 
             //at least 4 groups in the IP
-            if (arrOctets.Length != 4) return false;
+            if (arrOctets.Length != 4) {
+        return false;
+      }
 
-            //  Check each substring checking that the int value is less than 255 and that is char[] length is !> 2
-            const Int16 MAXVALUE = 255;
+      //  Check each substring checking that the int value is less than 255 and that is char[] length is !> 2
+      const Int16 MAXVALUE = 255;
             Int32 temp; // Parse returns Int32
             foreach (String strOctet in arrOctets)
             {
                 //check if at least 3 digits but not more OR 0 length
-                if (strOctet.Length > 3 | strOctet.Length == 0) return false;
+                if (strOctet.Length > 3 | strOctet.Length == 0) {
+          return false;
+        }
 
-                //make sure all digits
-                if (!int.TryParse(strOctet, out int temp2)) return false;
+        //make sure all digits
+        if (!int.TryParse(strOctet, out int temp2)) {
+          return false;
+        }
 
-                //make sure not more then 255
-                temp = int.Parse(strOctet);
-                if (temp > MAXVALUE | temp < 0) return false;
-            }
+        //make sure not more then 255
+        temp = int.Parse(strOctet);
+                if (temp > MAXVALUE | temp < 0) {
+          return false;
+        }
+      }
             return true;
         }
 

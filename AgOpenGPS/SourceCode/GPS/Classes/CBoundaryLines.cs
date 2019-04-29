@@ -56,23 +56,32 @@ namespace AgOpenGPS
             //first point needs last, first, second points
             CBndPt pt3 = arr[0];
             pt3.heading = Math.Atan2(arr[1].easting - arr[cnt].easting, arr[1].northing - arr[cnt].northing);
-            if (pt3.heading < 0) pt3.heading += glm.twoPI;
-            bndLine.Add(pt3);
+            if (pt3.heading < 0) {
+        pt3.heading += glm.twoPI;
+      }
+
+      bndLine.Add(pt3);
 
             //middle points
             for (int i = 1; i < cnt; i++)
             {
                 pt3 = arr[i];
                 pt3.heading = Math.Atan2(arr[i + 1].easting - arr[i - 1].easting, arr[i + 1].northing - arr[i - 1].northing);
-                if (pt3.heading < 0) pt3.heading += glm.twoPI;
-                bndLine.Add(pt3);
+                if (pt3.heading < 0) {
+          pt3.heading += glm.twoPI;
+        }
+
+        bndLine.Add(pt3);
             }
 
             //last and first point
             pt3 = arr[cnt];
             pt3.heading = Math.Atan2(arr[0].easting - arr[cnt - 1].easting, arr[0].northing - arr[cnt - 1].northing);
-            if (pt3.heading < 0) pt3.heading += glm.twoPI;
-            bndLine.Add(pt3);
+            if (pt3.heading < 0) {
+        pt3.heading += glm.twoPI;
+      }
+
+      bndLine.Add(pt3);
         }
 
         public void ResetBoundary()
@@ -100,13 +109,18 @@ namespace AgOpenGPS
             if (bndNum == 0)
             {
                 //outside an outer boundary means its wound clockwise
-                if (!IsPointInsideBoundary(point)) ReverseWinding();
-            }
+                if (!IsPointInsideBoundary(point)) {
+          ReverseWinding();
+        }
+      }
             else
             {
                 //inside an inner boundary means its wound clockwise
-                if (IsPointInsideBoundary(point)) ReverseWinding();
-                spacing = 3;
+                if (IsPointInsideBoundary(point)) {
+          ReverseWinding();
+        }
+
+        spacing = 3;
             }
 
             //make sure distance isn't too small between points on headland
@@ -131,8 +145,11 @@ namespace AgOpenGPS
             {
                 int j = i + 1;
 
-                if (j == bndCount) j = 0;
-                distance = glm.Distance(bndLine[i], bndLine[j]);
+                if (j == bndCount) {
+          j = 0;
+        }
+
+        distance = glm.Distance(bndLine[i], bndLine[j]);
                 if (distance > spacing)
                 {
                     CBndPt pointB = new CBndPt((bndLine[i].easting + bndLine[j].easting) / 2.0,
@@ -152,8 +169,11 @@ namespace AgOpenGPS
             {
                 int j = i + 1;
 
-                if (j == bndCount) j = 0;
-                distance = glm.Distance(bndLine[i], bndLine[j]);
+                if (j == bndCount) {
+          j = 0;
+        }
+
+        distance = glm.Distance(bndLine[i], bndLine[j]);
                 if (distance > spacing)
                 {
                     CBndPt pointB = new CBndPt((bndLine[i].easting + bndLine[j].easting) / 2.0,
@@ -180,8 +200,11 @@ namespace AgOpenGPS
             for (int i = cnt; i >= 0; i--)
             {
                 arr[i].heading -= Math.PI;
-                if (arr[i].heading < 0) arr[i].heading += glm.twoPI;
-                bndLine.Add(arr[i]);
+                if (arr[i].heading < 0) {
+          arr[i].heading += glm.twoPI;
+        }
+
+        bndLine.Add(arr[i]);
             }
         }
 
@@ -215,8 +238,11 @@ namespace AgOpenGPS
 
         public bool IsPointInsideBoundary(vec3 testPointv3)
         {
-            if (calcList.Count < 3) return false;
-            int j = bndLine.Count - 1;
+            if (calcList.Count < 3) {
+        return false;
+      }
+
+      int j = bndLine.Count - 1;
             bool oddNodes = false;
 
             //test against the constant and multiples list the test point
@@ -233,8 +259,11 @@ namespace AgOpenGPS
 
         public bool IsPointInsideBoundary(vec2 testPointv2)
         {
-            if (calcList.Count < 3) return false;
-            int j = bndLine.Count - 1;
+            if (calcList.Count < 3) {
+        return false;
+      }
+
+      int j = bndLine.Count - 1;
             bool oddNodes = false;
 
             //test against the constant and multiples list the test point
@@ -253,13 +282,23 @@ namespace AgOpenGPS
         {
             ////draw the perimeter line so far
             int ptCount = bndLine.Count;
-            if (ptCount < 1) return;
-            GL.LineWidth(1);
-            if (isDriveThru) GL.Color3(0.25f, 0.752f, 0.860f);
-            else GL.Color3(0.25f, 0.2f, 0.90f);
-            GL.Begin(PrimitiveType.LineStrip);
-            for (int h = 0; h < ptCount; h++) GL.Vertex3(bndLine[h].easting, bndLine[h].northing, 0);
-            GL.Color3(0.95f, 0.972f, 0.90f);
+            if (ptCount < 1) {
+        return;
+      }
+
+      GL.LineWidth(1);
+            if (isDriveThru) {
+        GL.Color3(0.25f, 0.752f, 0.860f);
+      } else {
+        GL.Color3(0.25f, 0.2f, 0.90f);
+      }
+
+      GL.Begin(PrimitiveType.LineStrip);
+            for (int h = 0; h < ptCount; h++) {
+        GL.Vertex3(bndLine[h].easting, bndLine[h].northing, 0);
+      }
+
+      GL.Color3(0.95f, 0.972f, 0.90f);
             GL.Vertex3(bndLine[0].easting, bndLine[0].northing, 0);
             GL.End();
 
@@ -282,29 +321,33 @@ namespace AgOpenGPS
         {
             ////draw the perimeter line so far
             int ptCount = bndLine.Count;
-            if (ptCount < 1) return;
-            //glb.LineWidth(4);
-            //glb.Color(0.0f, 0.99f, 0.0f);
-            //glb.Begin(OpenGL.GL_LINE_STRIP);
-            //for (int h = 0; h < ptCount; h++) glb.Vertex(ptList[h].easting, ptList[h].northing, 0);
-            //glb.End();
+            if (ptCount < 1) {
+        return;
+      }
+      //glb.LineWidth(4);
+      //glb.Color(0.0f, 0.99f, 0.0f);
+      //glb.Begin(OpenGL.GL_LINE_STRIP);
+      //for (int h = 0; h < ptCount; h++) glb.Vertex(ptList[h].easting, ptList[h].northing, 0);
+      //glb.End();
 
-            ////the "close the loop" line
-            //glb.LineWidth(4);
-            //glb.Color(0.0f, 0.990f, 0.0f);
-            //glb.Begin(OpenGL.GL_LINE_STRIP);
-            //glb.Vertex(ptList[ptCount - 1].easting, ptList[ptCount - 1].northing, 0);
-            //glb.Vertex(ptList[0].easting, ptList[0].northing, 0);
-            //glb.End();
-        }
+      ////the "close the loop" line
+      //glb.LineWidth(4);
+      //glb.Color(0.0f, 0.990f, 0.0f);
+      //glb.Begin(OpenGL.GL_LINE_STRIP);
+      //glb.Vertex(ptList[ptCount - 1].easting, ptList[ptCount - 1].northing, 0);
+      //glb.Vertex(ptList[0].easting, ptList[0].northing, 0);
+      //glb.End();
+    }
 
         //obvious
         public void CalculateBoundaryArea()
         {
             int ptCount = bndLine.Count;
-            if (ptCount < 1) return;
+            if (ptCount < 1) {
+        return;
+      }
 
-            area = 0;         // Accumulates area in the loop
+      area = 0;         // Accumulates area in the loop
             int j = ptCount - 1;  // The last vertex is the 'previous' one to the first
 
             for (int i = 0; i < ptCount; j = i++)

@@ -44,18 +44,24 @@ namespace AgOpenGPS
         {
             get
             {
-                if (workedAreaTotal < 404048) return (workedAreaTotal * 0.000247105).ToString("N2");
-                else return (workedAreaTotal * 0.000247105).ToString("N1");
-            }
+                if (workedAreaTotal < 404048) {
+          return (workedAreaTotal * 0.000247105).ToString("N2");
+        } else {
+          return (workedAreaTotal * 0.000247105).ToString("N1");
+        }
+      }
         }
 
         public string WorkedHectares
         {
             get
             {
-                if (workedAreaTotal < 99000) return (workedAreaTotal * 0.0001).ToString("N2");
-                else return (workedAreaTotal * 0.0001).ToString("N1");
-            }
+                if (workedAreaTotal < 99000) {
+          return (workedAreaTotal * 0.0001).ToString("N2");
+        } else {
+          return (workedAreaTotal * 0.0001).ToString("N1");
+        }
+      }
         }
 
         //User Distance strings
@@ -72,20 +78,24 @@ namespace AgOpenGPS
         {
             get
             {
-                if (areaBoundaryOuterLessInner > 10)
-                    return ((areaBoundaryOuterLessInner - workedAreaTotal) * 100 / areaBoundaryOuterLessInner).ToString("N2") + "%";
-                else return "0.00%";
-            }
+                if (areaBoundaryOuterLessInner > 10) {
+          return ((areaBoundaryOuterLessInner - workedAreaTotal) * 100 / areaBoundaryOuterLessInner).ToString("N2") + "%";
+        } else {
+          return "0.00%";
+        }
+      }
         }
 
         public string TimeTillFinished
         {
             get
             {
-                if (mf.pn.speed > 0.1)
-                    return (((areaBoundaryOuterLessInner - workedAreaTotal) * glm.m2ha) / (mf.vehicle.toolWidth * mf.pn.speed * 0.1)).ToString("N1") + " Hours";
-                else return "\u221E Hours";
-            }
+                if (mf.pn.speed > 0.1) {
+          return (((areaBoundaryOuterLessInner - workedAreaTotal) * glm.m2ha) / (mf.vehicle.toolWidth * mf.pn.speed * 0.1)).ToString("N1") + " Hours";
+        } else {
+          return "\u221E Hours";
+        }
+      }
         }
 
         public string WorkRateHectares { get { return (mf.vehicle.toolWidth * mf.pn.speed * 0.1).ToString("N1") + "\r\nHa/hr"; } }
@@ -107,8 +117,10 @@ namespace AgOpenGPS
 
             for (int i = 1; i < FormGPS.MAXBOUNDARIES; i++)
             {
-                if (mf.bnd.bndArr[i].isSet) areaBoundaryOuterLessInner -= mf.bnd.bndArr[i].area;
-            }
+                if (mf.bnd.bndArr[i].isSet) {
+          areaBoundaryOuterLessInner -= mf.bnd.bndArr[i].area;
+        }
+      }
         }
     }
 }

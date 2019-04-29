@@ -26,13 +26,18 @@ namespace AgOpenGPS
             double mazeY = (mf.maxFieldY - mf.minFieldY);
             double mazeX = (mf.maxFieldX - mf.minFieldX);
 
-            if (mazeY > mazeX) mazeScale = (int)(mazeY / 150);
-            else mazeScale = (int)(mazeX / 150);
+            if (mazeY > mazeX) {
+        mazeScale = (int)(mazeY / 150);
+      } else {
+        mazeScale = (int)(mazeX / 150);
+      }
 
-            if (mazeScale < 4) mazeScale = 4;
-            //mazeScale = 4;
+      if (mazeScale < 4) {
+        mazeScale = 4;
+      }
+      //mazeScale = 4;
 
-            mazeRowYDim = (int)mazeY / mazeScale;
+      mazeRowYDim = (int)mazeY / mazeScale;
             mazeColXDim = (int)mazeX / mazeScale;
             mazeArr = new int[mazeRowYDim * mazeColXDim];
 
@@ -69,11 +74,22 @@ namespace AgOpenGPS
                 {
                     if (i > 0 && i < mazeRowYDim - 1 && j > 0 && j < mazeColXDim - 1)
                     {
-                        if (arr[i, j] == 1 && arr[i + 1, j] == 0) arr[i + 1, j] = 2;
-                        if (arr[i, j] == 1 && arr[i - 1, j] == 0) arr[i - 1, j] = 2;
-                        if (arr[i, j] == 1 && arr[i, j + 1] == 0) arr[i, j + 1] = 2;
-                        if (arr[i, j] == 1 && arr[i, j - 1] == 0) arr[i, j - 1] = 2;
-                    }
+                        if (arr[i, j] == 1 && arr[i + 1, j] == 0) {
+              arr[i + 1, j] = 2;
+            }
+
+            if (arr[i, j] == 1 && arr[i - 1, j] == 0) {
+              arr[i - 1, j] = 2;
+            }
+
+            if (arr[i, j] == 1 && arr[i, j + 1] == 0) {
+              arr[i, j + 1] = 2;
+            }
+
+            if (arr[i, j] == 1 && arr[i, j - 1] == 0) {
+              arr[i, j - 1] = 2;
+            }
+          }
                 }
             }
 
@@ -122,10 +138,12 @@ namespace AgOpenGPS
                                           (int)((stop.northing - mf.minFieldY) / mf.mazeGrid.mazeScale),
                                           (int)((stop.easting - mf.minFieldX) / mf.mazeGrid.mazeScale));
 
-            if (mazeList == null) return mazeList;
+            if (mazeList == null) {
+        return mazeList;
+      }
 
-            //we find our way back, we want to go forward, so reverse the list
-            mazeList.Reverse();
+      //we find our way back, we want to go forward, so reverse the list
+      mazeList.Reverse();
 
             int cnt = mazeList.Count;
 
@@ -152,9 +170,11 @@ namespace AgOpenGPS
             for (int i = 0; i < cnt; i++)
             {
                 int j = i + 1;
-                if (j == cnt)
-                    j = i;
-                double distance = glm.Distance(mazeList[i], mazeList[j]);
+                if (j == cnt) {
+          j = i;
+        }
+
+        double distance = glm.Distance(mazeList[i], mazeList[j]);
                 if (distance > 2)
                 {
                     vec3 pointB = new vec3((mazeList[i].easting + mazeList[j].easting) / 2.0,
@@ -209,8 +229,11 @@ namespace AgOpenGPS
             {
                 vec3 pt3 = arr[i];
                 pt3.heading = Math.Atan2(arr[i + 1].easting - arr[i].easting, arr[i + 1].northing - arr[i].northing);
-                if (pt3.heading < 0) pt3.heading += glm.twoPI;
-                mazeList.Add(pt3);
+                if (pt3.heading < 0) {
+          pt3.heading += glm.twoPI;
+        }
+
+        mazeList.Add(pt3);
             }
 
             return mazeList;

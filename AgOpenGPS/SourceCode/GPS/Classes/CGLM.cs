@@ -217,8 +217,11 @@ namespace AgOpenGPS
 
         public static float acosh(float x)
         {
-            if (x < 1f) return 0f;
-            return (float)Math.Log(x + Math.Sqrt((x * x) - 1f));
+            if (x < 1f) {
+        return 0f;
+      }
+
+      return (float)Math.Log(x + Math.Sqrt((x * x) - 1f));
         }
 
         public static float asin(float x)
@@ -243,8 +246,11 @@ namespace AgOpenGPS
 
         public static float atanh(float x)
         {
-            if (Math.Abs(x) >= 1f) return 0;
-            return 0.5f * (float)Math.Log((1f + x) / (1f - x));
+            if (Math.Abs(x) >= 1f) {
+        return 0;
+      }
+
+      return 0.5f * (float)Math.Log((1f + x) / (1f - x));
         }
 
         public static float cos(float angle)

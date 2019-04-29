@@ -3,34 +3,29 @@ using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace AgOpenGPS
-{
-    public partial class FormSteerGraph : Form
-    {
-        private readonly FormGPS mf = null;
-        private string[] words;
+namespace AgOpenGPS {
+  public partial class FormSteerGraph : Form {
+    private readonly FormGPS mf = null;
+    private string[] words;
 
-        private bool mode = true;
-        private double error, actual = 0;
+    private bool mode = true;
+    private double error, actual = 0;
 
-        //chart data
-        private string dataSteerAngle = "0";
+    //chart data
+    private string dataSteerAngle = "0";
 
-        private string dataPWM = "-1";
+    private string dataPWM = "-1";
 
-        public FormSteerGraph(Form callingForm)
-        {
-            mf = callingForm as FormGPS;
-            InitializeComponent();
-        }
+    public FormSteerGraph( Form callingForm ) {
+      mf = callingForm as FormGPS;
+      InitializeComponent();
+    }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            DrawChart();
-        }
+    private void timer1_Tick( object sender, EventArgs e ) {
+      DrawChart();
+    }
 
-        private void DrawChart()
-        {
+    private void DrawChart() {
 #warning implement charts!
       ////just data
       //words = mf.mc.serialRecvAutoSteerStr.Split(',');
@@ -67,45 +62,48 @@ namespace AgOpenGPS
 
       //chart data
       Series s = unoChart.Series["S"];
-            Series w = unoChart.Series["PWM"];
-            double nextX = 1;
-            double nextX5 = 1;
+      Series w = unoChart.Series["PWM"];
+      double nextX = 1;
+      double nextX5 = 1;
 
-            if (s.Points.Count > 0) nextX = s.Points[s.Points.Count - 1].XValue + 1;
-            if (w.Points.Count > 0) nextX5 = w.Points[w.Points.Count - 1].XValue + 1;
+      if( s.Points.Count > 0 ) {
+        nextX = s.Points[s.Points.Count - 1].XValue + 1;
+      }
 
-            unoChart.Series["S"].Points.AddXY(nextX, dataSteerAngle);
-            unoChart.Series["PWM"].Points.AddXY(nextX5, dataPWM);
+      if( w.Points.Count > 0 ) {
+        nextX5 = w.Points[w.Points.Count - 1].XValue + 1;
+      }
 
-            //if (isScroll)
-            {
-                while (s.Points.Count > 30)
-                {
-                    s.Points.RemoveAt(0);
-                }
-                while (w.Points.Count > 30)
-                {
-                    w.Points.RemoveAt(0);
-                }
-                unoChart.ResetAutoValues();
-            }
+      unoChart.Series["S"].Points.AddXY( nextX, dataSteerAngle );
+      unoChart.Series["PWM"].Points.AddXY( nextX5, dataPWM );
+
+      //if (isScroll)
+      {
+        while( s.Points.Count > 30 ) {
+          s.Points.RemoveAt( 0 );
         }
-
-        private void FormSteerGraph_Load(object sender, EventArgs e)
-        {
-            timer1.Interval = (int)((1 / (double)mf.fixUpdateHz) * 1000);
+        while( w.Points.Count > 30 ) {
+          w.Points.RemoveAt( 0 );
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void btnMode_Click(object sender, EventArgs e)
-        {
-            mode = !mode;
-            if (mode) btnMode.Text = "A   S";
-            else btnMode.Text = "A - S";
-        }
+        unoChart.ResetAutoValues();
+      }
     }
+
+    private void FormSteerGraph_Load( object sender, EventArgs e ) {
+      timer1.Interval = (int)( ( 1 / (double)mf.fixUpdateHz ) * 1000 );
+    }
+
+    private void button1_Click( object sender, EventArgs e ) {
+      Close();
+    }
+
+    private void btnMode_Click( object sender, EventArgs e ) {
+      mode = !mode;
+      if( mode ) {
+        btnMode.Text = "A   S";
+      } else {
+        btnMode.Text = "A - S";
+      }
+    }
+  }
 }

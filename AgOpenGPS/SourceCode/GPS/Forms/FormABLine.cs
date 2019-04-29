@@ -109,8 +109,10 @@ namespace AgOpenGPS
                 }
 
                 // go to bottom of list - if there is a bottom
-                if (lvLines.Items.Count > 0) lvLines.Items[lvLines.Items.Count - 1].EnsureVisible();
-            }
+                if (lvLines.Items.Count > 0) {
+          lvLines.Items[lvLines.Items.Count - 1].EnsureVisible();
+        }
+      }
         }
 
         private void btnAPoint_Click(object sender, EventArgs e)
@@ -138,8 +140,11 @@ namespace AgOpenGPS
 
         private void btnUpABHeading_Click(object sender, EventArgs e)
         {
-            if ((upDnHeading += 10) > 359.999999) upDnHeading = 0;
-            upDnHeading = (int)upDnHeading;
+            if ((upDnHeading += 10) > 359.999999) {
+        upDnHeading = 0;
+      }
+
+      upDnHeading = (int)upDnHeading;
             mf.ABLine.abHeading = glm.toRadians(upDnHeading);
             tboxHeading.Text = Convert.ToString(upDnHeading, CultureInfo.InvariantCulture);
             btnABLineOk.Enabled = true;
@@ -147,8 +152,11 @@ namespace AgOpenGPS
 
         private void btnDownABHeading_Click(object sender, EventArgs e)
         {
-            if ((upDnHeading -= 10) < 0) upDnHeading = 350;
-            upDnHeading = (int)upDnHeading;
+            if ((upDnHeading -= 10) < 0) {
+        upDnHeading = 350;
+      }
+
+      upDnHeading = (int)upDnHeading;
             mf.ABLine.abHeading = glm.toRadians(upDnHeading);
             tboxHeading.Text = Convert.ToString(upDnHeading, CultureInfo.InvariantCulture);
             btnABLineOk.Enabled = true;
@@ -156,8 +164,11 @@ namespace AgOpenGPS
 
         private void btnUpABHeadingBy1_Click(object sender, EventArgs e)
         {
-            if ((upDnHeading++) > 358) upDnHeading = 0;
-            upDnHeading = (int)upDnHeading;
+            if ((upDnHeading++) > 358) {
+        upDnHeading = 0;
+      }
+
+      upDnHeading = (int)upDnHeading;
             mf.ABLine.abHeading = glm.toRadians(upDnHeading);
             tboxHeading.Text = Convert.ToString(upDnHeading, CultureInfo.InvariantCulture);
             btnABLineOk.Enabled = true;
@@ -166,8 +177,11 @@ namespace AgOpenGPS
         private void btnDnABHeadingBy1_Click(object sender, EventArgs e)
         {
             upDnHeading--;
-            if (upDnHeading < 0) upDnHeading = 359;
-            upDnHeading = (int)upDnHeading;
+            if (upDnHeading < 0) {
+        upDnHeading = 359;
+      }
+
+      upDnHeading = (int)upDnHeading;
             mf.ABLine.abHeading = glm.toRadians(upDnHeading);
             tboxHeading.Text = Convert.ToString(upDnHeading, CultureInfo.InvariantCulture);
             btnABLineOk.Enabled = true;
@@ -220,9 +234,12 @@ namespace AgOpenGPS
                 Math.Pow(mf.ABLine.refPoint1.easting - mf.pn.fix.easting, 2)
                 + Math.Pow(mf.ABLine.refPoint1.northing - mf.pn.fix.northing, 2);
 
-                if (pointAToFixDistance > 100) btnBPoint.Enabled = true;
-                else lblKeepGoing.Text = Convert.ToInt16(100 - pointAToFixDistance).ToString();
-            }
+                if (pointAToFixDistance > 100) {
+          btnBPoint.Enabled = true;
+        } else {
+          lblKeepGoing.Text = Convert.ToInt16(100 - pointAToFixDistance).ToString();
+        }
+      }
 
             int count = lvLines.SelectedItems.Count;
             if (count > 0)
@@ -266,8 +283,10 @@ namespace AgOpenGPS
                 lvLines.Items.Add(itm);
 
                 // go to bottom of list - if there is a bottom
-                if (lvLines.Items.Count > 0) lvLines.Items[lvLines.Items.Count - 1].EnsureVisible();
-            }
+                if (lvLines.Items.Count > 0) {
+          lvLines.Items[lvLines.Items.Count - 1].EnsureVisible();
+        }
+      }
         }
 
         private void tboxHeading_TextChanged(object sender, EventArgs e)
@@ -277,9 +296,15 @@ namespace AgOpenGPS
             textboxSender.Text = Regex.Replace(textboxSender.Text, "[^0-9.]", "");
             textboxSender.SelectionStart = cursorPosition;
             string line = tboxHeading.Text.Trim();
-            if (line?.Length == 0) line = "0";
-            if (line == ".") line = "0";
-            upDnHeading = double.Parse(line, CultureInfo.InvariantCulture);
+            if (line?.Length == 0) {
+        line = "0";
+      }
+
+      if (line == ".") {
+        line = "0";
+      }
+
+      upDnHeading = double.Parse(line, CultureInfo.InvariantCulture);
             mf.ABLine.abHeading = glm.toRadians(Math.Round(upDnHeading, 6));
             mf.ABLine.SetABLineByHeading();
             btnABLineOk.Enabled = true;
@@ -348,8 +373,11 @@ namespace AgOpenGPS
         private void btnPlus90_Click(object sender, EventArgs e)
         {
             upDnHeading += 90;
-            if (upDnHeading > 359.999999) upDnHeading -= 360;
-            mf.ABLine.abHeading = glm.toRadians(upDnHeading);
+            if (upDnHeading > 359.999999) {
+        upDnHeading -= 360;
+      }
+
+      mf.ABLine.abHeading = glm.toRadians(upDnHeading);
             mf.ABLine.SetABLineByHeading();
             tboxHeading.Text = Convert.ToString(upDnHeading, CultureInfo.InvariantCulture);
             btnABLineOk.Enabled = true;

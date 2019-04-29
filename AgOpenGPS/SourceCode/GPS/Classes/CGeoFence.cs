@@ -19,14 +19,17 @@ namespace AgOpenGPS
 
             //GeoFenceLines array
             geoFenceArr = new CGeoFenceLines[FormGPS.MAXBOUNDARIES];
-            for (int j = 0; j < FormGPS.MAXBOUNDARIES; j++) geoFenceArr[j] = new CGeoFenceLines();
-        }
+            for (int j = 0; j < FormGPS.MAXBOUNDARIES; j++) {
+        geoFenceArr[j] = new CGeoFenceLines();
+      }
+    }
 
         public void ResetGeoFenceLines()
         {
-            for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++)
-                geoFenceArr[i].ResetGeoFence();
-        }
+            for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++) {
+        geoFenceArr[i].ResetGeoFence();
+      }
+    }
 
         public void FindPointsDriveAround(vec3 fromPt, double headAB, ref vec3 start, ref vec3 stop)
         {
@@ -50,9 +53,11 @@ namespace AgOpenGPS
                 {
                     for (int t = 1; t < FormGPS.MAXBOUNDARIES; t++)
                     {
-                        if (!mf.bnd.bndArr[t].isSet || mf.bnd.bndArr[t].isDriveThru) continue;
+                        if (!mf.bnd.bndArr[t].isSet || mf.bnd.bndArr[t].isDriveThru) {
+              continue;
+            }
 
-                        if (mf.bnd.bndArr[t].isDriveAround)
+            if (mf.bnd.bndArr[t].isDriveAround)
                         {
                             if (mf.gf.geoFenceArr[t].IsPointInGeoFenceArea(pt))
                             {
@@ -84,8 +89,10 @@ namespace AgOpenGPS
                     closestTurnNum = 0;
                     return;
                 }
-                if (isFound) break;
-            }
+                if (isFound) {
+          break;
+        }
+      }
 
             isFound = false;
 
@@ -103,8 +110,10 @@ namespace AgOpenGPS
                     stop.heading = headAB;
                 }
 
-                if (isFound) break;
-            }
+                if (isFound) {
+          break;
+        }
+      }
 
             for (int i = 0; i < 30; i++)
             {
@@ -123,8 +132,10 @@ namespace AgOpenGPS
                     return;
                 }
 
-                if (mf.mazeGrid.mazeArr[iStart] == 0) break;
-            }
+                if (mf.mazeGrid.mazeArr[iStart] == 0) {
+          break;
+        }
+      }
 
             for (int i = 0; i < 30; i++)
             {
@@ -143,8 +154,10 @@ namespace AgOpenGPS
                     return;
                 }
 
-                if (mf.mazeGrid.mazeArr[iStop] == 0) break;
-            }
+                if (mf.mazeGrid.mazeArr[iStop] == 0) {
+          break;
+        }
+      }
         }
 
         public bool IsPointInsideGeoFences(vec3 pt)
@@ -221,10 +234,12 @@ namespace AgOpenGPS
                 point.easting = mf.bnd.bndArr[0].bndLine[i].easting + (-Math.Sin(glm.PIBy2 + mf.bnd.bndArr[0].bndLine[i].heading) * totalHeadWidth);
                 point.northing = mf.bnd.bndArr[0].bndLine[i].northing + (-Math.Cos(glm.PIBy2 + mf.bnd.bndArr[0].bndLine[i].heading) * totalHeadWidth);
                 point.heading = mf.bnd.bndArr[0].bndLine[i].heading;
-                if (point.heading < -glm.twoPI) point.heading += glm.twoPI;
+                if (point.heading < -glm.twoPI) {
+          point.heading += glm.twoPI;
+        }
 
-                //only add if inside actual field boundary
-                if (mf.bnd.bndArr[0].IsPointInsideBoundary(point))
+        //only add if inside actual field boundary
+        if (mf.bnd.bndArr[0].IsPointInsideBoundary(point))
                 {
                     vec2 tPnt = new vec2(point.easting, point.northing);
                     geoFenceArr[0].geoFenceLine.Add(tPnt);
@@ -237,9 +252,11 @@ namespace AgOpenGPS
             for (int j = 1; j < FormGPS.MAXBOUNDARIES; j++)
             {
                 geoFenceArr[j].geoFenceLine.Clear();
-                if (!mf.bnd.bndArr[j].isSet || mf.bnd.bndArr[j].isDriveThru) continue;
+                if (!mf.bnd.bndArr[j].isSet || mf.bnd.bndArr[j].isDriveThru) {
+          continue;
+        }
 
-                ptCount = mf.bnd.bndArr[j].bndLine.Count;
+        ptCount = mf.bnd.bndArr[j].bndLine.Count;
 
                 for (int i = ptCount - 1; i >= 0; i--)
                 {
@@ -247,10 +264,12 @@ namespace AgOpenGPS
                     point.easting = mf.bnd.bndArr[j].bndLine[i].easting + (-Math.Sin(glm.PIBy2 + mf.bnd.bndArr[j].bndLine[i].heading) * totalHeadWidth);
                     point.northing = mf.bnd.bndArr[j].bndLine[i].northing + (-Math.Cos(glm.PIBy2 + mf.bnd.bndArr[j].bndLine[i].heading) * totalHeadWidth);
                     point.heading = mf.bnd.bndArr[j].bndLine[i].heading;
-                    if (point.heading < -glm.twoPI) point.heading += glm.twoPI;
+                    if (point.heading < -glm.twoPI) {
+            point.heading += glm.twoPI;
+          }
 
-                    //only add if outside actual field boundary
-                    if (!mf.bnd.bndArr[j].IsPointInsideBoundary(point))
+          //only add if outside actual field boundary
+          if (!mf.bnd.bndArr[j].IsPointInsideBoundary(point))
                     {
                         vec2 tPnt = new vec2(point.easting, point.northing);
                         geoFenceArr[j].geoFenceLine.Add(tPnt);
@@ -267,9 +286,10 @@ namespace AgOpenGPS
         {
             for (int i = 0; i < FormGPS.MAXBOUNDARIES; i++)
             {
-                if (mf.bnd.bndArr[i].isSet)
-                    geoFenceArr[i].DrawGeoFenceLine();
-            }
+                if (mf.bnd.bndArr[i].isSet) {
+          geoFenceArr[i].DrawGeoFenceLine();
+        }
+      }
         }
     }
 }

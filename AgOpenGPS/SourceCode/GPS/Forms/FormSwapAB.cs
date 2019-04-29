@@ -86,8 +86,10 @@ namespace AgOpenGPS
                 }
 
                 // go to bottom of list - if there is a bottom
-                if (lvLines.Items.Count > 0) lvLines.Items[lvLines.Items.Count - 1].EnsureVisible();
-            }
+                if (lvLines.Items.Count > 0) {
+          lvLines.Items[lvLines.Items.Count - 1].EnsureVisible();
+        }
+      }
 
             //make sure at least a blank quickAB file exists
             directoryName = Path.GetDirectoryName(mf.fieldsDirectory).ToString(CultureInfo.InvariantCulture);

@@ -19,8 +19,11 @@ namespace AgOpenGPS
         private void btnRecord_Click(object sender, EventArgs e)
         {
             btnRecord.ForeColor = Color.Red;
-            if (mf.yt.youFileList.Count > 0) mf.yt.youFileList.Clear();
-            mf.yt.isRecordingCustomYouTurn = true;
+            if (mf.yt.youFileList.Count > 0) {
+        mf.yt.youFileList.Clear();
+      }
+
+      mf.yt.isRecordingCustomYouTurn = true;
             btnRecord.Enabled = false;
             btnStop.Enabled = true;
         }
@@ -87,9 +90,10 @@ namespace AgOpenGPS
             using (StreamWriter writer = new StreamWriter(dir))
             {
                 writer.WriteLine(pt.Length);
-                for (i = 0; i < mf.yt.youFileList.Count; i++)
-                    writer.WriteLine(mf.yt.youFileList[i].easting + "," + mf.yt.youFileList[i].northing);
-            }
+                for (i = 0; i < mf.yt.youFileList.Count; i++) {
+          writer.WriteLine(mf.yt.youFileList[i].easting + "," + mf.yt.youFileList[i].northing);
+        }
+      }
 
             Close();
         }

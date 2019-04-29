@@ -57,8 +57,11 @@ namespace AgOpenGPS
         private void FormJob_Load(object sender, EventArgs e)
         {
             //check if directory and file exists, maybe was deleted etc
-            if (String.IsNullOrEmpty(mf.currentFieldDirectory)) btnJobResume.Enabled = false;
-            string directoryName = mf.fieldsDirectory + mf.currentFieldDirectory + "\\";
+            if (String.IsNullOrEmpty(mf.currentFieldDirectory)) {
+        btnJobResume.Enabled = false;
+      }
+
+      string directoryName = mf.fieldsDirectory + mf.currentFieldDirectory + "\\";
 
             string fileAndDirectory = directoryName + "Field.txt";
 

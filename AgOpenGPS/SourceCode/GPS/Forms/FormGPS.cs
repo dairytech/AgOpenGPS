@@ -231,8 +231,9 @@ namespace AgOpenGPS {
       //create a new section and set left and right positions
       //created whether used or not, saves restarting program
       section = new CSection[MAXSECTIONS];
-      for( int j = 0 ; j < MAXSECTIONS ; j++ )
+      for( int j = 0 ; j < MAXSECTIONS ; j++ ) {
         section[j] = new CSection( this );
+      }
 
       //our NMEA parser
       pn = new CNMEA( this );
@@ -310,21 +311,27 @@ namespace AgOpenGPS {
 
     private void ZoomByMouseWheel( object sender, MouseEventArgs e ) {
       if( e.Delta > 0 ) {
-        if( camera.zoomValue <= 20 )
+        if( camera.zoomValue <= 20 ) {
           camera.zoomValue += camera.zoomValue * 0.02;
-        else
+        } else {
           camera.zoomValue += camera.zoomValue * 0.01;
-        if( camera.zoomValue > 120 )
+        }
+
+        if( camera.zoomValue > 120 ) {
           camera.zoomValue = 120;
+        }
+
         camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
         SetZoom();
       } else {
         if( camera.zoomValue <= 20 ) {
-          if( ( camera.zoomValue -= camera.zoomValue * 0.02 ) < 6.0 )
+          if( ( camera.zoomValue -= camera.zoomValue * 0.02 ) < 6.0 ) {
             camera.zoomValue = 6.0;
+          }
         } else {
-          if( ( camera.zoomValue -= camera.zoomValue * 0.01 ) < 6.0 )
+          if( ( camera.zoomValue -= camera.zoomValue * 0.01 ) < 6.0 ) {
             camera.zoomValue = 6.0;
+          }
         }
 
         camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
@@ -340,10 +347,11 @@ namespace AgOpenGPS {
 
       this.MouseWheel += ZoomByMouseWheel;
 
-      if( Settings.Default.setF_workingDirectory == "Default" )
+      if( Settings.Default.setF_workingDirectory == "Default" ) {
         baseDirectory = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ) + "\\AgOpenGPS\\";
-      else
+      } else {
         baseDirectory = Settings.Default.setF_workingDirectory + "\\AgOpenGPS\\";
+      }
 
       //get the fields directory, if not exist, create
       fieldsDirectory = baseDirectory + "Fields\\";
@@ -396,14 +404,16 @@ namespace AgOpenGPS {
       //same for SectionRelay port
       portNameRelaySection = Settings.Default.setPort_portNameRateRelay;
       wasRateRelayConnectedLastRun = Settings.Default.setPort_wasRateRelayConnected;
-      if( wasRateRelayConnectedLastRun )
+      if( wasRateRelayConnectedLastRun ) {
         SerialPortRateRelayOpen();
+      }
 
       //same for AutoSteer port
       portNameAutoSteer = Settings.Default.setPort_portNameAutoSteer;
       wasAutoSteerConnectedLastRun = Settings.Default.setPort_wasAutoSteerConnected;
-      if( wasAutoSteerConnectedLastRun )
+      if( wasAutoSteerConnectedLastRun ) {
         SerialPortAutoSteerOpen();
+      }
 
       //Set width of section and positions for each section
       SectionSetPosition();
@@ -422,8 +432,9 @@ namespace AgOpenGPS {
       triangleResolution = Settings.Default.setDisplay_triangleResolution;
 
       //start udp server if required
-      if( Properties.Settings.Default.setUDP_isOn )
+      if( Properties.Settings.Default.setUDP_isOn ) {
         StartUDPServer();
+      }
 
       //start NTRIP if required
       if( Properties.Settings.Default.setNTRIP_isOn ) {
@@ -656,12 +667,18 @@ namespace AgOpenGPS {
       using( var form = new FormSaveOrNot() ) {
         var result = form.ShowDialog();
 
-        if( result == DialogResult.OK )
+        if( result == DialogResult.OK ) {
           return 0;
-        if( result == DialogResult.Ignore )
+        }
+
+        if( result == DialogResult.Ignore ) {
           return 1;
-        if( result == DialogResult.Cancel )
+        }
+
+        if( result == DialogResult.Cancel ) {
           return 2;
+        }
+
         return 3;
       }
     }
@@ -844,8 +861,9 @@ namespace AgOpenGPS {
     //close the current job
     public void JobClose() {
       //rate control buttons
-      if( rcd.isRateControlOn )
+      if( rcd.isRateControlOn ) {
         btnDualRate.PerformClick();
+      }
 
       rcd.ShutdownRateControl();  //double dam sure its off
 
@@ -1079,8 +1097,10 @@ namespace AgOpenGPS {
           //if requested to be on, set the timer to Max 10 (1 seconds) = 10 frames per second
           if( section[j].sectionOnRequest && !section[j].sectionOnOffCycle ) {
             section[j].sectionOnTimer = (int)( pn.speed * vehicle.toolLookAhead ) + 1;
-            if( section[j].sectionOnTimer > fixUpdateHz + 3 )
+            if( section[j].sectionOnTimer > fixUpdateHz + 3 ) {
               section[j].sectionOnTimer = fixUpdateHz + 3;
+            }
+
             section[j].sectionOnOffCycle = true;
           }
 
@@ -1091,25 +1111,30 @@ namespace AgOpenGPS {
           if( section[j].sectionOnTimer > 0 ) {
             //turn the section ON if not and decrement timer
             section[j].sectionOnTimer--;
-            if( !section[j].isSectionOn )
+            if( !section[j].isSectionOn ) {
               section[j].TurnSectionOn();
+            }
 
             //keep resetting the section OFF timer while the ON is active
             section[j].sectionOffTimer = (int)( fixUpdateHz * vehicle.toolTurnOffDelay );
           }
 
-          if( !section[j].sectionOffRequest )
+          if( !section[j].sectionOffRequest ) {
             section[j].sectionOffTimer = (int)( fixUpdateHz * vehicle.toolTurnOffDelay );
+          }
 
           //decrement the off timer
-          if( section[j].sectionOffTimer > 0 )
+          if( section[j].sectionOffTimer > 0 ) {
             section[j].sectionOffTimer--;
+          }
 
           //Turn OFF
           //if Off section timer is zero, turn off the section
           if( section[j].sectionOffTimer == 0 && section[j].sectionOnTimer == 0 && section[j].sectionOffRequest ) {
-            if( section[j].isSectionOn )
+            if( section[j].isSectionOn ) {
               section[j].TurnSectionOff();
+            }
+
             section[j].sectionOnOffCycle = false;
             section[j].sectionOffRequest = false;
           }
@@ -1215,26 +1240,45 @@ namespace AgOpenGPS {
     //take the distance from object and convert to camera data
     private void SetZoom() {
       //match grid to cam distance and redo perspective
-      if( camera.camSetDistance <= -20000 )
+      if( camera.camSetDistance <= -20000 ) {
         camera.gridZoom = 2000;
-      if( camera.camSetDistance >= -20000 && camera.camSetDistance < -10000 )
+      }
+
+      if( camera.camSetDistance >= -20000 && camera.camSetDistance < -10000 ) {
         camera.gridZoom = 2000;
-      if( camera.camSetDistance >= -10000 && camera.camSetDistance < -5000 )
+      }
+
+      if( camera.camSetDistance >= -10000 && camera.camSetDistance < -5000 ) {
         camera.gridZoom = 1000;
-      if( camera.camSetDistance >= -5000 && camera.camSetDistance < -2000 )
+      }
+
+      if( camera.camSetDistance >= -5000 && camera.camSetDistance < -2000 ) {
         camera.gridZoom = 503;
-      if( camera.camSetDistance >= -2000 && camera.camSetDistance < -1000 )
+      }
+
+      if( camera.camSetDistance >= -2000 && camera.camSetDistance < -1000 ) {
         camera.gridZoom = 201.2;
-      if( camera.camSetDistance >= -1000 && camera.camSetDistance < -500 )
+      }
+
+      if( camera.camSetDistance >= -1000 && camera.camSetDistance < -500 ) {
         camera.gridZoom = 100.6;
-      if( camera.camSetDistance >= -500 && camera.camSetDistance < -250 )
+      }
+
+      if( camera.camSetDistance >= -500 && camera.camSetDistance < -250 ) {
         camera.gridZoom = 50.3;
-      if( camera.camSetDistance >= -250 && camera.camSetDistance < -150 )
+      }
+
+      if( camera.camSetDistance >= -250 && camera.camSetDistance < -150 ) {
         camera.gridZoom = 25.15;
-      if( camera.camSetDistance >= -150 && camera.camSetDistance < -50 )
+      }
+
+      if( camera.camSetDistance >= -150 && camera.camSetDistance < -50 ) {
         camera.gridZoom = 10.06;
-      if( camera.camSetDistance >= -50 && camera.camSetDistance < -1 )
+      }
+
+      if( camera.camSetDistance >= -50 && camera.camSetDistance < -1 ) {
         camera.gridZoom = 5.03;
+      }
       //1.216 2.532
 
       oglMain.MakeCurrent();
@@ -1248,13 +1292,16 @@ namespace AgOpenGPS {
     //All the files that need to be saved when closing field or app
     private void FileSaveEverythingBeforeClosingField() {
       //turn off contour line if on
-      if( ct.isContourOn )
+      if( ct.isContourOn ) {
         ct.StopContourLine( pivotAxlePos );
+      }
 
       //turn off all the sections
       for( int j = 0 ; j < vehicle.numOfSections + 1 ; j++ ) {
-        if( section[j].isSectionOn )
+        if( section[j].isSectionOn ) {
           section[j].TurnSectionOff();
+        }
+
         section[j].sectionOnOffCycle = false;
         section[j].sectionOffRequest = false;
       }

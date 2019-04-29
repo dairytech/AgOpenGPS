@@ -20,8 +20,11 @@ namespace AgOpenGPS
 
         public bool IsPointInGeoFenceArea(vec3 testPointv2)
         {
-            if (calcList.Count < 3) return false;
-            int j = geoFenceLine.Count - 1;
+            if (calcList.Count < 3) {
+        return false;
+      }
+
+      int j = geoFenceLine.Count - 1;
             bool oddNodes = false;
 
             //test against the constant and multiples list the test point
@@ -38,8 +41,11 @@ namespace AgOpenGPS
 
         public bool IsPointInGeoFenceArea(vec2 testPointv2)
         {
-            if (calcList.Count < 3) return false;
-            int j = geoFenceLine.Count - 1;
+            if (calcList.Count < 3) {
+        return false;
+      }
+
+      int j = geoFenceLine.Count - 1;
             bool oddNodes = false;
 
             //test against the constant and multiples list the test point
@@ -58,13 +64,19 @@ namespace AgOpenGPS
         {
             ////draw the turn line oject
             int ptCount = geoFenceLine.Count;
-            if (ptCount < 1) return;
-            GL.LineWidth(1);
+            if (ptCount < 1) {
+        return;
+      }
+
+      GL.LineWidth(1);
             GL.Color3(0.6555f, 0.3232f, 0.0f);
             //GL.PointSize(4);
             GL.Begin(PrimitiveType.LineStrip);
-            for (int h = 0; h < ptCount; h++) GL.Vertex3(geoFenceLine[h].easting, geoFenceLine[h].northing, 0);
-            GL.Vertex3(geoFenceLine[0].easting, geoFenceLine[0].northing, 0);
+            for (int h = 0; h < ptCount; h++) {
+        GL.Vertex3(geoFenceLine[h].easting, geoFenceLine[h].northing, 0);
+      }
+
+      GL.Vertex3(geoFenceLine[0].easting, geoFenceLine[0].northing, 0);
             GL.End();
         }
 
@@ -113,8 +125,11 @@ namespace AgOpenGPS
             for (int i = 0; i < bndCount; i++)
             {
                 int j = i + 1;
-                if (j == bndCount) j = 0;
-                distance = glm.Distance(geoFenceLine[i], geoFenceLine[j]);
+                if (j == bndCount) {
+          j = 0;
+        }
+
+        distance = glm.Distance(geoFenceLine[i], geoFenceLine[j]);
                 if (distance > (spacing * 1.25))
                 {
                     vec2 pointB = new vec2((geoFenceLine[i].easting + geoFenceLine[j].easting) / 2.0, (geoFenceLine[i].northing + geoFenceLine[j].northing) / 2.0);
