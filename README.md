@@ -31,4 +31,13 @@ and AB Line with loops for narrow equipment
 
 Included is an application, and source folders, ino's for steering and rate control and a built in NMEA simulators. 
 
-It has English, German, SPanish, French, italian, Dutch and Russian Language - But haven't been updated in far too long.
+It has English, German, Spanish, French, italian, Dutch and Russian Language - But haven't been updated in far too long.
+
+# development/building
+
+First you have to generate a certificate. To do this, you right-click on the project in the project-view
+and go to "signing". There you click on the button to generate a test certificate. If this doesn't
+work ("Access Denied"), you have to make the folder "C:\ProgramData\Microsoft\Crypto\RSA\MachineKeys"
+writable by you user (right click on the folder -> settings -> sercurity -> change it).
+
+Then you to the menu "Build" and choose the point "Publish". Execute the published application.
