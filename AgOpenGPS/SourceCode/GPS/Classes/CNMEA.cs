@@ -263,7 +263,7 @@ Field	Meaning
     private void ParseAVR() {
       if( !String.IsNullOrEmpty( words[1] ) ) {
         //True heading
-        double.TryParse( words[5], NumberStyles.Float, CultureInfo.InvariantCulture, out nRoll );
+        _ = double.TryParse( words[5], NumberStyles.Float, CultureInfo.InvariantCulture, out nRoll );
         if( mf.ahrs.isRollPAOGI )
         //input to the kalman filter
         {
@@ -327,9 +327,9 @@ Field	Meaning
           //get latitude and convert to decimal degrees
           int decim = words[2].IndexOf( ".", StringComparison.Ordinal );
           decim -= 2;
-          double.TryParse( words[2].Substring( 0, decim ), NumberStyles.Float, CultureInfo.InvariantCulture, out latitude );
-          double.TryParse( words[2].Substring( decim ), NumberStyles.Float, CultureInfo.InvariantCulture, out double temp );
-          temp *= 0.01666666666666666666666666666667;
+          _ = double.TryParse( words[2].Substring( 0, decim ), NumberStyles.Float, CultureInfo.InvariantCulture, out latitude );
+          _ = double.TryParse( words[2].Substring( decim ), NumberStyles.Float, CultureInfo.InvariantCulture, out double temp );
+          temp /= 60;
           latitude += temp;
           if( words[3] == "S" ) {
             latitude *= -1;
@@ -341,9 +341,9 @@ Field	Meaning
           //get longitude and convert to decimal degrees
           decim = words[4].IndexOf( ".", StringComparison.Ordinal );
           decim -= 2;
-          double.TryParse( words[4].Substring( 0, decim ), NumberStyles.Float, CultureInfo.InvariantCulture, out longitude );
-          double.TryParse( words[4].Substring( decim ), NumberStyles.Float, CultureInfo.InvariantCulture, out temp );
-          longitude += temp * 0.01666666666666666666666666666667;
+          _ = double.TryParse( words[4].Substring( 0, decim ), NumberStyles.Float, CultureInfo.InvariantCulture, out longitude );
+          _ = double.TryParse( words[4].Substring( decim ), NumberStyles.Float, CultureInfo.InvariantCulture, out temp );
+          longitude += temp / 60;
 
           {
             if( words[5] == "W" )
@@ -355,19 +355,19 @@ Field	Meaning
         }
 
         //fixQuality
-        int.TryParse( words[6], NumberStyles.Float, CultureInfo.InvariantCulture, out fixQuality );
+        _ = int.TryParse( words[6], NumberStyles.Float, CultureInfo.InvariantCulture, out fixQuality );
 
         //satellites tracked
-        int.TryParse( words[7], NumberStyles.Float, CultureInfo.InvariantCulture, out satellitesTracked );
+        _ = int.TryParse( words[7], NumberStyles.Float, CultureInfo.InvariantCulture, out satellitesTracked );
 
         //hdop
-        double.TryParse( words[8], NumberStyles.Float, CultureInfo.InvariantCulture, out hdop );
+        _ = double.TryParse( words[8], NumberStyles.Float, CultureInfo.InvariantCulture, out hdop );
 
         //altitude
-        double.TryParse( words[9], NumberStyles.Float, CultureInfo.InvariantCulture, out altitude );
+        _ = double.TryParse( words[9], NumberStyles.Float, CultureInfo.InvariantCulture, out altitude );
 
         //age of differential
-        double.TryParse( words[11], NumberStyles.Float, CultureInfo.InvariantCulture, out ageDiff );
+        _ = double.TryParse( words[11], NumberStyles.Float, CultureInfo.InvariantCulture, out ageDiff );
 
         updatedGGA = true;
         mf.recvCounter = 0;
@@ -381,9 +381,9 @@ Field	Meaning
           && !String.IsNullOrEmpty( words[4] ) && !String.IsNullOrEmpty( words[5] ) ) {
         if( fixFrom == "OGI" ) {
           //get latitude and convert to decimal degrees
-          double.TryParse( words[2].Substring( 0, 2 ), NumberStyles.Float, CultureInfo.InvariantCulture, out latitude );
-          double.TryParse( words[2].Substring( 2 ), NumberStyles.Float, CultureInfo.InvariantCulture, out double temp );
-          temp *= 0.01666666666666666666666666666667;
+          _ = double.TryParse( words[2].Substring( 0, 2 ), NumberStyles.Float, CultureInfo.InvariantCulture, out latitude );
+          _ = double.TryParse( words[2].Substring( 2 ), NumberStyles.Float, CultureInfo.InvariantCulture, out double temp );
+          temp /= 60;
           latitude += temp;
           if( words[3] == "S" ) {
             latitude *= -1;
@@ -393,9 +393,9 @@ Field	Meaning
           }
 
           //get longitude and convert to decimal degrees
-          double.TryParse( words[4].Substring( 0, 3 ), NumberStyles.Float, CultureInfo.InvariantCulture, out longitude );
-          double.TryParse( words[4].Substring( 3 ), NumberStyles.Float, CultureInfo.InvariantCulture, out temp );
-          longitude += temp * 0.01666666666666666666666666666667;
+          _ = double.TryParse( words[4].Substring( 0, 3 ), NumberStyles.Float, CultureInfo.InvariantCulture, out longitude );
+          _ = double.TryParse( words[4].Substring( 3 ), NumberStyles.Float, CultureInfo.InvariantCulture, out temp );
+          longitude += temp / 60;
 
           {
             if( words[5] == "W" )
@@ -407,44 +407,44 @@ Field	Meaning
         }
 
         //fixQuality
-        int.TryParse( words[6], NumberStyles.Float, CultureInfo.InvariantCulture, out fixQuality );
+        _ = int.TryParse( words[6], NumberStyles.Float, CultureInfo.InvariantCulture, out fixQuality );
 
         //satellites tracked
-        int.TryParse( words[7], NumberStyles.Float, CultureInfo.InvariantCulture, out satellitesTracked );
+        _ = int.TryParse( words[7], NumberStyles.Float, CultureInfo.InvariantCulture, out satellitesTracked );
 
         //hdop
-        double.TryParse( words[8], NumberStyles.Float, CultureInfo.InvariantCulture, out hdop );
+        _ = double.TryParse( words[8], NumberStyles.Float, CultureInfo.InvariantCulture, out hdop );
 
         //altitude
-        double.TryParse( words[9], NumberStyles.Float, CultureInfo.InvariantCulture, out altitude );
+        _ = double.TryParse( words[9], NumberStyles.Float, CultureInfo.InvariantCulture, out altitude );
 
         //age of differential
-        double.TryParse( words[11], NumberStyles.Float, CultureInfo.InvariantCulture, out ageDiff );
+        _ = double.TryParse( words[11], NumberStyles.Float, CultureInfo.InvariantCulture, out ageDiff );
 
         //kph for speed - knots read
-        double.TryParse( words[12], NumberStyles.Float, CultureInfo.InvariantCulture, out speed );
+        _ = double.TryParse( words[12], NumberStyles.Float, CultureInfo.InvariantCulture, out speed );
         speed = Math.Round( speed * 1.852, 1 );
 
         //True heading
-        double.TryParse( words[13], NumberStyles.Float, CultureInfo.InvariantCulture, out headingTrue );
+        _ = double.TryParse( words[13], NumberStyles.Float, CultureInfo.InvariantCulture, out headingTrue );
 
         //roll
-        double.TryParse( words[14], NumberStyles.Float, CultureInfo.InvariantCulture, out nRoll );
+        _ = double.TryParse( words[14], NumberStyles.Float, CultureInfo.InvariantCulture, out nRoll );
         if( mf.ahrs.isRollPAOGI )
           mf.mc.rollRaw = (int)( nRoll * 16 );
 
         //pitch
-        double.TryParse( words[15], NumberStyles.Float, CultureInfo.InvariantCulture, out nPitch );
+        _ = double.TryParse( words[15], NumberStyles.Float, CultureInfo.InvariantCulture, out nPitch );
 
         //yaw
-        double.TryParse( words[16], NumberStyles.Float, CultureInfo.InvariantCulture, out nYaw );
+        _ = double.TryParse( words[16], NumberStyles.Float, CultureInfo.InvariantCulture, out nYaw );
         if( mf.ahrs.isHeadingPAOGI ) {
           mf.mc.prevGyroHeading = mf.mc.gyroHeading;
           mf.mc.gyroHeading = (int)( nYaw * 16 );
         }
 
         //Angular velocity
-        double.TryParse( words[17], NumberStyles.Float, CultureInfo.InvariantCulture, out nAngularVelocity );
+        _ = double.TryParse( words[17], NumberStyles.Float, CultureInfo.InvariantCulture, out nAngularVelocity );
 
         //is imu valid fusion
         isValidIMU = words[18] == "T";
@@ -465,11 +465,11 @@ Field	Meaning
       //is the sentence GGA
       if( !String.IsNullOrEmpty( words[1] ) && !String.IsNullOrEmpty( words[5] ) ) {
         //kph for speed - knots read
-        double.TryParse( words[5], NumberStyles.Float, CultureInfo.InvariantCulture, out speed );
+        _ = double.TryParse( words[5], NumberStyles.Float, CultureInfo.InvariantCulture, out speed );
         speed = Math.Round( speed * 1.852, 1 );
 
         //True heading
-        double.TryParse( words[1], NumberStyles.Float, CultureInfo.InvariantCulture, out headingTrue );
+        _ = double.TryParse( words[1], NumberStyles.Float, CultureInfo.InvariantCulture, out headingTrue );
 
         //average the speeds for display, not calcs
         mf.avgSpeed[mf.ringCounter] = speed;
@@ -490,7 +490,7 @@ Field	Meaning
 
       if( !String.IsNullOrEmpty( words[1] ) ) {
         //True heading
-        double.TryParse( words[1], NumberStyles.Float, CultureInfo.InvariantCulture, out headingHDT );
+        _ = double.TryParse( words[1], NumberStyles.Float, CultureInfo.InvariantCulture, out headingHDT );
       }
     }
 
@@ -501,9 +501,9 @@ Field	Meaning
           && !String.IsNullOrEmpty( words[5] ) && !String.IsNullOrEmpty( words[6] ) ) {
         if( fixFrom == "RMC" ) {
           //get latitude and convert to decimal degrees
-          double.TryParse( words[3].Substring( 0, 2 ), NumberStyles.Float, CultureInfo.InvariantCulture, out latitude );
-          double.TryParse( words[3].Substring( 2 ), NumberStyles.Float, CultureInfo.InvariantCulture, out double temp );
-          latitude += temp * 0.01666666666666666666666666666667;
+          _ = double.TryParse( words[3].Substring( 0, 2 ), NumberStyles.Float, CultureInfo.InvariantCulture, out latitude );
+          _ = double.TryParse( words[3].Substring( 2 ), NumberStyles.Float, CultureInfo.InvariantCulture, out double temp );
+          latitude += temp / 60;
 
           if( words[4] == "S" ) {
             latitude *= -1;
@@ -513,9 +513,9 @@ Field	Meaning
           }
 
           //get longitude and convert to decimal degrees
-          double.TryParse( words[5].Substring( 0, 3 ), NumberStyles.Float, CultureInfo.InvariantCulture, out longitude );
-          double.TryParse( words[5].Substring( 3 ), NumberStyles.Float, CultureInfo.InvariantCulture, out temp );
-          longitude += temp * 0.01666666666666666666666666666667;
+          _ = double.TryParse( words[5].Substring( 0, 3 ), NumberStyles.Float, CultureInfo.InvariantCulture, out longitude );
+          _ = double.TryParse( words[5].Substring( 3 ), NumberStyles.Float, CultureInfo.InvariantCulture, out temp );
+          longitude += temp / 60;
 
           if( words[6] == "W" )
             longitude *= -1;
@@ -525,11 +525,11 @@ Field	Meaning
         }
 
         //Convert from knots to kph for speed
-        double.TryParse( words[7], NumberStyles.Float, CultureInfo.InvariantCulture, out speed );
+        _ = double.TryParse( words[7], NumberStyles.Float, CultureInfo.InvariantCulture, out speed );
         speed = Math.Round( speed * 1.852, 1 );
 
         //True heading
-        double.TryParse( words[8], NumberStyles.Float, CultureInfo.InvariantCulture, out headingTrue );
+        _ = double.TryParse( words[8], NumberStyles.Float, CultureInfo.InvariantCulture, out headingTrue );
 
         //Status
         if( String.IsNullOrEmpty( words[2] ) ) {
@@ -633,7 +633,7 @@ Field	Meaning
     public double[] DecDeg2UTM( double latitude, double longitude ) {
       //only calculate the zone once!
       if( !mf.isFirstFixPositionSet )
-        zone = Math.Floor( ( longitude + 180.0 ) * 0.16666666666666666666666666666667 ) + 1;
+        zone = Math.Floor( ( longitude + 180.0 ) / 60 ) + 1;
 
       double[] xy = MapLatLonToXY( latitude * 0.01745329251994329576923690766743,
                                   longitude * 0.01745329251994329576923690766743,
