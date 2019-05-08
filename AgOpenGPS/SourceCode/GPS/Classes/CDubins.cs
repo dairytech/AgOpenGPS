@@ -471,8 +471,9 @@ namespace AgOpenGPS {
       theta += Math.Atan2( goalCircle.northing - startCircle.northing, goalCircle.easting - startCircle.easting );
 
       //Add pi to get the "bottom" coordinate which is on the opposite side (180 degrees = pi)
-      if( isBottom )
+      if( isBottom ) {
         theta += Math.PI;
+      }
 
       //The coordinates of the first tangent points
       double xT1 = startCircle.easting + ( CDubins.turningRadius * Math.Cos( theta ) );
@@ -505,8 +506,9 @@ namespace AgOpenGPS {
       double theta = Math.Acos( ( 2 * CDubins.turningRadius ) / D );
 
       //If the circles is LSR, then the first tangent pos is on the other side of the center line
-      if( isBottom )
+      if( isBottom ) {
         theta *= -1.0;
+      }
 
       //Need to modify theta if the circles are not on the same height
       theta += Math.Atan2( goalCircle.northing - startCircle.northing, goalCircle.easting - startCircle.easting );
@@ -550,10 +552,11 @@ namespace AgOpenGPS {
       vec2 V1 = goalCircle - startCircle;
 
       //Different depending on if we calculate LRL or RLR
-      if( isLRL )
+      if( isLRL ) {
         theta = Math.Atan2( V1.northing, V1.easting ) + theta;
-      else
+      } else {
         theta = Math.Atan2( V1.northing, V1.easting ) - theta;
+      }
 
       //Calculate the position of the third circle
       double x = startCircle.easting + ( 2 * CDubins.turningRadius * Math.Cos( theta ) );
@@ -580,10 +583,12 @@ namespace AgOpenGPS {
       vec2 V2 = goalPos - circleCenterPos;
 
       double theta = Math.Atan2( V2.northing, V2.easting ) - Math.Atan2( V1.northing, V1.easting );
-      if( theta < 0f && isLeftCircle )
+      if( theta < 0f && isLeftCircle ) {
         theta += 2.0 * Math.PI;
-      else if( theta > 0 && !isLeftCircle )
+      } else if( theta > 0 && !isLeftCircle ) {
         theta -= 2.0 * Math.PI;
+      }
+
       return Math.Abs( theta * CDubins.turningRadius );
     }
 
@@ -605,8 +610,9 @@ namespace AgOpenGPS {
           //Which way are we turning?
           double turnParameter = 1.0;
 
-          if( !isTurningRight )
+          if( !isTurningRight ) {
             turnParameter = -1.0;
+          }
 
           //Update the heading
           theta += ( CDubins.driveDistance / CDubins.turningRadius ) * turnParameter;

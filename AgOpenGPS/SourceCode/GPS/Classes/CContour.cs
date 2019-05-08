@@ -111,8 +111,9 @@ namespace AgOpenGPS {
       else {
         ptList.Clear();
         int ra = stripList.Count - 1;
-        if( ra > 0 )
+        if( ra > 0 ) {
           stripList.RemoveAt( ra );
+        }
       }
 
       //turn it off
@@ -143,16 +144,19 @@ namespace AgOpenGPS {
         point.easting = mf.bnd.bndArr[0].bndLine[i].easting - ( -Math.Sin( glm.PIBy2 + mf.bnd.bndArr[0].bndLine[i].heading ) * totalHeadWidth );
         point.northing = mf.bnd.bndArr[0].bndLine[i].northing - ( -Math.Cos( glm.PIBy2 + mf.bnd.bndArr[0].bndLine[i].heading ) * totalHeadWidth );
         point.heading = mf.bnd.bndArr[0].bndLine[i].heading - Math.PI;
-        if( point.heading < -glm.twoPI )
+        if( point.heading < -glm.twoPI ) {
           point.heading += glm.twoPI;
+        }
+
         ptList.Add( point );
       }
 
       //totalHeadWidth = (mf.vehicle.toolWidth - mf.vehicle.toolOverlap) * 0.5 + 0.2 + (mf.vehicle.toolWidth - mf.vehicle.toolOverlap);
 
       for( int j = 1 ; j < FormGPS.MAXBOUNDARIES ; j++ ) {
-        if( !mf.bnd.bndArr[j].isSet )
+        if( !mf.bnd.bndArr[j].isSet ) {
           continue;
+        }
 
         //count the points from the boundary
         ptCount = mf.bnd.bndArr[j].bndLine.Count;
@@ -165,8 +169,9 @@ namespace AgOpenGPS {
           point.easting = mf.bnd.bndArr[j].bndLine[i].easting - ( -Math.Sin( glm.PIBy2 + mf.bnd.bndArr[j].bndLine[i].heading ) * totalHeadWidth );
           point.northing = mf.bnd.bndArr[j].bndLine[i].northing - ( -Math.Cos( glm.PIBy2 + mf.bnd.bndArr[j].bndLine[i].heading ) * totalHeadWidth );
           point.heading = mf.bnd.bndArr[j].bndLine[i].heading - Math.PI;
-          if( point.heading < -glm.twoPI )
+          if( point.heading < -glm.twoPI ) {
             point.heading += glm.twoPI;
+          }
 
           //only add if inside actual field boundary
           ptList.Add( point );
@@ -254,8 +259,9 @@ namespace AgOpenGPS {
 
       //check if no strips yet, return
       int stripCount = stripList.Count;
-      if( stripCount == 0 )
+      if( stripCount == 0 ) {
         return;
+      }
 
       cvec pointC = new cvec();
       if( isRightPriority ) {
@@ -470,20 +476,22 @@ namespace AgOpenGPS {
       double piSide;
 
       //sign of distance determines which side of line we are on
-      if( distanceFromRefLine > 0 )
+      if( distanceFromRefLine > 0 ) {
         piSide = glm.PIBy2;
-      else
+      } else {
         piSide = -glm.PIBy2;
+      }
 
       //offset calcs
       double toolOffset = mf.vehicle.toolOffset;
       if( isSameWay ) {
         toolOffset = 0.0;
       } else {
-        if( distanceFromRefLine > 0 )
+        if( distanceFromRefLine > 0 ) {
           toolOffset *= 2.0;
-        else
+        } else {
           toolOffset *= -2.0;
+        }
       }
 
       //move the Guidance Line over based on the overlap, width, and offset amount set in vehicle
@@ -497,11 +505,14 @@ namespace AgOpenGPS {
       int start, stop;
 
       start = pt - 35;
-      if( start < 0 )
+      if( start < 0 ) {
         start = 0;
+      }
+
       stop = pt + 35;
-      if( stop > ptCount )
+      if( stop > ptCount ) {
         stop = ptCount + 1;
+      }
 
       double distSq = widthMinusOverlap * widthMinusOverlap * 0.875;
       bool fail = false;
@@ -528,18 +539,22 @@ namespace AgOpenGPS {
           }
         }
 
-        if( !fail )
+        if( !fail ) {
           ctList.Add( point );
+        }
+
         fail = false;
       }
 
       //if no boundaries, just return.
-      if( !mf.bnd.bndArr[0].isSet )
+      if( !mf.bnd.bndArr[0].isSet ) {
         return;
+      }
 
       int ctCount = ctList.Count;
-      if( ctCount < 6 )
+      if( ctCount < 6 ) {
         return;
+      }
 
       const double spacing = 0.8;
       double distance;
@@ -557,8 +572,9 @@ namespace AgOpenGPS {
         int cnt = ctList.Count;
 
         //just go back if not very long
-        if( cnt < 10 )
+        if( cnt < 10 ) {
           return;
+        }
 
         //the temp array
         vec3[] arr = new vec3[cnt];
@@ -610,8 +626,10 @@ namespace AgOpenGPS {
       for( int i = 1 ; i < cnt ; i++ ) {
         vec3 pt3 = arr[i];
         pt3.heading = Math.Atan2( arr[i + 1].easting - arr[i - 1].easting, arr[i + 1].northing - arr[i - 1].northing );
-        if( pt3.heading < 0 )
+        if( pt3.heading < 0 ) {
           pt3.heading += glm.twoPI;
+        }
+
         ctList.Add( pt3 );
       }
     }
@@ -651,8 +669,9 @@ namespace AgOpenGPS {
         //z2-z1
         double dy = ctList[B].northing - ctList[A].northing;
 
-        if( Math.Abs( dx ) < Double.Epsilon && Math.Abs( dy ) < Double.Epsilon )
+        if( Math.Abs( dx ) < Double.Epsilon && Math.Abs( dy ) < Double.Epsilon ) {
           return;
+        }
 
         //abHeading = Math.Atan2(dz, dx);
         abHeading = ctList[A].heading;
@@ -695,8 +714,9 @@ namespace AgOpenGPS {
 
         //Subtract the two headings, if > 1.57 its going the opposite heading as refAB
         abFixHeadingDelta = ( Math.Abs( mf.fixHeading - abHeading ) );
-        if( abFixHeadingDelta >= Math.PI )
+        if( abFixHeadingDelta >= Math.PI ) {
           abFixHeadingDelta = Math.Abs( abFixHeadingDelta - glm.twoPI );
+        }
 
         //used for accumulating distance to find goal point
         double distSoFar;
@@ -793,15 +813,21 @@ namespace AgOpenGPS {
         steerAngleCT = glm.toDegrees( Math.Atan( 2 * ( ( ( goalPointCT.easting - pivot.easting ) * Math.Cos( localHeading ) )
             + ( ( goalPointCT.northing - pivot.northing ) * Math.Sin( localHeading ) ) ) * mf.vehicle.wheelbase / goalPointDistanceSquared ) );
 
-        if( steerAngleCT < -mf.vehicle.maxSteerAngle )
+        if( steerAngleCT < -mf.vehicle.maxSteerAngle ) {
           steerAngleCT = -mf.vehicle.maxSteerAngle;
-        if( steerAngleCT > mf.vehicle.maxSteerAngle )
-          steerAngleCT = mf.vehicle.maxSteerAngle;
+        }
 
-        if( ppRadiusCT < -500 )
+        if( steerAngleCT > mf.vehicle.maxSteerAngle ) {
+          steerAngleCT = mf.vehicle.maxSteerAngle;
+        }
+
+        if( ppRadiusCT < -500 ) {
           ppRadiusCT = -500;
-        if( ppRadiusCT > 500 )
+        }
+
+        if( ppRadiusCT > 500 ) {
           ppRadiusCT = 500;
+        }
 
         radiusPointCT.easting = pivot.easting + ( ppRadiusCT * Math.Cos( localHeading ) );
         radiusPointCT.northing = pivot.northing + ( ppRadiusCT * Math.Sin( localHeading ) );
@@ -822,8 +848,9 @@ namespace AgOpenGPS {
         //if you're going the opposite direction left is right and right is left
         //double temp;
         if( isABSameAsFixHeading ) {
-          if( !isOnRightSideCurrentLine )
+          if( !isOnRightSideCurrentLine ) {
             distanceFromCurrentLine *= -1.0;
+          }
         }
 
         //opposite way so right is left
@@ -848,8 +875,10 @@ namespace AgOpenGPS {
       GL.LineWidth( 2 );
       GL.Color3( 0.98f, 0.2f, 0.0f );
       GL.Begin( PrimitiveType.LineStrip );
-      for( int h = 0 ; h < ptCount ; h++ )
+      for( int h = 0 ; h < ptCount ; h++ ) {
         GL.Vertex3( ctList[h].easting, ctList[h].northing, 0 );
+      }
+
       GL.End();
 
       //GL.PointSize(2.0f);

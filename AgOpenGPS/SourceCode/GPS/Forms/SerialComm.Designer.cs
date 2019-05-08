@@ -402,9 +402,7 @@ namespace AgOpenGPS {
 
           //MessageBox.Show(ex.Message + "\n\r" + "\n\r" + "Go to Settings -> COM Ports to Fix", "ComPort Failure!");
         }
-
       }
-
     }
 
     public void SerialPortOpenGPS() {
@@ -467,7 +465,6 @@ namespace AgOpenGPS {
 
         sp.Dispose();
       }
-
     }
 
     #endregion SerialPortGPS

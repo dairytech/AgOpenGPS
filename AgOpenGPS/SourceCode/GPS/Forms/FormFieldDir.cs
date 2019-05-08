@@ -96,12 +96,14 @@ namespace AgOpenGPS {
       mf.currentFieldDirectory = tboxFieldName.Text.Trim() + "_";
 
       //task
-      if( !String.IsNullOrEmpty( tboxTask.Text.Trim() ) )
+      if( !String.IsNullOrEmpty( tboxTask.Text.Trim() ) ) {
         mf.currentFieldDirectory += tboxTask.Text.Trim() + "_";
+      }
 
       //vehicle
-      if( !String.IsNullOrEmpty( tboxVehicle.Text.Trim() ) )
+      if( !String.IsNullOrEmpty( tboxVehicle.Text.Trim() ) ) {
         mf.currentFieldDirectory += tboxVehicle.Text.Trim() + "_";
+      }
 
       //date
       mf.currentFieldDirectory += String.Format( "{0}", DateTime.Now.ToString( "yyyy.MMM.dd HH_mm", CultureInfo.InvariantCulture ) );
@@ -215,33 +217,39 @@ namespace AgOpenGPS {
 
           string fileToCopy = templateDirectoryName + "\\Boundary.txt";
           string destinationDirectory = directoryName + "\\Boundary.txt";
-          if( File.Exists( fileToCopy ) )
+          if( File.Exists( fileToCopy ) ) {
             File.Copy( fileToCopy, destinationDirectory );
+          }
 
           fileToCopy = templateDirectoryName + "\\Headland.txt";
           destinationDirectory = directoryName + "\\Headland.txt";
-          if( File.Exists( fileToCopy ) )
+          if( File.Exists( fileToCopy ) ) {
             File.Copy( fileToCopy, destinationDirectory );
+          }
 
           fileToCopy = templateDirectoryName + "\\Flags.txt";
           destinationDirectory = directoryName + "\\Flags.txt";
-          if( File.Exists( fileToCopy ) )
+          if( File.Exists( fileToCopy ) ) {
             File.Copy( fileToCopy, destinationDirectory );
+          }
 
           fileToCopy = templateDirectoryName + "\\ABLine.txt";
           destinationDirectory = directoryName + "\\ABLine.txt";
-          if( File.Exists( fileToCopy ) )
+          if( File.Exists( fileToCopy ) ) {
             File.Copy( fileToCopy, destinationDirectory );
+          }
 
           fileToCopy = templateDirectoryName + "\\RecPath.txt";
           destinationDirectory = directoryName + "\\RecPath.txt";
-          if( File.Exists( fileToCopy ) )
+          if( File.Exists( fileToCopy ) ) {
             File.Copy( fileToCopy, destinationDirectory );
+          }
 
           fileToCopy = templateDirectoryName + "\\CurveLine.txt";
           destinationDirectory = directoryName + "\\CurveLine.txt";
-          if( File.Exists( fileToCopy ) )
+          if( File.Exists( fileToCopy ) ) {
             File.Copy( fileToCopy, destinationDirectory );
+          }
 
           //now open the newly cloned field
           mf.FileOpenField( dirNewField + myFileName );
