@@ -3039,7 +3039,7 @@ namespace AgOpenGPS {
     public string GyroInDegrees {
       get {
         if( mc.gyroHeading != 9999 ) {
-          return Math.Round( mc.gyroHeading / 16, 1 ) + "\u00B0";
+          return Math.Round( mc.gyroHeading / (double)16, 1 ) + "\u00B0";
         } else {
           return "-";
         }
@@ -3048,7 +3048,7 @@ namespace AgOpenGPS {
     public string RollInDegrees {
       get {
         if( mc.rollRaw != 9999 ) {
-          return Math.Round( ( mc.rollRaw - ahrs.rollZero ) / 16, 1 ) + "\u00B0";
+          return Math.Round( ( mc.rollRaw - ahrs.rollZero ) / (double)16, 1 ) + "\u00B0";
         } else {
           return "-";
         }
