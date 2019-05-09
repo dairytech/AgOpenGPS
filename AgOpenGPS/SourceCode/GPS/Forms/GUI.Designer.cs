@@ -3430,7 +3430,7 @@ namespace AgOpenGPS {
         lblHeading.Text = Heading;
         lblHeading2.Text = lblHeading.Text;
         lblLidarDistance.Text = ( mc.lidarDistance / 100 ).ToString();
-        lblHz.Text = NMEAHz + "Hz " + (int)( frameTime );
+        lblHz.Text = NMEAHz + "Hz " + (int)( frameTime ) + "ms cycletime";
       }
 
       //every half of a second update all status  ////////////////    0.5  0.5   0.5    0.5    /////////////////
