@@ -1,6 +1,4 @@
-﻿//Please, if you use this, share the improvements
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -210,12 +208,14 @@ namespace AgOpenGPS {
       int top = 0;
       if( panelSimControls.Visible == true ) {
         top = 190;
-        if( vehicle.numOfSections > 8 )
+        if( vehicle.numOfSections > 8 ) {
           top = 230;
+        }
       } else {
         top = 140;
-        if( vehicle.numOfSections > 8 )
+        if( vehicle.numOfSections > 8 ) {
           top = 180;
+        }
       }
 
       btnSection1Man.Top = Height - top;
@@ -228,10 +228,11 @@ namespace AgOpenGPS {
       btnSection8Man.Top = Height - top;
 
       int first2Thirds;
-      if( tabControl1.Visible )
+      if( tabControl1.Visible ) {
         first2Thirds = ( Width - 340 - 195 ) / 2 + 385;
-      else
+      } else {
         first2Thirds = ( Width - 200 - 195 ) / 2 + 260;
+      }
 
       int even = 60;
       int offset = 7;
@@ -774,8 +775,9 @@ namespace AgOpenGPS {
       // re-sort the id's based on how many flags left
       int flagCnt = flagPts.Count;
       if( flagCnt > 0 ) {
-        for( int i = 0 ; i < flagCnt ; i++ )
+        for( int i = 0 ; i < flagCnt ; i++ ) {
           flagPts[i].ID = i + 1;
+        }
       }
     }
 
@@ -906,13 +908,17 @@ namespace AgOpenGPS {
     private void btnRateLeftDn_MouseDown( object sender, MouseEventArgs e ) {
       if( isMetric ) {
         rcd.rateLeft--;
-        if( rcd.rateLeft < 2.0 )
+        if( rcd.rateLeft < 2.0 ) {
           rcd.rateLeft = 2.0;
+        }
+
         lblRateSetpointLeft.Text = rcd.rateLeft.ToString( "N1" );
       } else {
         rcd.rateLeft--;
-        if( rcd.rateLeft < 2.0 )
+        if( rcd.rateLeft < 2.0 ) {
           rcd.rateLeft = 2.0;
+        }
+
         lblRateSetpointLeft.Text = ( rcd.rateLeft * glm.LHa2galAc ).ToString( "N1" );
       }
     }
@@ -928,13 +934,15 @@ namespace AgOpenGPS {
     private void btnRateRightDn_MouseDown( object sender, MouseEventArgs e ) {
       if( isMetric ) {
         rcd.rateRight--;
-        if( rcd.rateRight < 2.0 )
+        if( rcd.rateRight < 2.0 ) {
           rcd.rateRight = 2.0;
+        }
         //lblRateSetpointRight.Text = rcd.rateRight.ToString("N1");
       } else {
         rcd.rateRight--;
-        if( rcd.rateRight < 2.0 )
+        if( rcd.rateRight < 2.0 ) {
           rcd.rateRight = 2.0;
+        }
         //lblRateSetpointRight.Text = (rcd.rateRight * glm.LHa2galAc).ToString("N1");
       }
     }
@@ -1073,15 +1081,20 @@ namespace AgOpenGPS {
           btnABLine.Image = Properties.Resources.ABLineOff;
           ABLine.isABLineBeingSet = false;
           DisableYouTurnButtons();
-          if( isAutoSteerBtnOn )
+          if( isAutoSteerBtnOn ) {
             btnAutoSteer.PerformClick();
+          }
+
           btnCurve.Enabled = true;
         }
 
-        if( curve.isCurveSet )
+        if( curve.isCurveSet ) {
           curve.ResetCurveLine();
-        if( yt.isYouTurnBtnOn )
+        }
+
+        if( yt.isYouTurnBtnOn ) {
           btnEnableAutoYouTurn.PerformClick();
+        }
 
         if( !recPath.StartDrivingRecordedPath() ) {
           //Cancel the recPath - something went seriously wrong
@@ -1184,15 +1197,20 @@ namespace AgOpenGPS {
           btnABLine.Image = Properties.Resources.ABLineOff;
           ABLine.isABLineBeingSet = false;
           DisableYouTurnButtons();
-          if( isAutoSteerBtnOn )
+          if( isAutoSteerBtnOn ) {
             btnAutoSteer.PerformClick();
+          }
+
           btnCurve.Enabled = true;
         }
 
-        if( curve.isCurveSet )
+        if( curve.isCurveSet ) {
           curve.ResetCurveLine();
-        if( yt.isYouTurnBtnOn )
+        }
+
+        if( yt.isYouTurnBtnOn ) {
           btnEnableAutoYouTurn.PerformClick();
+        }
 
         if( !recPath.StartDrivingRecordedPath() ) {
           //Cancel the recPath - something went seriously wrong
@@ -1245,8 +1263,9 @@ namespace AgOpenGPS {
     private void btnABLine_Click( object sender, EventArgs e ) {
       //if contour is on, turn it off
       if( ct.isContourBtnOn ) {
-        if( ct.isContourBtnOn )
+        if( ct.isContourBtnOn ) {
           btnContour.PerformClick();
+        }
       }
 
       //new direction so reset where to put turn diagnostic
@@ -1279,8 +1298,10 @@ namespace AgOpenGPS {
 
           DisableYouTurnButtons();
 
-          if( isAutoSteerBtnOn )
+          if( isAutoSteerBtnOn ) {
             btnAutoSteer.PerformClick();
+          }
+
           btnCurve.Enabled = true;
 
         }
@@ -1298,8 +1319,9 @@ namespace AgOpenGPS {
     private void btnCurve_Click( object sender, EventArgs e ) {
       //if contour is on, turn it off
       if( ct.isContourBtnOn ) {
-        if( ct.isContourBtnOn )
+        if( ct.isContourBtnOn ) {
           btnContour.PerformClick();
+        }
       }
 
       //new direction so reset where to put turn diagnostic
@@ -1344,8 +1366,10 @@ namespace AgOpenGPS {
         //btnContour.Enabled = false;
         btnABLine.Enabled = false;
 
-        if( isAutoSteerBtnOn )
+        if( isAutoSteerBtnOn ) {
           btnAutoSteer.PerformClick();
+        }
+
         btnContourPriority.Enabled = true;
 
         Form form = new FormABCurve( this );
@@ -1439,14 +1463,14 @@ namespace AgOpenGPS {
         if( ABLine.isABLineSet ) {
           //snap distance is in cm
           yt.ResetCreatedYouTurn();
-          double dist = 0.01 * Properties.Settings.Default.setDisplay_snapDistanceSmall;
+          double dist = Properties.Settings.Default.setDisplay_snapDistanceSmall / 100;
 
           ABLine.MoveABLine( -dist );
           FileSaveABLine();
         } else if( curve.isCurveSet ) {
           //snap distance is in cm
           yt.ResetCreatedYouTurn();
-          double dist = 0.01 * Properties.Settings.Default.setDisplay_snapDistanceSmall;
+          double dist = Properties.Settings.Default.setDisplay_snapDistanceSmall / 100;
 
           curve.MoveABCurve( -dist );
         } else {
@@ -1460,13 +1484,13 @@ namespace AgOpenGPS {
         if( ABLine.isABLineSet ) {
           //snap distance is in cm
           yt.ResetCreatedYouTurn();
-          double dist = 0.01 * Properties.Settings.Default.setDisplay_snapDistanceSmall;
+          double dist = Properties.Settings.Default.setDisplay_snapDistanceSmall / 100;
           ABLine.MoveABLine( dist );
           FileSaveABLine();
         } else if( curve.isCurveSet ) {
           //snap distance is in cm
           yt.ResetCreatedYouTurn();
-          double dist = 0.01 * Properties.Settings.Default.setDisplay_snapDistanceSmall;
+          double dist = Properties.Settings.Default.setDisplay_snapDistanceSmall / 100;
           curve.MoveABCurve( dist );
         } else {
           var form = new FormTimedMessage( 2000, ( gStr.gsNoGuidanceLines ), ( gStr.gsTurnOnContourOrABLine ) );
@@ -1479,14 +1503,14 @@ namespace AgOpenGPS {
         if( ABLine.isABLineSet ) {
           //snap distance is in cm
           yt.ResetCreatedYouTurn();
-          double dist = 0.01 * Properties.Settings.Default.setDisplay_snapDistance;
+          double dist = Properties.Settings.Default.setDisplay_snapDistance / 100;
 
           ABLine.MoveABLine( dist );
           FileSaveABLine();
         } else if( curve.isCurveSet ) {
           //snap distance is in cm
           yt.ResetCreatedYouTurn();
-          double dist = 0.01 * Properties.Settings.Default.setDisplay_snapDistance;
+          double dist = Properties.Settings.Default.setDisplay_snapDistance / 100;
           curve.MoveABCurve( dist );
         } else {
           var form = new FormTimedMessage( 2000, ( gStr.gsNoGuidanceLines ), ( gStr.gsTurnOnContourOrABLine ) );
@@ -1500,14 +1524,14 @@ namespace AgOpenGPS {
         if( ABLine.isABLineSet ) {
           //snap distance is in cm
           yt.ResetCreatedYouTurn();
-          double dist = 0.01 * Properties.Settings.Default.setDisplay_snapDistance;
+          double dist = Properties.Settings.Default.setDisplay_snapDistance / 100;
 
           ABLine.MoveABLine( -dist );
           FileSaveABLine();
         } else if( curve.isCurveSet ) {
           //snap distance is in cm
           yt.ResetCreatedYouTurn();
-          double dist = 0.01 * Properties.Settings.Default.setDisplay_snapDistance;
+          double dist = Properties.Settings.Default.setDisplay_snapDistance / 100;
 
           curve.MoveABCurve( -dist );
         } else {
@@ -1663,8 +1687,10 @@ namespace AgOpenGPS {
     private void btnSection1Man_Click( object sender, EventArgs e ) {
       if( autoBtnState != btnStates.Auto ) {
         //if auto is off just have on-off for choices of section buttons
-        if( section[0].manBtnState == manBtn.Off )
+        if( section[0].manBtnState == manBtn.Off ) {
           section[0].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 0, btnSection1Man );
         return;
       }
@@ -1674,8 +1700,10 @@ namespace AgOpenGPS {
     private void btnSection2Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[1].manBtnState == manBtn.Off )
+        if( section[1].manBtnState == manBtn.Off ) {
           section[1].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 1, btnSection2Man );
         return;
       }
@@ -1685,8 +1713,10 @@ namespace AgOpenGPS {
     private void btnSection3Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[2].manBtnState == manBtn.Off )
+        if( section[2].manBtnState == manBtn.Off ) {
           section[2].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 2, btnSection3Man );
         return;
       }
@@ -1696,8 +1726,10 @@ namespace AgOpenGPS {
     private void btnSection4Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[3].manBtnState == manBtn.Off )
+        if( section[3].manBtnState == manBtn.Off ) {
           section[3].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 3, btnSection4Man );
         return;
       }
@@ -1706,8 +1738,10 @@ namespace AgOpenGPS {
     private void btnSection5Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[4].manBtnState == manBtn.Off )
+        if( section[4].manBtnState == manBtn.Off ) {
           section[4].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 4, btnSection5Man );
         return;
       }
@@ -1717,8 +1751,10 @@ namespace AgOpenGPS {
     private void btnSection6Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[5].manBtnState == manBtn.Off )
+        if( section[5].manBtnState == manBtn.Off ) {
           section[5].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 5, btnSection6Man );
         return;
       }
@@ -1728,8 +1764,10 @@ namespace AgOpenGPS {
     private void btnSection7Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[6].manBtnState == manBtn.Off )
+        if( section[6].manBtnState == manBtn.Off ) {
           section[6].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 6, btnSection7Man );
         return;
       }
@@ -1739,8 +1777,10 @@ namespace AgOpenGPS {
     private void btnSection8Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[7].manBtnState == manBtn.Off )
+        if( section[7].manBtnState == manBtn.Off ) {
           section[7].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 7, btnSection8Man );
         return;
       }
@@ -1750,8 +1790,10 @@ namespace AgOpenGPS {
     private void btnSection9Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[8].manBtnState == manBtn.Off )
+        if( section[8].manBtnState == manBtn.Off ) {
           section[8].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 8, btnSection9Man );
         return;
       }
@@ -1762,8 +1804,10 @@ namespace AgOpenGPS {
     private void btnSection10Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[9].manBtnState == manBtn.Off )
+        if( section[9].manBtnState == manBtn.Off ) {
           section[9].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 9, btnSection10Man );
         return;
       }
@@ -1774,8 +1818,10 @@ namespace AgOpenGPS {
     private void btnSection11Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[10].manBtnState == manBtn.Off )
+        if( section[10].manBtnState == manBtn.Off ) {
           section[10].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 10, btnSection11Man );
         return;
       }
@@ -1786,8 +1832,10 @@ namespace AgOpenGPS {
     private void btnSection12Man_Click( object sender, EventArgs e ) {
       //if auto is off just have on-off for choices of section buttons
       if( autoBtnState != btnStates.Auto ) {
-        if( section[11].manBtnState == manBtn.Off )
+        if( section[11].manBtnState == manBtn.Off ) {
           section[11].manBtnState = manBtn.Auto;
+        }
+
         ManualBtnUpdate( 11, btnSection12Man );
         return;
       }
@@ -1835,20 +1883,24 @@ namespace AgOpenGPS {
     }
     private void toolStripZoomOut_Click( object sender, EventArgs e ) {
 
-      if( camera.zoomValue <= 20 )
-        camera.zoomValue += camera.zoomValue * 0.2;
-      else
-        camera.zoomValue += camera.zoomValue * 0.05;
+      if( camera.zoomValue <= 20 ) {
+        camera.zoomValue += camera.zoomValue / 50;
+      } else {
+        camera.zoomValue += camera.zoomValue / 50;
+      }
+
       camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
       SetZoom();
     }
     private void toolStripZoomIn_Click( object sender, EventArgs e ) {
       if( camera.zoomValue <= 20 ) {
-        if( ( camera.zoomValue -= camera.zoomValue * 0.2 ) < 6.0 )
+        if( ( camera.zoomValue -= camera.zoomValue / 5 ) < 6.0 ) {
           camera.zoomValue = 6.0;
+        }
       } else {
-        if( ( camera.zoomValue -= camera.zoomValue * 0.05 ) < 6.0 )
+        if( ( camera.zoomValue -= camera.zoomValue / 5 ) < 6.0 ) {
           camera.zoomValue = 6.0;
+        }
       }
 
       camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
@@ -1857,45 +1909,57 @@ namespace AgOpenGPS {
 
     //The zoom tilt buttons
     private void btnZoomIn_MouseDown( object sender, MouseEventArgs e ) {
-      if( camera.zoomValue <= 20 )
-        camera.zoomValue += camera.zoomValue * 0.1;
-      else
-        camera.zoomValue += camera.zoomValue * 0.05;
-      if( camera.zoomValue > 120 )
+      if( camera.zoomValue <= 20 ) {
+        camera.zoomValue += camera.zoomValue / 10;
+      } else {
+        camera.zoomValue += camera.zoomValue / 50;
+      }
+
+      if( camera.zoomValue > 120 ) {
         camera.zoomValue = 120;
+      }
+
       camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
       SetZoom();
     }
     private void btnZoomOut_MouseDown( object sender, MouseEventArgs e ) {
       if( camera.zoomValue <= 20 ) {
-        if( ( camera.zoomValue -= camera.zoomValue * 0.1 ) < 6.0 )
+        if( ( camera.zoomValue -= camera.zoomValue * 0.1 ) < 6.0 ) {
           camera.zoomValue = 6.0;
+        }
       } else {
-        if( ( camera.zoomValue -= camera.zoomValue * 0.05 ) < 6.0 )
+        if( ( camera.zoomValue -= camera.zoomValue * 0.05 ) < 6.0 ) {
           camera.zoomValue = 6.0;
+        }
       }
       camera.camSetDistance = camera.zoomValue * camera.zoomValue * -1;
       SetZoom();
     }
     private void btnpTiltUp_MouseDown( object sender, MouseEventArgs e ) {
-      camera.camPitch -= ( ( camera.camPitch * 0.02 ) - 1 );
-      if( camera.camPitch > 0 )
+      camera.camPitch -= ( ( camera.camPitch / 50 ) - 1 );
+      if( camera.camPitch > 0 ) {
         camera.camPitch = 0;
+      }
     }
     private void btnpTiltDown_MouseDown( object sender, MouseEventArgs e ) {
-      camera.camPitch += ( ( camera.camPitch * 0.02 ) - 1 );
-      if( camera.camPitch < -80 )
+      camera.camPitch += ( ( camera.camPitch / 50 ) - 1 );
+      if( camera.camPitch < -80 ) {
         camera.camPitch = -80;
+      }
     }
     private void btnZoomExtents_Click( object sender, EventArgs e ) {
       //if (isJobStarted)
       {
-        if( camera.camSetDistance < -400 )
+        if( camera.camSetDistance < -400 ) {
           camera.camSetDistance = -250;
-        else
+        } else {
           camera.camSetDistance = -5 * maxFieldDistance;
-        if( camera.camSetDistance == 0 )
+        }
+
+        if( camera.camSetDistance == 0 ) {
           camera.camSetDistance = -2000;
+        }
+
         SetZoom();
       }
     }
@@ -2118,8 +2182,9 @@ namespace AgOpenGPS {
           FileCreateContour();
           FileCreateSections();
 
-          if( rcd.isRateControlOn )
+          if( rcd.isRateControlOn ) {
             btnDualRate.PerformClick();
+          }
 
           rcd.ShutdownRateControl();  //double dam sure its off
 
@@ -2154,8 +2219,9 @@ namespace AgOpenGPS {
           ct.StopContourLine( pivotAxlePos );
           ct.ResetContour();
           fd.workedAreaTotal = 0;
-        } else
+        } else {
           TimedMessageBox( 1500, "Nothing Deleted", "Action has been cancelled" );
+        }
       }
     }
     private void cboxpRowWidth_SelectedIndexChanged( object sender, EventArgs e ) {
@@ -2207,10 +2273,11 @@ namespace AgOpenGPS {
       fbd.ShowNewFolderButton = true;
       fbd.Description = "Currently: " + Settings.Default.setF_workingDirectory;
 
-      if( Settings.Default.setF_workingDirectory == "Default" )
+      if( Settings.Default.setF_workingDirectory == "Default" ) {
         fbd.SelectedPath = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments );
-      else
+      } else {
         fbd.SelectedPath = Settings.Default.setF_workingDirectory;
+      }
 
       if( fbd.ShowDialog() == DialogResult.OK ) {
         RegistryKey regKey = Registry.CurrentUser.OpenSubKey( @"SOFTWARE\AgOpenGPS", true );
@@ -2241,8 +2308,10 @@ namespace AgOpenGPS {
 
       if( result == DialogResult.OK ) {
         MessageBox.Show( "AgOpenGPS will Exit", "Please Restart the Program" );
-        if( isJobStarted )
+        if( isJobStarted ) {
           JobClose();
+        }
+
         Application.Exit();
       }
     }
@@ -2506,18 +2575,24 @@ namespace AgOpenGPS {
         Color = Color.FromArgb( 255, redSections, grnSections, bluSections )
       };
 
-      if( colorDlg.ShowDialog() != DialogResult.OK )
+      if( colorDlg.ShowDialog() != DialogResult.OK ) {
         return;
+      }
 
       redSections = colorDlg.Color.R;
-      if( redSections > 253 )
+      if( redSections > 253 ) {
         redSections = 253;
+      }
+
       grnSections = colorDlg.Color.G;
-      if( grnSections > 253 )
+      if( grnSections > 253 ) {
         grnSections = 253;
+      }
+
       bluSections = colorDlg.Color.B;
-      if( bluSections > 253 )
+      if( bluSections > 253 ) {
         bluSections = 253;
+      }
 
       Settings.Default.setF_SectionColorR = redSections;
       Settings.Default.setF_SectionColorG = grnSections;
@@ -2535,18 +2610,24 @@ namespace AgOpenGPS {
           Settings.Default.setF_FieldColorG, Settings.Default.setF_FieldColorB )
       };
 
-      if( colorDlg.ShowDialog() != DialogResult.OK )
+      if( colorDlg.ShowDialog() != DialogResult.OK ) {
         return;
+      }
 
       redField = colorDlg.Color.R;
-      if( redField > 253 )
+      if( redField > 253 ) {
         redField = 253;
+      }
+
       grnField = colorDlg.Color.G;
-      if( grnField > 253 )
+      if( grnField > 253 ) {
         grnField = 253;
+      }
+
       bluField = colorDlg.Color.B;
-      if( bluField > 253 )
+      if( bluField > 253 ) {
         bluField = 253;
+      }
 
       Settings.Default.setF_FieldColorR = redField;
       Settings.Default.setF_FieldColorG = grnField;
@@ -2598,8 +2679,9 @@ namespace AgOpenGPS {
     }
     private void contextMenuStripOpenGL_Opening( object sender, System.ComponentModel.CancelEventArgs e ) {
       //dont bring up menu if no flag selected
-      if( flagNumberPicked == 0 )
+      if( flagNumberPicked == 0 ) {
         e.Cancel = true;
+      }
     }
     private void googleEarthOpenGLContextMenu_Click( object sender, EventArgs e ) {
       if( isJobStarted ) {
@@ -2630,10 +2712,11 @@ namespace AgOpenGPS {
           }
         }
       } else {
-        if( !isJobStarted )
+        if( !isJobStarted ) {
           TimedMessageBox( 2000, gStr.gsFieldNotOpen, gStr.gsStartNewField );
-        else
+        } else {
           TimedMessageBox( 2000, gStr.gsCurveNotOn, gStr.gsCurveTurnOn );
+        }
       }
     }
     private void toolStripAreYouSure_Click( object sender, EventArgs e ) {
@@ -2647,8 +2730,9 @@ namespace AgOpenGPS {
           FileCreateContour();
           FileCreateSections();
 
-          if( rcd.isRateControlOn )
+          if( rcd.isRateControlOn ) {
             btnDualRate.PerformClick();
+          }
 
           rcd.ShutdownRateControl();  //double dam sure its off
 
@@ -2685,8 +2769,9 @@ namespace AgOpenGPS {
           }
           patchSaveList?.Clear();
 
-        } else
+        } else {
           TimedMessageBox( 1500, "Nothing Deleted", "Action has been cancelled" );
+        }
       }
     }
     private void toolStripBtnMakeBndContour_Click( object sender, EventArgs e ) {
@@ -2694,11 +2779,11 @@ namespace AgOpenGPS {
       ct.BuildBoundaryContours();
     }
     private void toolStripBtnSnap_Click( object sender, EventArgs e ) {
-      if( ABLine.isABLineSet )
+      if( ABLine.isABLineSet ) {
         ABLine.SnapABLine();
-      else if( curve.isCurveSet )
+      } else if( curve.isCurveSet ) {
         curve.SnapABCurve();
-      else {
+      } else {
         var form = new FormTimedMessage( 2000, ( gStr.gsNoGuidanceLines ), ( gStr.gsTurnOnContourOrABLine ) );
         form.Show();
       }
@@ -2830,13 +2915,15 @@ namespace AgOpenGPS {
       //if a GPS is connected disable sim
       //if (!sp.IsOpen)
       {
-        if( isAutoSteerBtnOn && ( guidanceLineDistanceOff != 32000 ) )
-          sim.DoSimTick( guidanceLineSteerAngle * 0.01 );
+        if( isAutoSteerBtnOn && ( guidanceLineDistanceOff != 32000 ) ) {
+          sim.DoSimTick( guidanceLineSteerAngle / 100 );
+        }
         //else if (genPath.isDrivingGenLine | genPath.isDrivingHome) sim.DoSimTick(guidanceLineSteerAngle * 0.01);
-        else if( recPath.isDrivingRecordedPath )
-          sim.DoSimTick( guidanceLineSteerAngle * 0.01 );
-        else
+        else if( recPath.isDrivingRecordedPath ) {
+          sim.DoSimTick( guidanceLineSteerAngle / 100 );
+        } else {
           sim.DoSimTick( sim.steerAngleScrollBar );
+        }
       }
     }
     private void hsbarSteerAngle_Scroll( object sender, ScrollEventArgs e ) {
@@ -2916,56 +3003,60 @@ namespace AgOpenGPS {
     }
     public string Status {
       get {
-        if( pn.status == "A" )
+        if( pn.status == "A" ) {
           return "Active";
-        else
+        } else {
           return "Void";
+        }
       }
     }
     public string FixQuality {
       get {
-        if( pn.fixQuality == 0 )
+        if( pn.fixQuality == 0 ) {
           return "Invalid";
-        else if( pn.fixQuality == 1 )
+        } else if( pn.fixQuality == 1 ) {
           return "GPS fix";
-        else if( pn.fixQuality == 2 )
+        } else if( pn.fixQuality == 2 ) {
           return "DGPS fix";
-        else if( pn.fixQuality == 3 )
+        } else if( pn.fixQuality == 3 ) {
           return "PPS fix";
-        else if( pn.fixQuality == 4 )
+        } else if( pn.fixQuality == 4 ) {
           return "RTK fix";
-        else if( pn.fixQuality == 5 )
+        } else if( pn.fixQuality == 5 ) {
           return "Flt RTK";
-        else if( pn.fixQuality == 6 )
+        } else if( pn.fixQuality == 6 ) {
           return "Estimate";
-        else if( pn.fixQuality == 7 )
+        } else if( pn.fixQuality == 7 ) {
           return "Man IP";
-        else if( pn.fixQuality == 8 )
+        } else if( pn.fixQuality == 8 ) {
           return "Sim";
-        else
+        } else {
           return "Unknown";
+        }
       }
     }
 
     public string GyroInDegrees {
       get {
-        if( mc.gyroHeading != 9999 )
-          return Math.Round( mc.gyroHeading * 0.0625, 1 ) + "\u00B0";
-        else
+        if( mc.gyroHeading != 9999 ) {
+          return Math.Round( mc.gyroHeading / 16, 1 ) + "\u00B0";
+        } else {
           return "-";
+        }
       }
     }
     public string RollInDegrees {
       get {
-        if( mc.rollRaw != 9999 )
-          return Math.Round( ( mc.rollRaw - ahrs.rollZero ) * 0.0625, 1 ) + "\u00B0";
-        else
+        if( mc.rollRaw != 9999 ) {
+          return Math.Round( ( mc.rollRaw - ahrs.rollZero ) / 16, 1 ) + "\u00B0";
+        } else {
           return "-";
+        }
       }
     }
     public string PureSteerAngle {
       get {
-        return ( (double)( guidanceLineSteerAngle ) * 0.01 ).ToString( "N1" );
+        return ( (double)( guidanceLineSteerAngle ) / 100 ).ToString( "N1" );
       }
     }
 
@@ -3011,18 +3102,22 @@ namespace AgOpenGPS {
     public string SpeedMPH {
       get {
         double spd = 0;
-        for( int c = 0 ; c < 10 ; c++ )
+        for( int c = 0 ; c < 10 ; c++ ) {
           spd += avgSpeed[c];
-        spd *= 0.0621371;
+        }
+
+        spd /= 16;
         return Convert.ToString( Math.Round( spd, 1 ) );
       }
     }
     public string SpeedKPH {
       get {
         double spd = 0;
-        for( int c = 0 ; c < 10 ; c++ )
+        for( int c = 0 ; c < 10 ; c++ ) {
           spd += avgSpeed[c];
-        spd *= 0.1;
+        }
+
+        spd /= 10;
         return Convert.ToString( Math.Round( spd, 1 ) );
       }
     }
@@ -3070,12 +3165,12 @@ namespace AgOpenGPS {
 
     public string PeriAreaAcres {
       get {
-        return Math.Round( periArea.area * 0.000247105, 2 ).ToString();
+        return Math.Round( periArea.area / 4050, 2 ).ToString();
       }
     }
     public string PeriAreaHectares {
       get {
-        return Math.Round( periArea.area * 0.0001, 2 ).ToString();
+        return Math.Round( periArea.area / 10000, 2 ).ToString();
       }
     }
 
@@ -3087,56 +3182,62 @@ namespace AgOpenGPS {
     }
     public string RateDualAccumulatedVolumeGallons {
       get {
-        return ( (double)rcd.dualVolumeActual * 0.264172875 ).ToString( "N0" ) + " Gal";
+        return ( (double)rcd.dualVolumeActual / 3.785 ).ToString( "N0" ) + " Gal";
       }
     }
     public string RateAppliedActualRightLPerHA {
       get {
-        if( rcd.rateSetPointRight != 0 )
-          return ( rcd.rateActualRight / ( rcd.currentWidthRight * pn.speed * .0016666666666 + 0.0001 ) ).ToString( "N1" );
-        else
+        if( rcd.rateSetPointRight != 0 ) {
+          return ( rcd.rateActualRight / ( rcd.currentWidthRight * pn.speed / 600 + 0.0001 ) ).ToString( "N1" );
+        } else {
           return "0";
+        }
       }
     }
     public string RateAppliedActualRightGPA {
       get {
-        if( rcd.rateSetPointRight != 0 )
-          return ( ( rcd.rateActualRight / ( rcd.currentWidthRight * pn.speed * .0016666666666 + 0.0001 ) ) * glm.LHa2galAc ).ToString( "N1" );
-        else
+        if( rcd.rateSetPointRight != 0 ) {
+          return ( ( rcd.rateActualRight / ( rcd.currentWidthRight * pn.speed / 600 + 0.0001 ) ) * glm.LHa2galAc ).ToString( "N1" );
+        } else {
           return "0";
+        }
       }
     }
     public string RateAppliedActualLeftLPerHA {
       get {
-        if( rcd.rateSetPointLeft != 0 )
-          return ( rcd.rateActualLeft / ( rcd.currentWidthLeft * pn.speed * .0016666666666 + 0.0001 ) ).ToString( "N1" );
-        else
+        if( rcd.rateSetPointLeft != 0 ) {
+          return ( rcd.rateActualLeft / ( rcd.currentWidthLeft * pn.speed / 600 + 0.0001 ) ).ToString( "N1" );
+        } else {
           return "0";
+        }
       }
     }
     public string RateAppliedActualLeftGPA {
       get {
-        if( rcd.rateSetPointLeft != 0 )
-          return ( ( rcd.rateActualLeft / ( rcd.currentWidthLeft * pn.speed * .0016666666666 + 0.0001 ) ) * glm.LHa2galAc ).ToString( "N1" );
-        else
+        if( rcd.rateSetPointLeft != 0 ) {
+          return ( ( rcd.rateActualLeft / ( rcd.currentWidthLeft * pn.speed / 600 + 0.0001 ) ) * glm.LHa2galAc ).ToString( "N1" );
+        } else {
           return "0";
+        }
       }
     }
 
     public string DistPivotM {
       get {
-        if( distancePivotToTurnLine > 0 )
+        if( distancePivotToTurnLine > 0 ) {
           return ( (int)( distancePivotToTurnLine ) ) + " m";
-        else
+        } else {
           return "--";
+        }
       }
     }
     public string DistPivotFt {
       get {
-        if( distancePivotToTurnLine > 0 )
+        if( distancePivotToTurnLine > 0 ) {
           return ( ( (int)( glm.m2ft * ( distancePivotToTurnLine ) ) ) + " ft" );
-        else
+        } else {
           return "--";
+        }
       }
     }
 
@@ -3200,24 +3301,26 @@ namespace AgOpenGPS {
 
         if( isNTRIP_RequiredOn ) {
           //update byte counter and up counter
-          if( ntripCounter > 59 )
+          if( ntripCounter > 59 ) {
             lblNTRIPSeconds.Text = ( ntripCounter / 60 ) + " Mins";
-          else if( ntripCounter < 60 && ntripCounter > 22 )
+          } else if( ntripCounter < 60 && ntripCounter > 22 ) {
             lblNTRIPSeconds.Text = ntripCounter + " Secs";
-          else
+          } else {
             lblNTRIPSeconds.Text = "Connecting in " + ( ntripCounter - 22 );
+          }
 
-          pbarNtrip.Value = (byte)( tripBytes * 0.02 );
-          lblNtripBytes.Text = ( ( tripBytes ) * 0.001 ).ToString( "###,###,###" ) + " Kb";
+          pbarNtrip.Value = (byte)( tripBytes / 50 );
+          lblNtripBytes.Text = ( ( tripBytes ) / 1000 ).ToString( "###,###,###" ) + " Kb";
 
           //watchdog for Ntrip
-          if( isNTRIP_Connecting )
+          if( isNTRIP_Connecting ) {
             lblWatch.Text = "Authorizing";
-          else {
-            if( NTRIP_Watchdog > 10 )
+          } else {
+            if( NTRIP_Watchdog > 10 ) {
               lblWatch.Text = "Waiting";
-            else
+            } else {
               lblWatch.Text = "Listening";
+            }
           }
 
           if( sendGGAInterval > 0 && isNTRIP_Sending ) {
@@ -3269,7 +3372,7 @@ namespace AgOpenGPS {
             lblDualAccumulatedVolume.Text = RateDualAccumulatedVolumeGallons;
             //lblRateAppliedActualRight.Text = RateAppliedActualRightGPA;
             lblRateAppliedActualLeft.Text = RateAppliedActualLeftGPA;
-            lblFlowRateLeft.Text = ( rcd.rateSetPointLeft * 0.264172875 ).ToString( "N1" );
+            lblFlowRateLeft.Text = ( rcd.rateSetPointLeft / 3.785 ).ToString( "N1" );
             //lblFlowRateRight.Text = (rcd.rateSetPointRight * 0.264172875).ToString("N1");
           }
 
@@ -3281,16 +3384,16 @@ namespace AgOpenGPS {
 
           if( bnd.bndArr[0].isSet ) {
             if( yt.isYouTurnRight ) {
-              if( !yt.isYouTurnTriggered )
+              if( !yt.isYouTurnTriggered ) {
                 btnLeftYouTurn.Text = DistPivotFt;
-              else {
+              } else {
                 btnLeftYouTurn.Text = "";
                 btnRightYouTurn.Text = "Cancel";
               }
             } else {
-              if( !yt.isYouTurnTriggered )
+              if( !yt.isYouTurnTriggered ) {
                 btnRightYouTurn.Text = DistPivotFt;
-              else {
+              } else {
                 btnRightYouTurn.Text = "";
                 btnLeftYouTurn.Text = "Cancel";
               }
@@ -3326,17 +3429,14 @@ namespace AgOpenGPS {
         lblFixQuality.Text = FixQuality;
         lblHeading.Text = Heading;
         lblHeading2.Text = lblHeading.Text;
-        lblLidarDistance.Text = ( mc.lidarDistance * 0.01 ).ToString();
+        lblLidarDistance.Text = ( mc.lidarDistance / 100 ).ToString();
         lblHz.Text = NMEAHz + "Hz " + (int)( frameTime );
-
-
       }
 
       //every half of a second update all status  ////////////////    0.5  0.5   0.5    0.5    /////////////////
       if( displayUpdateHalfSecondCounter != oneHalfSecond ) {
         //reset the counter
         displayUpdateHalfSecondCounter = oneHalfSecond;
-
 
         if( tabControl1.SelectedIndex == 3 && tabControl1.Visible ) {
           //both
@@ -3364,7 +3464,6 @@ namespace AgOpenGPS {
           }
 
           tboxSentence.Text = recvSentenceSettings;
-
         }
 
         if( panelBatman.Visible ) {
@@ -3375,16 +3474,16 @@ namespace AgOpenGPS {
 
         if( bnd.bndArr[0].isSet ) {
           if( yt.isYouTurnRight ) {
-            if( !yt.isYouTurnTriggered )
+            if( !yt.isYouTurnTriggered ) {
               btnLeftYouTurn.Text = DistPivotM;
-            else {
+            } else {
               btnLeftYouTurn.Text = "";
               btnRightYouTurn.Text = "Cancel" + "\r\n" + yt.onA;
             }
           } else {
-            if( !yt.isYouTurnTriggered )
+            if( !yt.isYouTurnTriggered ) {
               btnRightYouTurn.Text = DistPivotM;
-            else {
+            } else {
               btnRightYouTurn.Text = "";
               btnLeftYouTurn.Text = "Cancel" + "\r\n" + yt.onA;
             }
@@ -3444,11 +3543,7 @@ namespace AgOpenGPS {
           lblSats.Text = SatsTracked;
           lblZone.Text = pn.zone.ToString();
           tboxSentence.Text = recvSentenceSettings;
-
         }
-
-
-
 
         //the main formgps window
         if( isMetric )  //metric or imperial
@@ -3476,8 +3571,9 @@ namespace AgOpenGPS {
           lblNorthing.Text = gStr.gsNoGPS;
           lblZone.Text = "-";
           tboxSentence.Text = gStr.gsNoSentenceData;
-        } else
+        } else {
           stripOnlineGPS.Value = 100;
+        }
 
       }//end every 3 seconds
     }//wait till timer fires again.  
