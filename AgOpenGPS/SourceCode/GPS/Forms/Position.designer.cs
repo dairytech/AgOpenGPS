@@ -102,6 +102,7 @@ namespace AgOpenGPS {
         pn.updatedRMC = false;
 
         //update all data for new frame
+        CPose pose = new CPose( 0.0, 0.0, 0.0, 0.0, 0.0 );
         UpdateFixPosition();
       }
 
