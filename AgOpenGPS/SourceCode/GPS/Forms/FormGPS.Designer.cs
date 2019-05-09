@@ -74,6 +74,7 @@
       this.menuStrip1 = new System.Windows.Forms.MenuStrip();
       this.tmrWatchdog = new System.Windows.Forms.Timer( this.components );
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+      this.toolStripBatman = new System.Windows.Forms.ToolStripDropDownButton();
       this.lblAreaRate = new System.Windows.Forms.ToolStripStatusLabel();
       this.toolStripBtnCamera = new System.Windows.Forms.ToolStripDropDownButton();
       this.CameraNorthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,7 +109,6 @@
       this.toolstripHeadland = new System.Windows.Forms.ToolStripMenuItem();
       this.toolstripResetTrip = new System.Windows.Forms.ToolStripMenuItem();
       this.stripOnlineGPS = new System.Windows.Forms.ToolStripProgressBar();
-      this.toolStripBatman = new System.Windows.Forms.ToolStripDropDownButton();
       this.lblNorthing = new System.Windows.Forms.Label();
       this.lblEasting = new System.Windows.Forms.Label();
       this.lblSpeed = new System.Windows.Forms.Label();
@@ -308,6 +308,7 @@
       // contextMenuStripOpenGL
       // 
       resources.ApplyResources( this.contextMenuStripOpenGL, "contextMenuStripOpenGL" );
+      this.contextMenuStripOpenGL.ImageScalingSize = new System.Drawing.Size( 20, 20 );
       this.contextMenuStripOpenGL.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
             this.deleteFlagToolOpenGLContextMenu,
             this.toolStripSeparator5,
@@ -645,6 +646,7 @@
       // 
       resources.ApplyResources( this.menuStrip1, "menuStrip1" );
       this.menuStrip1.BackColor = System.Drawing.SystemColors.ScrollBar;
+      this.menuStrip1.ImageScalingSize = new System.Drawing.Size( 20, 20 );
       this.menuStrip1.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.settingsToolStripMenuItem} );
@@ -659,6 +661,7 @@
       // 
       resources.ApplyResources( this.statusStrip1, "statusStrip1" );
       this.statusStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
+      this.statusStrip1.ImageScalingSize = new System.Drawing.Size( 20, 20 );
       this.statusStrip1.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
             this.toolStripBatman,
             this.lblAreaRate,
@@ -672,6 +675,15 @@
             this.stripOnlineGPS} );
       this.statusStrip1.Name = "statusStrip1";
       this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+      // 
+      // toolStripBatman
+      // 
+      resources.ApplyResources( this.toolStripBatman, "toolStripBatman" );
+      this.toolStripBatman.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.toolStripBatman.Image = global::AgOpenGPS.Properties.Resources.Batman48;
+      this.toolStripBatman.Name = "toolStripBatman";
+      this.toolStripBatman.ShowDropDownArrow = false;
+      this.toolStripBatman.Click += new System.EventHandler( this.toolStripBatman_Click );
       // 
       // lblAreaRate
       // 
@@ -939,15 +951,6 @@
       this.stripOnlineGPS.Name = "stripOnlineGPS";
       this.stripOnlineGPS.Value = 1;
       // 
-      // toolStripBatman
-      // 
-      resources.ApplyResources( this.toolStripBatman, "toolStripBatman" );
-      this.toolStripBatman.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.toolStripBatman.Image = global::AgOpenGPS.Properties.Resources.Batman48;
-      this.toolStripBatman.Name = "toolStripBatman";
-      this.toolStripBatman.ShowDropDownArrow = false;
-      this.toolStripBatman.Click += new System.EventHandler( this.toolStripBatman_Click );
-      // 
       // lblNorthing
       // 
       resources.ApplyResources( this.lblNorthing, "lblNorthing" );
@@ -970,6 +973,7 @@
       // 
       resources.ApplyResources( this.contextMenuStripFlag, "contextMenuStripFlag" );
       this.contextMenuStripFlag.BackColor = System.Drawing.SystemColors.ButtonFace;
+      this.contextMenuStripFlag.ImageScalingSize = new System.Drawing.Size( 20, 20 );
       this.contextMenuStripFlag.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemFlagRed,
             this.toolStripMenuFlagGrn,
@@ -1034,6 +1038,7 @@
       // contextMenuArea
       // 
       resources.ApplyResources( this.contextMenuArea, "contextMenuArea" );
+      this.contextMenuArea.ImageScalingSize = new System.Drawing.Size( 20, 20 );
       this.contextMenuArea.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuAreaSide} );
       this.contextMenuArea.Name = "contextMenuArea";
@@ -2079,6 +2084,7 @@
       // contextMenuStripAB
       // 
       resources.ApplyResources( this.contextMenuStripAB, "contextMenuStripAB" );
+      this.contextMenuStripAB.ImageScalingSize = new System.Drawing.Size( 20, 20 );
       this.contextMenuStripAB.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSeparator15,
             this.toolStripMenuOriginal,
@@ -2178,6 +2184,7 @@
       // 
       // contextMenuSnap
       // 
+      this.contextMenuSnap.ImageScalingSize = new System.Drawing.Size( 20, 20 );
       this.contextMenuSnap.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem3,
             this.toolStripMenuItem4,
