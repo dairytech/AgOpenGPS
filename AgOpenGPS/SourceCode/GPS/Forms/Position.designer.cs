@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace AgOpenGPS {
   public partial class FormGPS {
@@ -29,6 +30,7 @@ namespace AgOpenGPS {
 
     //history
     public vec2 prevFix = new vec2( 0, 0 );
+    public CPose prevFixPose = new CPose();
 
     //headings
     public double fixHeading = 0.0, camHeading = 0.0, gpsHeading = 0.0, prevGPSHeading = 0.0;
@@ -40,12 +42,14 @@ namespace AgOpenGPS {
     private double distance = 0.0;
 
     //how far travelled since last section was added, section points
-    double sectionTriggerDistance = 0, sectionTriggerStepDistance = 0;
+    double sectionTriggerStepDistance = 0;
     public vec2 prevSectionPos = new vec2( 0, 0 );
+    public CPose prevSectionPose = new CPose();
 
     //step distances and positions for boundary, 4 meters before next point
     public double boundaryTriggerDistance = 4.0;
     public vec2 prevBoundaryPos = new vec2( 0, 0 );
+    public CPose prevBoundaryPose = new CPose();
 
     //are we still getting valid data from GPS, resets to 0 in NMEA OGI block, watchdog 
     public int recvCounter = 20;
@@ -71,7 +75,6 @@ namespace AgOpenGPS {
     public int youTurnProgressBar = 0;
 
     //IMU 
-    double rollCorrectionDistance = 0;
     double gyroDelta, gyroCorrection, gyroRaw, gyroCorrected;
 
     //step position - slow speed spinner killer
@@ -101,9 +104,16 @@ namespace AgOpenGPS {
         pn.updatedOGI = false;
         pn.updatedRMC = false;
 
+        double rollBuffer = 0;
+        if( ( ahrs.isRollBrick | ahrs.isRollDogs | ahrs.isRollPAOGI ) && mc.rollRaw != 9999 ) {
+          //for charting in GPS Data window
+          rollUsed = (double)( mc.rollRaw / 16 );
+          rollBuffer = ( mc.rollRaw - ahrs.rollZero ) / 16;
+        }
+
         //update all data for new frame
-        CPose pose = new CPose( 0.0, 0.0, 0.0, 0.0, 0.0 );
-        UpdateFixPosition();
+        CPose pose = new CPose( pn.fix.northing, pn.fix.easting, pn.altitude, fixHeading, 0.0, rollBuffer );
+        UpdateFixPosition( pose );
       }
 
       //must make sure arduinos are kept off if initializing
@@ -120,10 +130,11 @@ namespace AgOpenGPS {
     public double eastingBeforeRoll;
     public double eastingAfterRoll;
     public double rollUsed;
-    double offset = 0;
     public double headlandDistanceDelta = 0, boundaryDistanceDelta = 0;
 
-    private void UpdateFixPosition() {
+    private LinkedList<CPose> poseQueue = new LinkedList<CPose>();
+
+    private void UpdateFixPosition( CPose pose ) {
       startCounter++;
       totalFixSteps = fixUpdateHz * 6;
       if( !isGPSPositionInitialized ) {
@@ -131,60 +142,57 @@ namespace AgOpenGPS {
         return;
       }
 
-      #region Antenna Offset
+      pose = GetPivotPointFromAntennaOffsetAndRoll( pose );
 
-      if( vehicle.antennaOffset != 0 ) {
-        if( vehicle.antennaOffset < 0 ) {
-          offset -= 0.01;
-          if( offset < vehicle.antennaOffset ) {
-            offset = vehicle.antennaOffset;
-          }
-          pn.fix.easting = ( Math.Cos( -fixHeading ) * offset ) + pn.fix.easting;
-          pn.fix.northing = ( Math.Sin( -fixHeading ) * offset ) + pn.fix.northing;
-
-        } else {
-          offset += 0.01;
-          if( offset > vehicle.antennaOffset ) {
-            offset = vehicle.antennaOffset;
-          }
-          pn.fix.easting = ( Math.Cos( -fixHeading ) * offset ) + pn.fix.easting;
-          pn.fix.northing = ( Math.Sin( -fixHeading ) * offset ) + pn.fix.northing;
-        }
-      }
-
-      #endregion
-
-      #region Roll
-
-      rollUsed = 0;
-
-      if( ( ahrs.isRollBrick | ahrs.isRollDogs | ahrs.isRollPAOGI ) && mc.rollRaw != 9999 ) {
-        //for charting in GPS Data window
-        eastingBeforeRoll = pn.fix.easting;
-        rollUsed = (double)mc.rollRaw / 16;
-
-        //calculate how far the antenna moves based on sidehill roll
-        double roll = Math.Sin( glm.toRadians( ( mc.rollRaw - ahrs.rollZero ) * 0.0625 ) );
-        rollCorrectionDistance = roll * vehicle.antennaHeight;
-
-        // roll to left is positive  **** important!!
-        pn.fix.easting = ( Math.Cos( -fixHeading ) * rollCorrectionDistance ) + pn.fix.easting;
-        pn.fix.northing = ( Math.Sin( -fixHeading ) * rollCorrectionDistance ) + pn.fix.northing;
-
-        //for charting the position after roll adjustment
-        eastingAfterRoll = pn.fix.easting;
-      } else {
-        eastingAfterRoll = pn.fix.easting;
-        eastingBeforeRoll = pn.fix.easting;
-      }
+      //AddRollOffset();
 
       //pitchDistance = (pitch * vehicle.antennaHeight);
       ////pn.fix.easting = (Math.Sin(fixHeading) * pitchDistance) + pn.fix.easting;
       //pn.fix.northing = (Math.Cos(fixHeading) * pitchDistance) + pn.fix.northing;
 
-      #endregion Roll
 
       #region Step Fix
+      // add new pose to the linked list and limit the size to 60
+      poseQueue.AddFirst( pose );
+      while( poseQueue.Count > 60 ) {
+        poseQueue.RemoveLast();
+      }
+
+      foreach( CPose buf in poseQueue ) {
+        if( System.Numerics.Vector3.Distance( pose.position, buf.position ) > minFixStepDist ) {
+          //positions and headings 
+          CalculatePositionHeading();
+
+          //grab sentences for logging
+          if( isLogNMEA ) {
+            if( ct.isContourOn ) {
+              pn.logNMEASentence.Append( recvSentenceSettings );
+            }
+          }
+
+          //To prevent drawing high numbers of triangles, determine and test before drawing vertex
+          //section on off and points, contour points
+          if( System.Numerics.Vector3.Distance( pose.position, prevSectionPose.position ) > sectionTriggerStepDistance && isJobStarted ) {
+            AddSectionContourPathPoints();
+            prevSectionPose = pose;
+          }
+
+          //test if travelled far enough for new boundary point
+          if( System.Numerics.Vector3.Distance( pose.position, prevBoundaryPose.position ) > boundaryTriggerDistance ) {
+            AddBoundaryAndPerimiterPoint();
+            prevBoundaryPose = pose;
+          }
+
+          //calc distance travelled since last GPS fix
+          fd.distanceUser += System.Numerics.Vector3.Distance( pose.position, prevFixPose.position );
+          if( ( fd.distanceUser += distance ) > 3000 ) {
+            fd.distanceUser -= 3000;
+          };
+
+          prevFixPose = pose;
+        }
+      }
+
 
       //**** heading of the vec3 structure is used for distance in Step fix!!!!!
 
@@ -237,54 +245,54 @@ namespace AgOpenGPS {
         stepFixPts[( totalFixSteps - 1 )].northing = vHold.northing;
       } else //distance is exceeded, time to do all calcs and next frame
         {
-        //positions and headings 
-        CalculatePositionHeading();
+        ////positions and headings 
+        //CalculatePositionHeading();
 
-        //get rid of hold position
-        isFixHoldLoaded = false;
+        ////get rid of hold position
+        //isFixHoldLoaded = false;
 
-        //don't add the total distance again
-        stepFixPts[( totalFixSteps - 1 )].heading = 0;
+        ////don't add the total distance again
+        //stepFixPts[( totalFixSteps - 1 )].heading = 0;
 
-        //grab sentences for logging
-        if( isLogNMEA ) {
-          if( ct.isContourOn ) {
-            pn.logNMEASentence.Append( recvSentenceSettings );
-          }
-        }
+        ////grab sentences for logging
+        //if( isLogNMEA ) {
+        //  if( ct.isContourOn ) {
+        //    pn.logNMEASentence.Append( recvSentenceSettings );
+        //  }
+        //}
 
-        //To prevent drawing high numbers of triangles, determine and test before drawing vertex
-        sectionTriggerDistance = glm.Distance( pn.fix, prevSectionPos );
+        ////To prevent drawing high numbers of triangles, determine and test before drawing vertex
+        //sectionTriggerDistance = glm.Distance( pn.fix, prevSectionPos );
 
-        //section on off and points, contour points
-        if( sectionTriggerDistance > sectionTriggerStepDistance && isJobStarted ) {
-          AddSectionContourPathPoints();
-        }
+        ////section on off and points, contour points
+        //if( sectionTriggerDistance > sectionTriggerStepDistance && isJobStarted ) {
+        //  AddSectionContourPathPoints();
+        //}
 
-        //test if travelled far enough for new boundary point
-        double boundaryDistance = glm.Distance( pn.fix, prevBoundaryPos );
-        if( boundaryDistance > boundaryTriggerDistance ) {
-          AddBoundaryAndPerimiterPoint();
-        }
+        ////test if travelled far enough for new boundary point
+        //double boundaryDistance = glm.Distance( pn.fix, prevBoundaryPos );
+        //if( boundaryDistance > boundaryTriggerDistance ) {
+        //  AddBoundaryAndPerimiterPoint();
+        //}
 
-        //calc distance travelled since last GPS fix
-        distance = glm.Distance( pn.fix, prevFix );
-        if( ( fd.distanceUser += distance ) > 3000 ) {
-          fd.distanceUser = 0;
-        };//userDistance can be reset
+        ////calc distance travelled since last GPS fix
+        //distance = glm.Distance( pn.fix, prevFix );
+        //if( ( fd.distanceUser += distance ) > 3000 ) {
+        //  fd.distanceUser = 0;
+        //};//userDistance can be reset
 
-        //most recent fixes are now the prev ones
-        prevFix.easting = pn.fix.easting;
-        prevFix.northing = pn.fix.northing;
+        ////most recent fixes are now the prev ones
+        //prevFix.easting = pn.fix.easting;
+        //prevFix.northing = pn.fix.northing;
 
-        //load up history with valid data
-        for( int i = totalFixSteps - 1 ; i > 0 ; i-- ) {
-          stepFixPts[i] = stepFixPts[i - 1];
-        }
+        ////load up history with valid data
+        //for( int i = totalFixSteps - 1 ; i > 0 ; i-- ) {
+        //  stepFixPts[i] = stepFixPts[i - 1];
+        //}
 
-        stepFixPts[0].heading = glm.Distance( pn.fix, stepFixPts[0] );
-        stepFixPts[0].easting = pn.fix.easting;
-        stepFixPts[0].northing = pn.fix.northing;
+        //stepFixPts[0].heading = glm.Distance( pn.fix, stepFixPts[0] );
+        //stepFixPts[0].easting = pn.fix.easting;
+        //stepFixPts[0].northing = pn.fix.northing;
       }
       #endregion fix
 
@@ -526,11 +534,60 @@ namespace AgOpenGPS {
       //end of UppdateFixPosition
     }
 
+    private CPose AddRollOffset( CPose pose ) {
+#warning remove globals eastingAfterRoll, eastingBeforeRoll
+      eastingBeforeRoll = pose.position.Y;
+
+      if( pose.roll != 0 ) {
+        //calculate how far the antenna moves based on sidehill roll
+        double rollCorrectionDistance = Math.Sin( glm.toRadians( pose.roll ) ) * vehicle.antennaHeight;
+
+        // roll to left is positive  **** important!!
+        pose.position.Y += (float)( Math.Cos( -fixHeading ) * rollCorrectionDistance );
+        pose.position.X += (float)( Math.Sin( -fixHeading ) * rollCorrectionDistance );
+      }
+
+      //for charting the position after roll adjustment
+      eastingAfterRoll = pose.position.Y;
+
+      return pose;
+    }
+
+    //private double antennaOffsetBuffer = 0;
+    private CPose GetPivotPointFromAntennaOffsetAndRoll( CPose pose ) {
+      //if( vehicle.antennaOffset != 0 ) {
+      //  if( vehicle.antennaOffset < 0 ) {
+      //    antennaOffsetBuffer -= 0.01;
+      //    if( antennaOffsetBuffer < vehicle.antennaOffset ) {
+      //      antennaOffsetBuffer = vehicle.antennaOffset;
+      //    }
+      //  } else {
+      //    antennaOffsetBuffer += 0.01;
+      //    if( antennaOffsetBuffer > vehicle.antennaOffset ) {
+      //      antennaOffsetBuffer = vehicle.antennaOffset;
+      //    }
+      //  }
+      //  pose.position.Y += (float)( Math.Cos( -fixHeading ) * antennaOffsetBuffer );
+      //  pose.position.X += (float)( Math.Sin( -fixHeading ) * antennaOffsetBuffer );
+      //}
+      // return pose;
+
+      // transform the antenna position with the orientation
+      Vector3 antennaPosition = Vector3.Transform( new Vector3( (float)vehicle.antennaPivot, (float)vehicle.antennaOffset, (float)vehicle.antennaHeight ), pose.orientation );
+
+      // subtract the antenna -> pose = pivot point
+      pose.position = Vector3.Subtract( pose.position, antennaPosition );
+
+      return pose;
+    }
+
+
 
     //all the hitch, pivot, section, trailing hitch, headings and fixes
     private void CalculatePositionHeading() {
       switch( headingFromSource ) {
         case "Fix":
+#warning add method to calculate the heading out of the list of pose
           gpsHeading = Math.Atan2( pn.fix.easting - stepFixPts[currentStepFix].easting, pn.fix.northing - stepFixPts[currentStepFix].northing );
           if( gpsHeading < 0 ) {
             gpsHeading += glm.twoPI;
@@ -634,6 +691,7 @@ namespace AgOpenGPS {
 
       #region pivot hitch trail
 
+#warning pivot stuff -> do it in Vector3/Quaternion
       //translate world to the pivot axle
       pivotAxlePos.easting = pn.fix.easting - ( Math.Sin( fixHeading ) * vehicle.antennaPivot );
       pivotAxlePos.northing = pn.fix.northing - ( Math.Cos( fixHeading ) * vehicle.antennaPivot );
@@ -709,7 +767,7 @@ namespace AgOpenGPS {
       #endregion
       //used to increase triangle count when going around corners, less on straight
       //pick the slow moving side edge of tool
-      double metersPerSec = pn.speed * 0.277777777;
+      double metersPerSec = pn.speed / 3.6;
 
       //whichever is less
       if( vehicle.toolFarLeftSpeed < vehicle.toolFarRightSpeed ) {
