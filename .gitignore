@@ -50,4 +50,7 @@ Temporary Items
 AGOpenSteer/Fritzing/parts/user/PCF8574.fzp
 
 .vs
+AgOpenGPS/SourceCode/packages/
+AgOpenGPS/Application/System.Numerics.Vectors.dll
+AgOpenGPS/Application/System.Numerics.Vectors.xml
 
