@@ -112,7 +112,7 @@ namespace AgOpenGPS {
         }
 
         //update all data for new frame
-        CPose pose = new CPose( pn.fix.northing, pn.fix.easting, pn.altitude, fixHeading, 0.0, rollBuffer );
+        CPose pose = new CPose( (float)pn.fix.northing, (float)pn.fix.easting, (float)pn.altitude, (float)fixHeading, (float)0.0, (float)rollBuffer );
         UpdateFixPosition( pose );
       }
 
@@ -134,6 +134,9 @@ namespace AgOpenGPS {
 
     private LinkedList<CPose> poseQueue = new LinkedList<CPose>();
 
+    private CPose lastTool1Pose = new CPose();
+    private CPose lastTool2Pose = new CPose();
+
     private void UpdateFixPosition( CPose pose ) {
       startCounter++;
       totalFixSteps = fixUpdateHz * 6;
@@ -142,14 +145,24 @@ namespace AgOpenGPS {
         return;
       }
 
-      pose = GetPivotPointFromAntennaOffsetAndRoll( pose );
+      float distanceTraveled = pose.distanceTo( prevFixPose );
 
-      //AddRollOffset();
+      pose = GetTractorPivotPoint( pose );
 
-      //pitchDistance = (pitch * vehicle.antennaHeight);
-      ////pn.fix.easting = (Math.Sin(fixHeading) * pitchDistance) + pn.fix.easting;
-      //pn.fix.northing = (Math.Cos(fixHeading) * pitchDistance) + pn.fix.northing;
+      // if hitch lenght is longer than 2m -> trailer
+      if( vehicle.hitchLength < -2 ) {
+        pose = GetTrailerPivotPoint( distanceTraveled, (float)vehicle.hitchLength, pose, lastTool1Pose );
+      } else {
+        pose = GetToolPivotPoint( pose, (float)vehicle.hitchLength );
+      }
+      lastTool1Pose = pose;
 
+      if( vehicle.isToolTrailing == true ) {
+        pose = GetTrailerPivotPoint( distanceTraveled, (float)vehicle.toolTrailingHitchLength, pose, lastTool2Pose );
+      } else {
+        pose = GetToolPivotPoint( pose, (float)vehicle.toolTrailingHitchLength );
+      }
+      lastTool2Pose = pose;
 
       #region Step Fix
       // add new pose to the linked list and limit the size to 60
@@ -159,7 +172,15 @@ namespace AgOpenGPS {
       }
 
       foreach( CPose buf in poseQueue ) {
-        if( System.Numerics.Vector3.Distance( pose.position, buf.position ) > minFixStepDist ) {
+        if( pose.distanceTo( buf ) > minFixStepDist ) {
+
+          pn.fix.northing = pose.position.X;
+          pn.fix.easting = pose.position.Y;
+          Vector3 orientation = pose.orientation.toEulerDegrees();
+          fixHeading = orientation.X;
+          rollUsed = orientation.Z;
+
+
           //positions and headings 
           CalculatePositionHeading();
 
@@ -172,24 +193,27 @@ namespace AgOpenGPS {
 
           //To prevent drawing high numbers of triangles, determine and test before drawing vertex
           //section on off and points, contour points
-          if( System.Numerics.Vector3.Distance( pose.position, prevSectionPose.position ) > sectionTriggerStepDistance && isJobStarted ) {
-            AddSectionContourPathPoints();
+          if( pose.distanceTo( prevSectionPose ) > sectionTriggerStepDistance && isJobStarted ) {
+            AddSectionContourPathPoints( pose );
             prevSectionPose = pose;
           }
 
           //test if travelled far enough for new boundary point
-          if( System.Numerics.Vector3.Distance( pose.position, prevBoundaryPose.position ) > boundaryTriggerDistance ) {
-            AddBoundaryAndPerimiterPoint();
+          if( pose.distanceTo( prevBoundaryPose ) > boundaryTriggerDistance ) {
+#warning implement with pose
+            AddBoundaryAndPerimiterPoint(  );
             prevBoundaryPose = pose;
           }
 
           //calc distance travelled since last GPS fix
-          fd.distanceUser += System.Numerics.Vector3.Distance( pose.position, prevFixPose.position );
+          fd.distanceUser += distanceTraveled;
           if( ( fd.distanceUser += distance ) > 3000 ) {
             fd.distanceUser -= 3000;
           };
 
           prevFixPose = pose;
+
+          break;
         }
       }
 
@@ -534,46 +558,82 @@ namespace AgOpenGPS {
       //end of UppdateFixPosition
     }
 
-    private CPose AddRollOffset( CPose pose ) {
-#warning remove globals eastingAfterRoll, eastingBeforeRoll
-      eastingBeforeRoll = pose.position.Y;
 
-      if( pose.roll != 0 ) {
-        //calculate how far the antenna moves based on sidehill roll
-        double rollCorrectionDistance = Math.Sin( glm.toRadians( pose.roll ) ) * vehicle.antennaHeight;
 
-        // roll to left is positive  **** important!!
-        pose.position.Y += (float)( Math.Cos( -fixHeading ) * rollCorrectionDistance );
-        pose.position.X += (float)( Math.Sin( -fixHeading ) * rollCorrectionDistance );
-      }
+    private CPose GetToolPivotPoint( CPose pose, float hitchLenght ) {
+      CPose toolPose = new CPose();
+      //determine where the rigid vehicle hitch ends
+      // transform the hitch position with the orientation
+      Vector3 toolPosition = Vector3.Transform( new Vector3( hitchLenght, (float)0, (float)0 ), pose.orientation.getQuaternion() );
 
-      //for charting the position after roll adjustment
-      eastingAfterRoll = pose.position.Y;
+      // subtract the hitch -> pose = pivot point
+      toolPose.position = Vector3.Subtract( pose.position, toolPosition );
+      toolPose.orientation = pose.orientation;
 
-      return pose;
+      return toolPose;
     }
 
-    //private double antennaOffsetBuffer = 0;
-    private CPose GetPivotPointFromAntennaOffsetAndRoll( CPose pose ) {
-      //if( vehicle.antennaOffset != 0 ) {
-      //  if( vehicle.antennaOffset < 0 ) {
-      //    antennaOffsetBuffer -= 0.01;
-      //    if( antennaOffsetBuffer < vehicle.antennaOffset ) {
-      //      antennaOffsetBuffer = vehicle.antennaOffset;
-      //    }
-      //  } else {
-      //    antennaOffsetBuffer += 0.01;
-      //    if( antennaOffsetBuffer > vehicle.antennaOffset ) {
-      //      antennaOffsetBuffer = vehicle.antennaOffset;
-      //    }
-      //  }
-      //  pose.position.Y += (float)( Math.Cos( -fixHeading ) * antennaOffsetBuffer );
-      //  pose.position.X += (float)( Math.Sin( -fixHeading ) * antennaOffsetBuffer );
-      //}
-      // return pose;
+    private CPose GetTrailerPivotPoint(
+      float distanceTraveled,
+      float hitchLenght,
+      CPose hitchPose,
+      CPose lastTrailerPose ) {
 
+      CPose tankPose = new CPose();
+
+      if( distanceTraveled != 0 ) {
+        float t = hitchLenght / distanceTraveled;
+        tankPose.position = hitchPose.position + Vector3.Multiply( hitchPose.position - lastTrailerPose.position, t );
+        tankPose.orientation = new COrientation( (float)Math.Atan2( hitchPose.position.Y - tankPose.position.Y, hitchPose.position.X - tankPose.position.X ), 0, 0 );
+
+        //tankPose.position.Y = hitchPose.position.Y + t * ( hitchPose.position.Y - lastTankPose.position.Y );
+        //tankPose.position.X = hitchPose.position.X + t * ( hitchPose.position.X - lastTankPose.position.X );
+        //tankPose.position.Z = hitchPose.Z;
+        //tankPos.heading = Math.Atan2( hitchPos.easting - tankPos.easting, hitchPos.northing - tankPos.northing );
+      }
+
+      // calculate the angle between trailer and tractor
+      float angleOnHitch = Math.Abs( hitchPose.orientation.toEulerDegrees().X - tankPose.orientation.toEulerDegrees().X );
+      //double angleOnHitch = Math.Abs( Math.PI - Math.Abs( Math.Abs( tankPos.heading - fixHeading ) - Math.PI ) )
+
+      // if the angle is over 90°, reset the orientation, so trailer is straight behind
+      if( angleOnHitch > 90 || startCounter < 50 ) {
+        tankPose.orientation = hitchPose.orientation;
+      }
+
+      // move the trailer pivot point back with the hitch lenght
+      Vector3 relativeTrailerPivotPoint = Vector3.Transform( new Vector3( hitchLenght, (float)0, (float)0 ), tankPose.orientation.getQuaternion() );
+      tankPose.position = Vector3.Subtract( hitchPose.position, relativeTrailerPivotPoint );
+
+      //tankPos.easting = hitchPos.easting + ( Math.Sin( tankPos.heading ) * ( vehicle.tankTrailingHitchLength ) );
+      //tankPos.northing = hitchPos.northing + ( Math.Cos( tankPos.heading ) * ( vehicle.tankTrailingHitchLength ) );
+
+      return tankPose;
+    }
+
+    //    private CPose AddRollOffset( CPose pose ) {
+#warning remove globals eastingAfterRoll, eastingBeforeRoll
+    //      eastingBeforeRoll = pose.position.Y;
+
+    //      if( pose.roll != 0 ) {
+    //        //calculate how far the antenna moves based on sidehill roll
+    //        double rollCorrectionDistance = Math.Sin( glm.toRadians( pose.roll ) ) * vehicle.antennaHeight;
+
+    //        // roll to left is positive  **** important!!
+    //        pose.position.Y += (float)( Math.Cos( -fixHeading ) * rollCorrectionDistance );
+    //        pose.position.X += (float)( Math.Sin( -fixHeading ) * rollCorrectionDistance );
+    //      }
+
+    //      //for charting the position after roll adjustment
+    //      eastingAfterRoll = pose.position.Y;
+
+    //      return pose;
+    //    }
+
+    //private double antennaOffsetBuffer = 0;
+    private CPose GetTractorPivotPoint( CPose pose ) {
       // transform the antenna position with the orientation
-      Vector3 antennaPosition = Vector3.Transform( new Vector3( (float)vehicle.antennaPivot, (float)vehicle.antennaOffset, (float)vehicle.antennaHeight ), pose.orientation );
+      Vector3 antennaPosition = Vector3.Transform( new Vector3( (float)vehicle.antennaPivot, (float)vehicle.antennaOffset, (float)vehicle.antennaHeight ), pose.orientation.getQuaternion() );
 
       // subtract the antenna -> pose = pivot point
       pose.position = Vector3.Subtract( pose.position, antennaPosition );
@@ -689,82 +749,6 @@ namespace AgOpenGPS {
         fixHeading = gyroCorrected;
       }
 
-      #region pivot hitch trail
-
-#warning pivot stuff -> do it in Vector3/Quaternion
-      //translate world to the pivot axle
-      pivotAxlePos.easting = pn.fix.easting - ( Math.Sin( fixHeading ) * vehicle.antennaPivot );
-      pivotAxlePos.northing = pn.fix.northing - ( Math.Cos( fixHeading ) * vehicle.antennaPivot );
-      pivotAxlePos.heading = fixHeading;
-
-      //determine where the rigid vehicle hitch ends
-      hitchPos.easting = pn.fix.easting + ( Math.Sin( fixHeading ) * ( vehicle.hitchLength - vehicle.antennaPivot ) );
-      hitchPos.northing = pn.fix.northing + ( Math.Cos( fixHeading ) * ( vehicle.hitchLength - vehicle.antennaPivot ) );
-
-      //tool attached via a trailing hitch
-      if( vehicle.isToolTrailing ) {
-        double over;
-        if( vehicle.tankTrailingHitchLength < -2.0 ) {
-          //Torriem rules!!!!! Oh yes, this is all his. Thank-you
-          if( distanceCurrentStepFix != 0 ) {
-            double t = ( vehicle.tankTrailingHitchLength ) / distanceCurrentStepFix;
-            tankPos.easting = hitchPos.easting + t * ( hitchPos.easting - tankPos.easting );
-            tankPos.northing = hitchPos.northing + t * ( hitchPos.northing - tankPos.northing );
-            tankPos.heading = Math.Atan2( hitchPos.easting - tankPos.easting, hitchPos.northing - tankPos.northing );
-          }
-
-          ////the tool is seriously jacknifed or just starting out so just spring it back.
-          over = Math.Abs( Math.PI - Math.Abs( Math.Abs( tankPos.heading - fixHeading ) - Math.PI ) );
-
-          if( over < 2.0 && startCounter > 50 ) {
-            tankPos.easting = hitchPos.easting + ( Math.Sin( tankPos.heading ) * ( vehicle.tankTrailingHitchLength ) );
-            tankPos.northing = hitchPos.northing + ( Math.Cos( tankPos.heading ) * ( vehicle.tankTrailingHitchLength ) );
-          }
-
-          //criteria for a forced reset to put tool directly behind vehicle
-          if( over > 2.0 | startCounter < 51 ) {
-            tankPos.heading = fixHeading;
-            tankPos.easting = hitchPos.easting + ( Math.Sin( tankPos.heading ) * ( vehicle.tankTrailingHitchLength ) );
-            tankPos.northing = hitchPos.northing + ( Math.Cos( tankPos.heading ) * ( vehicle.tankTrailingHitchLength ) );
-          }
-        } else {
-          tankPos.heading = fixHeading;
-          tankPos.easting = hitchPos.easting;
-          tankPos.northing = hitchPos.northing;
-        }
-
-        //Torriem rules!!!!! Oh yes, this is all his. Thank-you
-        if( distanceCurrentStepFix != 0 ) {
-          double t = ( vehicle.toolTrailingHitchLength ) / distanceCurrentStepFix;
-          toolPos.easting = tankPos.easting + t * ( tankPos.easting - toolPos.easting );
-          toolPos.northing = tankPos.northing + t * ( tankPos.northing - toolPos.northing );
-          toolPos.heading = Math.Atan2( tankPos.easting - toolPos.easting, tankPos.northing - toolPos.northing );
-        }
-
-        ////the tool is seriously jacknifed or just starting out so just spring it back.
-        over = Math.Abs( Math.PI - Math.Abs( Math.Abs( toolPos.heading - tankPos.heading ) - Math.PI ) );
-
-        if( over < 1.9 && startCounter > 50 ) {
-          toolPos.easting = tankPos.easting + ( Math.Sin( toolPos.heading ) * ( vehicle.toolTrailingHitchLength ) );
-          toolPos.northing = tankPos.northing + ( Math.Cos( toolPos.heading ) * ( vehicle.toolTrailingHitchLength ) );
-        }
-
-        //criteria for a forced reset to put tool directly behind vehicle
-        if( over > 1.9 | startCounter < 51 ) {
-          toolPos.heading = tankPos.heading;
-          toolPos.easting = tankPos.easting + ( Math.Sin( toolPos.heading ) * ( vehicle.toolTrailingHitchLength ) );
-          toolPos.northing = tankPos.northing + ( Math.Cos( toolPos.heading ) * ( vehicle.toolTrailingHitchLength ) );
-        }
-      }
-
-      //rigidly connected to vehicle
-      else {
-        toolPos.heading = fixHeading;
-        toolPos.easting = hitchPos.easting;
-        toolPos.northing = hitchPos.northing;
-      }
-
-      #endregion
       //used to increase triangle count when going around corners, less on straight
       //pick the slow moving side edge of tool
       double metersPerSec = pn.speed / 3.6;
@@ -843,15 +827,9 @@ metersPerSec * triangleResolution * 2.0 + 1.0;
     }
 
     //add the points for section, contour line points, Area Calc feature
-    private void AddSectionContourPathPoints() {
+    private void AddSectionContourPathPoints( CPose pose ) {
 
       if( recPath.isRecordOn ) {
-        //keep minimum speed of 1.0
-        double speed = pn.speed;
-        if( pn.speed < 1.0 ) {
-          speed = 1.0;
-        }
-
         bool autoBtn = ( autoBtnState == btnStates.Auto );
 
         CRecPathPt pt = new CRecPathPt( pivotAxlePos.easting, pivotAxlePos.northing, pivotAxlePos.heading, pn.speed, autoBtn );
