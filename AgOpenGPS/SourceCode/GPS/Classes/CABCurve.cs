@@ -142,6 +142,8 @@ namespace AgOpenGPS {
     }
 
     public void GetCurrentCurveLine( vec3 pivot ) {
+      double angVel; //angular velocity of vehicle
+
       //determine closest point
       double minDistance = 9999999;
       int ptCount = refList.Count;
@@ -419,7 +421,7 @@ namespace AgOpenGPS {
         radiusPointCu.northing = pivot.northing + ( ppRadiusCu * Math.Sin( localHeading ) );
 
         //angular velocity in rads/sec  = 2PI * m/sec * radians/meters
-        double angVel = glm.twoPI * 0.277777 * mf.pn.speed * ( Math.Tan( glm.toRadians( steerAngleCu ) ) ) / mf.vehicle.wheelbase;
+        angVel = glm.angularVelocity( mf.vehicle.wheelbase, mf.pn.speed, steerAngleCu );
 
         //clamp the steering angle to not exceed safe angular velocity
         if( Math.Abs( angVel ) > mf.vehicle.maxAngularVelocity ) {

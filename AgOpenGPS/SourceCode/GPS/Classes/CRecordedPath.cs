@@ -296,6 +296,8 @@ namespace AgOpenGPS {
     }
 
     private void PurePursuit() {
+      double angVel; //angular velocity of vehicle
+
       //calc "D" the distance from pivot axle to lookahead point
       double goalPointDistanceSquared = glm.DistanceSquared( goalPointRP.northing, goalPointRP.easting, pivotAxlePosRP.northing, pivotAxlePosRP.easting );
 
@@ -310,7 +312,8 @@ namespace AgOpenGPS {
         steerAngleRP = -mf.vehicle.maxSteerAngle;
       if( steerAngleRP > mf.vehicle.maxSteerAngle )
         steerAngleRP = mf.vehicle.maxSteerAngle;
-
+      
+      // limit circle size for display purpose
       if( ppRadiusRP < -500 )
         ppRadiusRP = -500;
       if( ppRadiusRP > 500 )
@@ -320,7 +323,7 @@ namespace AgOpenGPS {
       radiusPointRP.northing = pivotAxlePosRP.northing + ( ppRadiusRP * Math.Sin( localHeading ) );
 
       //angular velocity in rads/sec  = 2PI * m/sec * radians/meters
-      double angVel = glm.twoPI * 0.277777 * mf.pn.speed * ( Math.Tan( glm.toRadians( steerAngleRP ) ) ) / mf.vehicle.wheelbase;
+      angVel = glm.angularVelocity( mf.vehicle.wheelbase, mf.pn.speed, steerAngleRP );
 
       //clamp the steering angle to not exceed safe angular velocity
       if( Math.Abs( angVel ) > mf.vehicle.maxAngularVelocity ) {

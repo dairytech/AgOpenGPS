@@ -177,9 +177,9 @@ namespace AgOpenGPS {
       refPoint2.northing = refABLineP2.northing;
     }
 
-    public double angVel;
-
     public void GetCurrentABLine( vec3 pivot ) {
+      double angVel; //angular velocity of vehicle
+      
       //move the ABLine over based on the overlap amount set in vehicle
       double widthMinusOverlap = mf.vehicle.toolWidth - mf.vehicle.toolOverlap;
 
@@ -307,7 +307,7 @@ namespace AgOpenGPS {
       distanceFromCurrentLine = Math.Round( distanceFromCurrentLine * 1000.0, MidpointRounding.AwayFromZero );
 
       //angular velocity in rads/sec  = 2PI * m/sec * radians/meters
-      angVel = glm.twoPI * 0.277777 * mf.pn.speed * ( Math.Tan( glm.toRadians( steerAngleAB ) ) ) / mf.vehicle.wheelbase;
+      angVel = glm.angularVelocity( mf.vehicle.wheelbase, mf.pn.speed, steerAngleAB );
 
       //clamp the steering angle to not exceed safe angular velocity
       if( Math.Abs( angVel ) > mf.vehicle.maxAngularVelocity ) {

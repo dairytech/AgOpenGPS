@@ -1641,6 +1641,7 @@ namespace AgOpenGPS {
 
     //determine distance from youTurn guidance line
     public void DistanceFromYouTurnLine() {
+      double angVel; //angular velocity of vehicle
       //grab a copy from main
       pivot = mf.pivotAxlePos;
       double minDistA = 1000000, minDistB = 1000000;
@@ -1794,7 +1795,7 @@ namespace AgOpenGPS {
         radiusPointYT.northing = pivot.northing + ( ppRadiusYT * Math.Sin( localHeading ) );
 
         //angular velocity in rads/sec  = 2PI * m/sec * radians/meters
-        double angVel = glm.twoPI * 0.277777 * mf.pn.speed * ( Math.Tan( glm.toRadians( steerAngleYT ) ) ) / mf.vehicle.wheelbase;
+        angVel = glm.angularVelocity( mf.vehicle.wheelbase, mf.pn.speed, steerAngleYT );
 
         //clamp the steering angle to not exceed safe angular velocity
         if( Math.Abs( angVel ) > mf.vehicle.maxAngularVelocity ) {

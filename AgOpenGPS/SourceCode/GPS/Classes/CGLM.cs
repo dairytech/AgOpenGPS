@@ -96,6 +96,12 @@ namespace AgOpenGPS {
 
     public static double PIBy2 = 1.57079632679489661923;
 
+    //Angular velocity in radians per second
+    public static double angularVelocity( double wheelbase, double speed, double stearAngle ) {
+      //angular velocity in rads/sec = 2PI * m/sec * radians/meters
+      return glm.twoPI * 0.277777 * speed * ( Math.Tan( glm.toRadians( stearAngle ) ) ) / wheelbase;
+    }
+
     //Degrees Radians Conversions
     public static double toDegrees( double radians ) {
       return radians * 57.295779513082325225835265587528;
