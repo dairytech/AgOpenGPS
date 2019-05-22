@@ -296,8 +296,6 @@ namespace AgOpenGPS {
     }
 
     private void PurePursuit() {
-      double angVel; //angular velocity of vehicle
-
       //calc "D" the distance from pivot axle to lookahead point
       double goalPointDistanceSquared = glm.DistanceSquared( goalPointRP.northing, goalPointRP.easting, pivotAxlePosRP.northing, pivotAxlePosRP.easting );
 
@@ -322,15 +320,9 @@ namespace AgOpenGPS {
       radiusPointRP.easting = pivotAxlePosRP.easting + ( ppRadiusRP * Math.Cos( localHeading ) );
       radiusPointRP.northing = pivotAxlePosRP.northing + ( ppRadiusRP * Math.Sin( localHeading ) );
 
-      //angular velocity in rads/sec  = 2PI * m/sec * radians/meters
-      angVel = glm.angularVelocity( mf.vehicle.wheelbase, mf.pn.speed, steerAngleRP );
+      //Reduce the steering angle, if necessary, to comply with the user supplied maximum angular velocity for this vehicle 
+      Classes.CPath.VelocityLimitSteerAngle( mf.vehicle.wheelbase, mf.pn.speed, mf.vehicle.maxAngularVelocity, steerAngleRP );
 
-      //clamp the steering angle to not exceed safe angular velocity
-      if( Math.Abs( angVel ) > mf.vehicle.maxAngularVelocity ) {
-        steerAngleRP = glm.toDegrees( steerAngleRP > 0 ?
-                ( Math.Atan( ( mf.vehicle.wheelbase * mf.vehicle.maxAngularVelocity ) / ( glm.twoPI * mf.pn.speed * 0.277777 ) ) )
-            : ( Math.Atan( ( mf.vehicle.wheelbase * -mf.vehicle.maxAngularVelocity ) / ( glm.twoPI * mf.pn.speed * 0.277777 ) ) ) );
-      }
       //Convert to centimeters
       distanceFromCurrentLine = Math.Round( distanceFromCurrentLine * 1000.0, MidpointRounding.AwayFromZero );
 

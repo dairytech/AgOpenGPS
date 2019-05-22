@@ -636,7 +636,6 @@ namespace AgOpenGPS {
 
     //determine distance from contour guidance line
     public void DistanceFromContourLine( vec3 pivot ) {
-      double angVel; //angular velocity of vehicle
       isValid = false;
       double minDistA = 1000000, minDistB = 1000000;
       int ptCount = ctList.Count;
@@ -833,15 +832,9 @@ namespace AgOpenGPS {
         radiusPointCT.easting = pivot.easting + ( ppRadiusCT * Math.Cos( localHeading ) );
         radiusPointCT.northing = pivot.northing + ( ppRadiusCT * Math.Sin( localHeading ) );
 
-        //angular velocity in rads/sec  = 2PI * m/sec * radians/meters
-        angVel = glm.angularVelocity( mf.vehicle.wheelbase, mf.pn.speed, steerAngleCT );
+        //Reduce the steering angle, if necessary, to comply with the user supplied maximum angular velocity for this vehicle 
+        Classes.CPath.VelocityLimitSteerAngle( mf.vehicle.wheelbase, mf.pn.speed, mf.vehicle.maxAngularVelocity, steerAngleCT );
 
-        //clamp the steering angle to not exceed safe angular velocity
-        if( Math.Abs( angVel ) > mf.vehicle.maxAngularVelocity ) {
-          steerAngleCT = glm.toDegrees( steerAngleCT > 0 ?
-                  ( Math.Atan( ( mf.vehicle.wheelbase * mf.vehicle.maxAngularVelocity ) / ( glm.twoPI * mf.pn.speed * 0.277777 ) ) )
-              : ( Math.Atan( ( mf.vehicle.wheelbase * -mf.vehicle.maxAngularVelocity ) / ( glm.twoPI * mf.pn.speed * 0.277777 ) ) ) );
-        }
         //Convert to centimeters
         distanceFromCurrentLine = Math.Round( distanceFromCurrentLine * 1000.0, MidpointRounding.AwayFromZero );
 

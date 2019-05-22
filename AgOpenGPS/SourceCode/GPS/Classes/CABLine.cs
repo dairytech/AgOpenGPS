@@ -178,8 +178,6 @@ namespace AgOpenGPS {
     }
 
     public void GetCurrentABLine( vec3 pivot ) {
-      double angVel; //angular velocity of vehicle
-      
       //move the ABLine over based on the overlap amount set in vehicle
       double widthMinusOverlap = mf.vehicle.toolWidth - mf.vehicle.toolOverlap;
 
@@ -306,15 +304,8 @@ namespace AgOpenGPS {
       //Convert to millimeters
       distanceFromCurrentLine = Math.Round( distanceFromCurrentLine * 1000.0, MidpointRounding.AwayFromZero );
 
-      //angular velocity in rads/sec  = 2PI * m/sec * radians/meters
-      angVel = glm.angularVelocity( mf.vehicle.wheelbase, mf.pn.speed, steerAngleAB );
-
-      //clamp the steering angle to not exceed safe angular velocity
-      if( Math.Abs( angVel ) > mf.vehicle.maxAngularVelocity ) {
-        steerAngleAB = glm.toDegrees( steerAngleAB > 0 ? ( Math.Atan( ( mf.vehicle.wheelbase * mf.vehicle.maxAngularVelocity )
-            / ( glm.twoPI * mf.pn.speed * 0.277777 ) ) )
-            : ( Math.Atan( ( mf.vehicle.wheelbase * -mf.vehicle.maxAngularVelocity ) / ( glm.twoPI * mf.pn.speed * 0.277777 ) ) ) );
-      }
+      //Reduce the steering angle, if necessary, to comply with the user supplied maximum angular velocity for this vehicle 
+      Classes.CPath.VelocityLimitSteerAngle( mf.vehicle.wheelbase, mf.pn.speed, mf.vehicle.maxAngularVelocity, steerAngleAB );
 
       //distance is negative if on left, positive if on right
       if( isABSameAsVehicleHeading ) {
