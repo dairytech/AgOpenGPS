@@ -1774,21 +1774,11 @@ namespace AgOpenGPS {
         steerAngleYT = glm.toDegrees( Math.Atan( 2 * ( ( ( goalPointYT.easting - pivot.easting ) * Math.Cos( localHeading ) )
             + ( ( goalPointYT.northing - pivot.northing ) * Math.Sin( localHeading ) ) ) * mf.vehicle.wheelbase / goalPointDistanceSquared ) );
 
-        if( steerAngleYT < -mf.vehicle.maxSteerAngle ) {
-          steerAngleYT = -mf.vehicle.maxSteerAngle;
-        }
+        //Reduce the steering angle, if necessary, to comply with the user supplied maximum steer angle for this vehicle
+        Classes.CPath.VehicleLimitSteerAngle( mf.vehicle.maxSteerAngle, steerAngleYT );
 
-        if( steerAngleYT > mf.vehicle.maxSteerAngle ) {
-          steerAngleYT = mf.vehicle.maxSteerAngle;
-        }
-
-        if( ppRadiusYT < -500 ) {
-          ppRadiusYT = -500;
-        }
-
-        if( ppRadiusYT > 500 ) {
-          ppRadiusYT = 500;
-        }
+        //Reduce the radius, if necessary, of the steering circle on the display to 500
+        Classes.CPath.RadiusLimitSteeringCircleDisplay( ppRadiusYT );
 
         radiusPointYT.easting = pivot.easting + ( ppRadiusYT * Math.Cos( localHeading ) );
         radiusPointYT.northing = pivot.northing + ( ppRadiusYT * Math.Sin( localHeading ) );

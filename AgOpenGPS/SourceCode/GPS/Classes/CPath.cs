@@ -9,6 +9,7 @@ namespace AgOpenGPS.Classes {
   /// This class contains all of the methods used to follow paths (lines)
   /// </summary>
   class CPath {
+    
     //Reduces the steering angle, if necessary, to comply with the user supplied maximum angular velocity for this vehicle 
     public static void VelocityLimitSteerAngle(
       double wheelbase,
@@ -18,14 +19,32 @@ namespace AgOpenGPS.Classes {
       //Calculate angular velocity
       //angular velocity in rads/sec = 2PI * m/sec * radians/meters
       double angVel = glm.twoPI * 0.277777 * speed * ( Math.Tan( glm.toRadians( steerAngle ) ) ) / wheelbase;
-     
+
       //clamp the steering angle to not exceed safe angular velocity
       if( Math.Abs( angVel ) > maxAngularVelocity ) {
         steerAngle = glm.toDegrees( steerAngle > 0 ?
                 ( Math.Atan( ( wheelbase * maxAngularVelocity ) / ( glm.twoPI * speed * 0.277777 ) ) )
             : ( Math.Atan( ( wheelbase * -maxAngularVelocity ) / ( glm.twoPI * speed * 0.277777 ) ) ) );
       }
-      return;
+    }
+    
+    //Reduces the steering angle, if necessary, to comply with the user supplied maximum steer angle for this vehicle
+    public static void VehicleLimitSteerAngle(
+      double maxSteerAngle,
+      double steerAngle ) {
+        if( steerAngle < -maxSteerAngle )
+          steerAngle = -maxSteerAngle;
+        if( steerAngle > maxSteerAngle )
+          steerAngle = maxSteerAngle;
+    }
+
+    //Reduces the radius, if necessary, of the steering circle on the display to 500
+    public static void RadiusLimitSteeringCircleDisplay(
+      double radius ) {
+      if( radius < -500 )
+        radius = -500;
+      if( radius > 500 )
+        radius = 500;
     }
   }
 }
