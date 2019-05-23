@@ -296,27 +296,23 @@ namespace AgOpenGPS {
     }
 
     private void PurePursuit() {
-      //calc "D" the distance from pivot axle to lookahead point
-      double goalPointDistanceSquared = glm.DistanceSquared( goalPointRP.northing, goalPointRP.easting, pivotAxlePosRP.northing, pivotAxlePosRP.easting );
+      //Calculate Turning Radius
+      ppRadiusRP = Classes.CPath.CalculateTurningRadius( goalPointRP, pivotAxlePosRP, mf.fixHeading );
 
-      //calculate the the delta x in local coordinates and steering angle degrees based on wheelbase
-      double localHeading = glm.twoPI - mf.fixHeading;
-      ppRadiusRP = goalPointDistanceSquared / ( 2 * ( ( ( goalPointRP.easting - pivotAxlePosRP.easting ) * Math.Cos( localHeading ) ) + ( ( goalPointRP.northing - pivotAxlePosRP.northing ) * Math.Sin( localHeading ) ) ) );
+      //Calculate Steering Angle
+      steerAngleRP = Classes.CPath.CalculateSteeringAngle( goalPointRP, pivotAxlePosRP, mf.fixHeading, mf.vehicle.wheelbase );
 
-      steerAngleRP = glm.toDegrees( Math.Atan( 2 * ( ( ( goalPointRP.easting - pivotAxlePosRP.easting ) * Math.Cos( localHeading ) )
-          + ( ( goalPointRP.northing - pivotAxlePosRP.northing ) * Math.Sin( localHeading ) ) ) * mf.vehicle.wheelbase / goalPointDistanceSquared ) );
-      
       //Reduce the steering angle, if necessary, to comply with the user supplied maximum steer angle for this vehicle
-      Classes.CPath.VehicleLimitSteerAngle( mf.vehicle.maxSteerAngle, steerAngleRP );
+      Classes.CPath.SteerAngle_VehicleLimit( mf.vehicle.maxSteerAngle, steerAngleRP );
 
       //Reduce the radius, if necessary, of the steering circle on the display to 500
-      Classes.CPath.RadiusLimitSteeringCircleDisplay( ppRadiusRP );
+      Classes.CPath.SteeringCircleDisplay_RadiusLimit( ppRadiusRP );
 
-      radiusPointRP.easting = pivotAxlePosRP.easting + ( ppRadiusRP * Math.Cos( localHeading ) );
-      radiusPointRP.northing = pivotAxlePosRP.northing + ( ppRadiusRP * Math.Sin( localHeading ) );
+      //Calculate Turning Radius Center Point
+      radiusPointRP = Classes.CPath.CalculateTurningRadiusCenterPoint( pivotAxlePosRP, ppRadiusRP, mf.fixHeading );
 
       //Reduce the steering angle, if necessary, to comply with the user supplied maximum angular velocity for this vehicle 
-      Classes.CPath.VelocityLimitSteerAngle( mf.vehicle.wheelbase, mf.pn.speed, mf.vehicle.maxAngularVelocity, steerAngleRP );
+      Classes.CPath.SteerAngle_AngularVelocityLimit( mf.vehicle.wheelbase, mf.pn.speed, mf.vehicle.maxAngularVelocity, steerAngleRP );
 
       //Convert to centimeters
       distanceFromCurrentLine = Math.Round( distanceFromCurrentLine * 1000.0, MidpointRounding.AwayFromZero );
