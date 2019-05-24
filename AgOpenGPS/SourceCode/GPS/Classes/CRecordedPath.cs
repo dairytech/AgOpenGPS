@@ -61,7 +61,7 @@ namespace AgOpenGPS {
     public double distanceFromRefLine, distanceFromCurrentLine, refLineSide = 1.0;
     private int A, B, C;
     public double abFixHeadingDelta, segmentHeading;
-    public bool isABSameAsFixHeading = true, isOnRightSideCurrentLine = true;
+    public bool isABSameAsVehicleHeading = true, isOnRightSideCurrentLine = true;
 
     public int lastPointFound = -1, currentPositonIndex;
 
@@ -122,7 +122,7 @@ namespace AgOpenGPS {
         pivotAxlePosRP = mf.pivotAxlePos;
 
         FindGoalPointDubinsPath( shuttleListCount );
-        PurePursuit();
+        Classes.CPath.PurePursuit( goalPointRP, pivotAxlePosRP, mf.pn.speed, mf.fixHeading, mf.vehicle.wheelbase, mf.vehicle.maxSteerAngle, mf.vehicle.maxAngularVelocity, isABSameAsVehicleHeading, isOnRightSideCurrentLine, ppRadiusRP, radiusPointRP, steerAngleRP, distanceFromCurrentLine, mf.guidanceLineDistanceOff, mf.guidanceLineSteerAngle );
 
         //check if close to recorded path
         int cnt = shuttleDubinsList.Count;
@@ -142,7 +142,7 @@ namespace AgOpenGPS {
         pivotAxlePosRP = mf.pivotAxlePos;
 
         FindGoalPointRecPath( recListCount );
-        PurePursuit();
+        Classes.CPath.PurePursuit( goalPointRP, pivotAxlePosRP, mf.pn.speed, mf.fixHeading, mf.vehicle.wheelbase, mf.vehicle.maxSteerAngle, mf.vehicle.maxAngularVelocity, isABSameAsVehicleHeading, isOnRightSideCurrentLine, ppRadiusRP, radiusPointRP, steerAngleRP, distanceFromCurrentLine, mf.guidanceLineDistanceOff, mf.guidanceLineSteerAngle );
 
         //if end of the line then stop
         if( !isEndOfTheRecLine ) {
@@ -192,7 +192,10 @@ namespace AgOpenGPS {
         pivotAxlePosRP = mf.pivotAxlePos;
 
         FindGoalPointDubinsPath( shuttleListCount );
-        PurePursuit();
+        
+        // Calculate the desired vehicle turning radius, desired vehicle steering angle, and distance from guidance line
+        // Also update the main form with the desired steering angle and the distance from the guidance line
+        Classes.CPath.PurePursuit( goalPointRP, pivotAxlePosRP, mf.pn.speed, mf.fixHeading, mf.vehicle.wheelbase, mf.vehicle.maxSteerAngle, mf.vehicle.maxAngularVelocity, isABSameAsVehicleHeading, isOnRightSideCurrentLine, ppRadiusRP, radiusPointRP, steerAngleRP, distanceFromCurrentLine, mf.guidanceLineDistanceOff, mf.guidanceLineSteerAngle );
       }
 
       //if paused, set the sim to 0
@@ -295,44 +298,6 @@ namespace AgOpenGPS {
       }
     }
 
-    private void PurePursuit() {
-      //Calculate Turning Radius
-      ppRadiusRP = Classes.CPath.CalculateTurningRadius( goalPointRP, pivotAxlePosRP, mf.fixHeading );
-
-      //Calculate Steering Angle
-      steerAngleRP = Classes.CPath.CalculateSteeringAngle( goalPointRP, pivotAxlePosRP, mf.fixHeading, mf.vehicle.wheelbase );
-
-      //Reduce the steering angle, if necessary, to comply with the user supplied maximum steer angle for this vehicle
-      Classes.CPath.SteerAngle_VehicleLimit( mf.vehicle.maxSteerAngle, steerAngleRP );
-
-      //Reduce the radius, if necessary, of the steering circle on the display to 500
-      Classes.CPath.SteeringCircleDisplay_RadiusLimit( ppRadiusRP );
-
-      //Calculate Turning Radius Center Point
-      radiusPointRP = Classes.CPath.CalculateTurningRadiusCenterPoint( pivotAxlePosRP, ppRadiusRP, mf.fixHeading );
-
-      //Reduce the steering angle, if necessary, to comply with the user supplied maximum angular velocity for this vehicle 
-      Classes.CPath.SteerAngle_AngularVelocityLimit( mf.vehicle.wheelbase, mf.pn.speed, mf.vehicle.maxAngularVelocity, steerAngleRP );
-
-      //Convert to centimeters
-      distanceFromCurrentLine = Math.Round( distanceFromCurrentLine * 1000.0, MidpointRounding.AwayFromZero );
-
-      //distance is negative if on left, positive if on right
-      //if you're going the opposite direction left is right and right is left
-      if( isABSameAsFixHeading ) {
-        if( !isOnRightSideCurrentLine )
-          distanceFromCurrentLine *= -1.0;
-      }
-
-      //opposite way so right is left
-      else if( isOnRightSideCurrentLine ) {
-        distanceFromCurrentLine *= -1.0;
-      }
-
-      mf.guidanceLineDistanceOff = (Int16)distanceFromCurrentLine;
-      mf.guidanceLineSteerAngle = (Int16)( steerAngleRP * 100 );
-    }
-
     private vec2 FindGoalPointRecPath( int ptCount ) {
       //find the closest 2 points to current fix
       double minDistA = 9999999999;
@@ -415,7 +380,7 @@ namespace AgOpenGPS {
       double tempDist = 0.0;
 
       //counting up
-      isABSameAsFixHeading = true;
+      isABSameAsVehicleHeading = true;
       distSoFar = glm.Distance( recList[B].easting, recList[B].northing, rEastRP, rNorthRP );
 
       //Is this segment long enough to contain the full lookahead distance?
@@ -533,7 +498,7 @@ namespace AgOpenGPS {
       double tempDist = 0.0;
 
       //counting up
-      isABSameAsFixHeading = true;
+      isABSameAsVehicleHeading = true;
       distSoFar = glm.Distance( shuttleDubinsList[B].easting, shuttleDubinsList[B].northing, rEastRP, rNorthRP );
 
       //Is this segment long enough to contain the full lookahead distance?

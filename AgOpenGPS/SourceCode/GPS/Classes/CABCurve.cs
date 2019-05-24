@@ -395,47 +395,9 @@ namespace AgOpenGPS {
           }
         }
 
-        //Calculate Turning Radius
-        ppRadiusCu = Classes.CPath.CalculateTurningRadius( goalPointCu, pivot, mf.fixHeading );
-
-        //Calculate Steering Angle
-        steerAngleCu = Classes.CPath.CalculateSteeringAngle( goalPointCu, pivot, mf.fixHeading, mf.vehicle.wheelbase );
-
-        //Reduce the steering angle, if necessary, to comply with the user supplied maximum steer angle for this vehicle
-        Classes.CPath.SteerAngle_VehicleLimit( mf.vehicle.maxSteerAngle, steerAngleCu );
-
-        //Reduce the radius, if necessary, of the steering circle on the display to 500
-        Classes.CPath.SteeringCircleDisplay_RadiusLimit( ppRadiusCu );
-
-        //Calculate Turning Radius Center Point
-        radiusPointCu = Classes.CPath.CalculateTurningRadiusCenterPoint( pivot, ppRadiusCu, mf.fixHeading );
-
-        //Reduce the steering angle, if necessary, to comply with the user supplied maximum angular velocity for this vehicle 
-        Classes.CPath.SteerAngle_AngularVelocityLimit( mf.vehicle.wheelbase, mf.pn.speed, mf.vehicle.maxAngularVelocity, steerAngleCu );
-
-        //Convert to centimeters
-        distanceFromCurrentLine = Math.Round( distanceFromCurrentLine * 1000.0, MidpointRounding.AwayFromZero );
-
-        //distance is negative if on left, positive if on right
-        //if you're going the opposite direction left is right and right is left
-        //double temp;
-        if( isABSameAsVehicleHeading ) {
-          //temp = (abHeading);
-          if( !isOnRightSideCurrentLine )
-            distanceFromCurrentLine *= -1.0;
-        }
-
-        //opposite way so right is left
-        else {
-          //temp = (abHeading - Math.PI);
-          //if (temp < 0) temp = (temp + glm.twoPI);
-          //temp = glm.toDegrees(temp);
-          if( isOnRightSideCurrentLine )
-            distanceFromCurrentLine *= -1.0;
-        }
-
-        mf.guidanceLineDistanceOff = (Int16)distanceFromCurrentLine;
-        mf.guidanceLineSteerAngle = (Int16)( steerAngleCu * 100 );
+        // Calculate the desired vehicle turning radius, desired vehicle steering angle, and distance from guidance line
+        // Also update the main form with the desired steering angle and the distance from the guidance line
+        Classes.CPath.PurePursuit( goalPointCu, pivot, mf.pn.speed, mf.fixHeading, mf.vehicle.wheelbase, mf.vehicle.maxSteerAngle, mf.vehicle.maxAngularVelocity, isABSameAsVehicleHeading, isOnRightSideCurrentLine, ppRadiusCu, radiusPointCu, steerAngleCu, distanceFromCurrentLine, mf.guidanceLineDistanceOff, mf.guidanceLineSteerAngle );
 
         if( mf.yt.isYouTurnTriggered ) {
           //do the pure pursuit from youTurn

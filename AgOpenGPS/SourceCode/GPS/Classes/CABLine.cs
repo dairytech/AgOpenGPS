@@ -275,42 +275,10 @@ namespace AgOpenGPS {
         goalPointAB.northing = rNorthAB + ( Math.Cos( abHeading ) * goalPointDistance );
       }
 
-      //Calculate Turning Radius
-      ppRadiusAB = Classes.CPath.CalculateTurningRadius( goalPointAB, pivot, mf.fixHeading );
-
-      //Calculate Steering Angle
-      steerAngleAB = Classes.CPath.CalculateSteeringAngle( goalPointAB, pivot, mf.fixHeading, mf.vehicle.wheelbase );
-
-      //Reduce the steering angle, if necessary, to comply with the user supplied maximum steer angle for this vehicle
-      Classes.CPath.SteerAngle_VehicleLimit( mf.vehicle.maxSteerAngle, steerAngleAB );
-
-      //Reduce the radius, if necessary, of the steering circle on the display to 500
-      Classes.CPath.SteeringCircleDisplay_RadiusLimit( ppRadiusAB );
-
-      //Calculate Turning Radius Center Point
-      radiusPointAB = Classes.CPath.CalculateTurningRadiusCenterPoint( pivot, ppRadiusAB, mf.fixHeading );
-
-      //Convert to millimeters
-      distanceFromCurrentLine = Math.Round( distanceFromCurrentLine * 1000.0, MidpointRounding.AwayFromZero );
-
-      //Reduce the steering angle, if necessary, to comply with the user supplied maximum angular velocity for this vehicle 
-      Classes.CPath.SteerAngle_AngularVelocityLimit( mf.vehicle.wheelbase, mf.pn.speed, mf.vehicle.maxAngularVelocity, steerAngleAB );
-
-      //distance is negative if on left, positive if on right
-      if( isABSameAsVehicleHeading ) {
-        if( !isOnRightSideCurrentLine )
-          distanceFromCurrentLine *= -1.0;
-      }
-
-      //opposite way so right is left
-      else {
-        if( isOnRightSideCurrentLine )
-          distanceFromCurrentLine *= -1.0;
-      }
-
-      mf.guidanceLineDistanceOff = (Int16)distanceFromCurrentLine;
-      mf.guidanceLineSteerAngle = (Int16)( steerAngleAB * 100 );
-
+      // Calculate the desired vehicle turning radius, desired vehicle steering angle, and distance from guidance line
+      // Also update the main form with the desired steering angle and the distance from the guidance line
+      Classes.CPath.PurePursuit( goalPointAB, pivot, mf.pn.speed, mf.fixHeading, mf.vehicle.wheelbase, mf.vehicle.maxSteerAngle, mf.vehicle.maxAngularVelocity, isABSameAsVehicleHeading, isOnRightSideCurrentLine, ppRadiusAB, radiusPointAB, steerAngleAB, distanceFromCurrentLine, mf.guidanceLineDistanceOff, mf.guidanceLineSteerAngle );
+      
       if( mf.yt.isYouTurnTriggered ) {
         //do the pure pursuit from youTurn
         mf.yt.DistanceFromYouTurnLine();
