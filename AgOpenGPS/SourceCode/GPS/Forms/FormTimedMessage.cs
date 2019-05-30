@@ -17,10 +17,22 @@ namespace AgOpenGPS {
 
       timer1.Interval = timeInMsec;
 
-      int messWidth = str2.Length;
-      Width = messWidth * 15 + 75;
+      //str2 is a string that may contain substrings separated by newline characters
+      //find the length of the longest substring and use it to set the width of the message box
+      Width = FindLongestStringSegmentLength( str2 ) * 15 + 75;
     }
 
+    //for a string composed of substrings separated by newline charaters, return the length of the longest substring
+    public int FindLongestStringSegmentLength( string Str ) {
+      string[] Substrs = Str.Split( new[] { System.Environment.NewLine }, StringSplitOptions.None );
+      int LongestSegmentLength = 0;
+      foreach( String Segment in Substrs ) {
+        if( Segment.Length > LongestSegmentLength ) {
+          LongestSegmentLength = Segment.Length;
+        }
+      }
+      return LongestSegmentLength;
+    }
     private void timer1_Tick( object sender, EventArgs e ) {
       Close();
     }

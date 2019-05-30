@@ -771,7 +771,7 @@ namespace AgOpenGPS {
         } catch( Exception e ) {
           WriteErrorLog( "While Opening Field" + e.ToString() );
 
-          var form = new FormTimedMessage( 4000, "Field File is Corrupt", "Choose a different field" );
+          var form = new FormTimedMessage( 4000, "Field File is Corrupt", "Choose a different field." + System.Environment.NewLine + "Check error log file for details." );
           form.Show();
           JobClose();
           return;
@@ -825,7 +825,7 @@ namespace AgOpenGPS {
           } catch( Exception e ) {
             WriteErrorLog( "Loading Contour file" + e.ToString() );
 
-            var form = new FormTimedMessage( 4000, "Contour File is Corrupt", "But Field is Loaded" );
+            var form = new FormTimedMessage( 4000, "Contour File is Corrupt", "But Field is Loaded." + System.Environment.NewLine + "Check error log file for details." );
             form.Show();
           }
         }
@@ -869,8 +869,9 @@ namespace AgOpenGPS {
           } catch( Exception e ) {
             WriteErrorLog( "Loading Contour file" + e.ToString() );
 
-            var form = new FormTimedMessage( 4000, "Contour File is Corrupt", "But Field is Loaded" );
-            form.Show();
+            var form = new FormTimedMessage( 4000, "Contour File is Corrupt", "But Field is Loaded." + System.Environment.NewLine + "Check error log file for details." );
+
+           form.Show();
           }
         }
       }
@@ -917,7 +918,7 @@ namespace AgOpenGPS {
 
             }
           } catch( Exception e ) {
-            var form = new FormTimedMessage( 4000, "Flag File is Corrupt", "But Field is Loaded" );
+            var form = new FormTimedMessage( 4000, "Flag File is Corrupt", "But Field is Loaded." + System.Environment.NewLine + "Check error log file for details." );
             form.Show();
             WriteErrorLog( "FieldOpen, Loading Flags, Corrupt Flag File" + e.ToString() );
           }
@@ -992,7 +993,7 @@ namespace AgOpenGPS {
               DisableYouTurnButtons();
             }
           } catch( Exception e ) {
-            var form = new FormTimedMessage( 4000, "AB Line File is Corrupt", "But Field is Loaded" );
+            var form = new FormTimedMessage( 4000, "AB Line File is Corrupt", "But Field is Loaded." + System.Environment.NewLine + "Check error log file for details." );
             form.Show();
             WriteErrorLog( "Load AB Line" + e.ToString() );
 
@@ -1062,7 +1063,7 @@ namespace AgOpenGPS {
 
             mazeGrid.BuildMazeGridArray();
           } catch( Exception e ) {
-            var form = new FormTimedMessage( 4000, " Boundary Line Files are Corrupt", "But Field is Loaded" );
+            var form = new FormTimedMessage( 4000, " Boundary Line Files are Corrupt", "But Field is Loaded." + System.Environment.NewLine + "Check error log file for details." );
             form.Show();
             WriteErrorLog( "Load Boundary Line" + e.ToString() );
           }
@@ -1123,7 +1124,7 @@ namespace AgOpenGPS {
 
       //        catch (Exception e)
       //        {
-      //            var form = new FormTimedMessage(4000, "Headland File is Corrupt", "But Field is Loaded");
+      //            var form = new FormTimedMessage(4000, "Headland File is Corrupt; check error log file for details.", "But Field is Loaded");
       //            form.Show();
       //            WriteErrorLog("Load Headland Loop" + e.ToString());
       //        }
@@ -1158,7 +1159,7 @@ namespace AgOpenGPS {
               }
             }
           } catch( Exception e ) {
-            var form = new FormTimedMessage( 4000, "Recorded Path File is Corrupt", "But Field is Loaded" );
+            var form = new FormTimedMessage( 4000, "Recorded Path File is Corrupt", "But Field is Loaded." + System.Environment.NewLine + "Check error log file for details." );
             form.Show();
             WriteErrorLog( "Load Recorded Path" + e.ToString() );
           }
@@ -1202,7 +1203,7 @@ namespace AgOpenGPS {
               }
             }
           } catch( Exception e ) {
-            var form = new FormTimedMessage( 4000, "Curve Line File is Corrupt", "But Field is Loaded" );
+            var form = new FormTimedMessage( 4000, "Curve Line File is Corrupt", "But Field is Loaded." + System.Environment.NewLine + "Check error log file for details." );
             form.Show();
             WriteErrorLog( "Load Boundary Line" + e.ToString() );
 
@@ -1545,7 +1546,7 @@ namespace AgOpenGPS {
                 flagPts[i].ID.ToString( CultureInfo.InvariantCulture ) );
           }
         } catch( Exception e ) {
-          Console.WriteLine( e.Message + "\n Cannot write to file." );
+          Console.WriteLine( e.Message + "\n Cannot write to file; check error log file for details." );
           WriteErrorLog( "Saving Flags" + e.ToString() );
           return;
         }
@@ -1581,7 +1582,7 @@ namespace AgOpenGPS {
           writer.WriteLine( ABLine.refPoint2.easting.ToString( CultureInfo.InvariantCulture ) + "," + ABLine.refPoint2.northing.ToString( CultureInfo.InvariantCulture ) );
           writer.WriteLine( ABLine.tramPassEvery.ToString( CultureInfo.InvariantCulture ) + "," + ABLine.passBasedOn.ToString( CultureInfo.InvariantCulture ) );
         } catch( Exception e ) {
-          Console.WriteLine( e.Message + "\n Cannot write to file." );
+          Console.WriteLine( e.Message + "\n Cannot write to file; check error log file for details." );
           WriteErrorLog( "Saving AB Line" + e.ToString() );
 
           return;
@@ -1620,7 +1621,7 @@ namespace AgOpenGPS {
                                       Math.Round( curve.refList[j].heading, 5 ).ToString( CultureInfo.InvariantCulture ) );
           }
         } catch( Exception e ) {
-          Console.WriteLine( e.Message + "\n Cannot write to file." );
+          Console.WriteLine( e.Message + "\n Cannot write to file; check error log file for details." );
           WriteErrorLog( "Saving Curve Line" + e.ToString() );
 
           return;

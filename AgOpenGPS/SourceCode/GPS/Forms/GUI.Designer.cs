@@ -1096,10 +1096,11 @@ namespace AgOpenGPS {
           btnEnableAutoYouTurn.PerformClick();
         }
 
-        if( !recPath.StartDrivingRecordedPath() ) {
+        string Status = recPath.StartDrivingRecordedPath();
+        if( Status != "Success" ) {
           //Cancel the recPath - something went seriously wrong
           recPath.StopDrivingRecordedPath();
-          TimedMessageBox( 1500, "Problem Making Path", "Couldn't generate valid path" );
+              TimedMessageBox( 2000, "Problem Making Path", Status );
         } else {
           btnDrivePath.Image = Properties.Resources.AutoStop;
           goPathMenu.Image = Properties.Resources.AutoStop;
@@ -1212,10 +1213,12 @@ namespace AgOpenGPS {
           btnEnableAutoYouTurn.PerformClick();
         }
 
-        if( !recPath.StartDrivingRecordedPath() ) {
+        string Status;
+        Status = recPath.StartDrivingRecordedPath();
+        if( Status != "Success" ) {
           //Cancel the recPath - something went seriously wrong
           recPath.StopDrivingRecordedPath();
-          TimedMessageBox( 1500, "Problem Making Path", "Couldn't generate valid path" );
+          TimedMessageBox( 2000, "Problem Making Path", Status );
         } else {
           btnDrivePath.Image = Properties.Resources.AutoStop;
           goPathMenu.Image = Properties.Resources.AutoStop;

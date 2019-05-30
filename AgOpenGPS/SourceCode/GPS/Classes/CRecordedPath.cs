@@ -76,12 +76,13 @@ namespace AgOpenGPS {
     public bool isBtnFollowOn, isEndOfTheRecLine, isRecordOn;
     public bool isDrivingRecordedPath, isPausedDrivingRecordedPath, isFollowingDubinsToPath, isFollowingRecPath, isFollowingDubinsHome;
 
-    public bool StartDrivingRecordedPath() {
+    public string StartDrivingRecordedPath() {
       //create the dubins path based on start and goal to start of recorded path
+
       A = B = C = 0;
       recListCount = recList.Count;
       if( recListCount < 5 )
-        return false;
+        return "Recorded path does not contain enough points (less than 5)"; //Recorded path contains fewer than 5 points
 
       //the goal is the first point of path, the start is the current position
       vec3 goal = new vec3( recList[0].easting, recList[0].northing, recList[0].heading );
@@ -95,7 +96,7 @@ namespace AgOpenGPS {
 
       //has a valid dubins path been created?
       if( shuttleListCount == 0 )
-        return false;
+        return "A Dubins solution to the start of the recorded path could not be found";  //Dubins solution to start of recorded path could not be created
 
       //technically all good if we get here so set all the flags
       isFollowingDubinsHome = false;
@@ -107,7 +108,7 @@ namespace AgOpenGPS {
 
       mf.btnDrivePath.Image = Properties.Resources.AutoGo;
       isPausedDrivingRecordedPath = false;
-      return true;
+      return "Success";
     }
 
     public bool trig;
@@ -217,7 +218,7 @@ namespace AgOpenGPS {
     }
 
     private void GetDubinsPath( vec3 goal ) {
-      CDubins.turningRadius = mf.vehicle.minTurningRadius * 2.0;
+      CDubins.turningRadius = mf.vehicle.minTurningRadius * 1.0;
       CDubins dubPath = new CDubins();
 
       // current psition
